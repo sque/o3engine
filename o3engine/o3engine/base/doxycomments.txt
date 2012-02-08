@@ -1,0 +1,215 @@
+/*!
+ @mainpage O3 Engine
+	O3 Engine is a lite object oriented engine that uses opengl for rendering.
+	
+	@section uname_sec General Information
+
+        API reference is not a tutorial, it is a helper tool for the learner
+        and the advanced user too. You will come here quite soon to look
+        the definition of your favorite class or dig to find something that
+        you may missed and solve your problem in a magic way.
+        @n
+        @subsection main_sec_first_day Your first day here?
+        To improve your experience with O3Engine we made some rules on the
+        way functions, class members etc are named. Those rules will help you
+        guess the function name of class without even knowing it. Those rules
+        are known as @ref sfn_page.
+        @todo Add information about modules
+        @todo Add information about namespaces and class list
+	  
+@page sfn_page Function Naming Policy
+	For ease of learning, a standard is followed for naming functions, which consists of some simple rules:
+
+	@section sfn_rule_1 1. Function Names
+		Function names usually consist of set of words. To create
+		the proper function name we follow 2 simple rules
+		- First word is always small letters (even if it consist from only one word)
+		- Every other word has its first letter capitalized
+		.
+		@b Examples:
+		- <i>get + current + camera</i> will become <b>getCurrentCamera()</b>
+		- <i>init</i> will become <b>init()</b>
+		- <i>start + rendering</i> will become <b>startRendering()</b>
+        .
+        @n
+
+    @section sfn_rule_2 2. Function Arguments
+        Function arguments are always lower case and they are concatenated
+        with a hyphen. For functions that just require right-value argument
+        is named simply @b r. This functions are assignmenet operator,
+        copy constructor etc.\n
+
+        @b Examples:
+        - setAlpha(Real @b alpha); 
+        - operator=(const MyClass @b r);
+        - loadImage(const std::string @b image_fname);
+        .
+        @n
+
+    @section sfn_rule_3 3. Class members
+        The rules for naming class members are:
+        - Class members must start with @b m_
+        - Static members must start with @b ms_
+        - Pointer members must start with @b mp_
+        - The rest of the name must be created from lowercase words concatenated with hyphen.
+        - Exception for this rule are one-letter members like @b x, @b y
+        .
+
+        @b Examples:
+        - Real @b m_param;
+        - Real @b m_listeners;
+        - static Singleton @b ms_singleton;
+        - Camera * @b mp_myCamera;
+        .
+
+        @b EXCEPTION @n
+        <b><i> Class members that are real properties of an object that must be public
+        and you don't want to add setXXX/getXXX API then those members must be named
+        directly without the @b m_ prefix. </i></b>
+
+        @b Examples:
+        - Real Vector3::@b x;
+        - Real Color::@b red;
+        .
+        @n
+	@section sfn_rule_4 4. Iterators for classes using std::map, std::vector etc
+        All these classes must provide <b>typedef</b> for iterator types
+
+        @b Examples
+		- typedef vector<bla>::iterator SomethingIterator
+		- typedef map<bla,bla>::iterator SomethingIterator
+        @n
+
+    @section sfn_rule_5 5. Virtual functions representing events
+        All the virtual functions that represent events must
+        start with @b on and must follow the general rules
+        of @ref sfn_rule_1
+
+        @b Examples:
+		- virtual void @b onMyEvent()
+        @n	
+
+    @section sfn_rule_6 6. Special Cases
+        In addition to the above rules there are some special cases
+        that must be treated specially
+
+	@subsection sfn_rule_6_1 6.1 Listeners ( OBSOLETE )
+        @b Examples:
+		- bool registerMyListener(MyListener *)
+		- bool unregisterMyListener(const MyListener *)
+
+	@subsection sfn_rule_6_2 6.2 Functions that handle boolean state
+        @b Examples:
+		- bool setSomething(bool bFlag)
+		- bool isSomething() const
+		.
+		There can be more functions except those, serving the same boolean variable.\n
+		@b Examples:
+		- void show()
+		- void hide()
+		.
+	@subsection sfn_rule_6_3 6.3 Set/Get Member functions
+        Functions regarding parameters of objects that
+        are not built-in data types (STL is not built-in)
+
+        @b Examples:
+		- MyType & setSomething(const MyType & new)
+		- const MyType & getSomething() const
+	    .
+
+ @page copyable_page Copyable
+    Copyable is an idiom of a class. A class is called copyable when it fulfils 2 rules
+        -# It has a copy constructor
+        -# It has an assignment operator
+        .
+    @par Usage of copyable classes
+    	Some containers require that the items they hold, must be copyable. Classes that are
+    	not designed to be copyable cannot exist in those containers. Such containers are
+    	some of the C++ Standard Template Library.
+    @par Example
+@code
+// A copyable class
+class A()
+{
+public:
+    // Default constructor
+    A();
+    
+    // Copy constructor
+    A(const A & r);
+    
+    // Assignment operator
+    A & operator=(const A & r);
+};
+
+// B is not copyable because it misses copy constructor
+class B()
+{
+public:
+    // Default constructor
+    B();
+    
+    // Assignement operator
+    B & operator=(const B & r);
+};
+@endcode
+
+ @page noncopyable_page NON-Copyable
+ 	Non-copyable is a class that cannot be copy-constructed or assigned.
+ 	To forcefully prevent this behaviour from the user they hide their
+ 	copy constructor and assignement operator in their private space.
+ 	When a user tries to copy a NON-Copyable class it will fail to compile
+ 	giving user the error that it cannot access the private scope of the class.
+ 	
+ @par Example
+ @code
+ //NON-Copyable class
+ class A
+ {
+ private:
+ 	// Copy constructor
+ 	A(const A &);
+ 	A & operator=(const A &);
+ public:
+ 	// .. public interface of class
+ };
+ 
+ A obj1;
+ 
+ A obj2(obj1);	// << Compiler will fail here
+ A obj3;
+ 
+ obj3 = obj1;	//<< Compiler will fail here too
+ @endcode
+ 
+ @page noninherit_page NON-Inheritable
+    A class is considered @b non-inheritable when it cannot
+    be logically or technically subclassed.
+    @n
+    @section noninherit_page_rule The Rule
+  	<i>In all cases there is only one rule:</i>@n
+  	<b>Users must NOT deriver classes from those that have been declared as non-inheritable</b>
+    @n
+  	@subsection noninherit_page_tech Technically imposible
+  		A class is technically non-inheritable when its destructor
+  		is not virtual.
+  	@subsection noninherit_page_log Logically impossible
+  		Logically impossible happens when the designer of the class
+        have not taken under consideration the usage of his class
+        from the child prespective.
+        
+  @page inherit_page Inheritable
+    A class is considered @b inheritable when it fulfils
+    all the prerequisites for subclassing, such as having
+    virtual constructor, providing needed api for child classes
+    in the protected scope e.t.c.
+
+    A class that is considered @b inheritable can be @b safely subclassed
+    by the end-user.
+
+  @page singleton_page Singleton
+    A  class is singleton when only one object can exist from this class.
+    A class inherited from o3engine::Singleton class is protected from multiple construction
+    and it also provides API to access the singleton object from any
+    position in your program.
+ */
