@@ -35,20 +35,31 @@ add_library(o3engine STATIC
 	texture.cpp
 	texturemanager.cpp
 	timesensitive.cpp
+	base/angle.cpp
+	base/color.cpp
+	base/image.cpp
+	base/math.cpp
+	base/matrix3.cpp
+	base/quaternion.cpp
+	base/rectangle.cpp
+	base/triangle3.cpp
+	base/vector2.cpp
+	base/vector3.cpp
+	base/vector4.cpp
 	gui/guibutton.hpp
 	gui/guiroot.cpp
 	gui/guisimpleengine.cpp
 	gui/guiwindow.cpp
 	tinyxml/tinystr.cpp
-    tinyxml/tinyxml.cpp
-    tinyxml/tinyxmlerror.cpp
-    tinyxml/tinyxmlparser.cpp
-    platforms/input_processor.cpp
-    platforms/input_processor_impl_glut.cpp
-    platforms/keyboard_listener.cpp
-    platforms/mouse_listener.cpp
-    platforms/platform.cpp
-    platforms/platform_impl_glut.cpp
-    platforms/timer_posix.cpp
+	tinyxml/tinyxml.cpp
+	tinyxml/tinyxmlerror.cpp
+	tinyxml/tinyxmlparser.cpp
+	platforms/input_processor.cpp
+	platforms/input_processor_impl_glut.cpp
+	platforms/keyboard_listener.cpp
+	platforms/mouse_listener.cpp
+	platforms/platform.cpp
+	platforms/platform_impl_glut.cpp
+	platforms/timer_posix.cpp
 )
 

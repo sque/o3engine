@@ -2,6 +2,7 @@
 #define O3ENGINE_COLOR_HPP_INCLUDED
 
 #include "./base_prereqs.hpp"
+#include <stdint.h>
 
 namespace o3engine
 {
@@ -21,7 +22,7 @@ namespace o3engine
          @param b The blue channel of the pixel
          @param a The alpha channel of the pixel
         */
-        inline color_rgba_t(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+        inline color_rgba_t(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
         {   channels.red = r;
             channels.green = g;
             channels.blue = b;
@@ -33,18 +34,18 @@ namespace o3engine
         @param rgba_pixel A 32bit length pixel containing 4channels of 8bit colors
             in RGBA format.
         */
-        inline color_rgba_t(unsigned long rgba_pixel)
+        inline color_rgba_t(uint32_t rgba_pixel)
         :full_pixel(rgba_pixel)
         {}
 
         struct channels_t
         {
-            unsigned char red;          //!< The 8bit red channel of pixel
-            unsigned char green;        //!< The 8bit green channel of pixel
-            unsigned char blue;         //!< The 8bit blue channel of pixel
-            unsigned char alpha;        //!< The 8bit alpha channel of pixel
+            uint8_t red;          //!< The 8bit red channel of pixel
+            uint8_t green;        //!< The 8bit green channel of pixel
+            uint8_t blue;         //!< The 8bit blue channel of pixel
+            uint8_t alpha;        //!< The 8bit alpha channel of pixel
         } channels;                     //!< The pixels divided in channels
-        unsigned long full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
+        uint32_t full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
     };
 
 
@@ -64,7 +65,7 @@ namespace o3engine
          @param r The red channel of the pixel.
          @param a The alpha channel of the pixel
         */
-        inline color_bgra_t(unsigned char b, unsigned char g, unsigned char r, unsigned char a)
+        inline color_bgra_t(uint8_t b, uint8_t g, uint8_t r, uint8_t a)
         {   channels.red = r;
             channels.green = g;
             channels.blue = b;
@@ -76,18 +77,18 @@ namespace o3engine
         @param bgra_pixel A 32bit length pixel containing 4channels of 8bit colors
             in BGRA format.
         */
-        inline color_bgra_t(unsigned long bgra_pixel)
+        inline color_bgra_t(uint32_t bgra_pixel)
         :full_pixel(bgra_pixel)
         {}
 
         struct channels_t
         {
-            unsigned char blue;         //!< The 8bit blue channel of pixel
-            unsigned char green;        //!< The 8bit green channel of pixel
-            unsigned char red;          //!< The 8bit red channel of pixel
-            unsigned char alpha;        //!< The 8bit alpha channel of pixel
+        	uint8_t blue;         //!< The 8bit blue channel of pixel
+        	uint8_t green;        //!< The 8bit green channel of pixel
+        	uint8_t red;          //!< The 8bit red channel of pixel
+        	uint8_t alpha;        //!< The 8bit alpha channel of pixel
         } channels;                     //!< The pixels divided in channels
-        unsigned long full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
+        uint32_t full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
     };
 
     //! [R5] Definition of 32bit ABGR color
@@ -106,7 +107,7 @@ namespace o3engine
          @param g The green channel of the pixel.
          @param r The red channel of the pixel.
         */
-        inline color_abgr_t(unsigned char a, unsigned char b, unsigned char g, unsigned char r)
+        inline color_abgr_t(uint8_t a, uint8_t b, uint8_t g, uint8_t r)
         {   channels.red = r;
             channels.green = g;
             channels.blue = b;
@@ -118,18 +119,18 @@ namespace o3engine
         @param abgr_pixel A 32bit length pixel containing 4channels of 8bit colors
             in ABGR format.
         */
-        inline color_abgr_t(unsigned long abgr_pixel)
+        inline color_abgr_t(uint32_t abgr_pixel)
         :full_pixel(abgr_pixel)
         {}
 
         struct channels_t
         {
-            unsigned char alpha;        //!< The 8bit alpha channel of pixel
-            unsigned char blue;         //!< The 8bit blue channel of pixel
-            unsigned char green;        //!< The 8bit green channel of pixel
-            unsigned char red;          //!< The 8bit red channel of pixel
+        	uint8_t alpha;        //!< The 8bit alpha channel of pixel
+        	uint8_t blue;         //!< The 8bit blue channel of pixel
+        	uint8_t green;        //!< The 8bit green channel of pixel
+        	uint8_t red;          //!< The 8bit red channel of pixel
         } channels;                     //!< The pixels divided in channels
-        unsigned long full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
+        uint32_t full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
     };
 
     //! [R5] Definition of 32bit ARGB color
@@ -148,7 +149,7 @@ namespace o3engine
          @param g The green channel of the pixel.
          @param r The red channel of the pixel.
         */
-        inline color_argb_t(unsigned char a, unsigned char r, unsigned char b, unsigned char g)
+        inline color_argb_t(uint8_t a, uint8_t r, uint8_t b, uint8_t g)
         {   channels.red = r;
             channels.green = g;
             channels.blue = b;
@@ -160,18 +161,18 @@ namespace o3engine
         @param argb_pixel A 32bit length pixel containing 4channels of 8bit colors
             in ARGB format.
         */
-        inline color_argb_t(unsigned long argb_pixel)
+        inline color_argb_t(uint32_t argb_pixel)
         :full_pixel(argb_pixel)
         {}
 
         struct channels_t
         {
-            unsigned char alpha;        //!< The 8bit alpha channel of pixel
-            unsigned char red;          //!< The 8bit red channel of pixel
-            unsigned char green;        //!< The 8bit green channel of pixel
-            unsigned char blue;         //!< The 8bit blue channel of pixel
+            uint8_t alpha;        //!< The 8bit alpha channel of pixel
+            uint8_t red;          //!< The 8bit red channel of pixel
+            uint8_t green;        //!< The 8bit green channel of pixel
+            uint8_t blue;         //!< The 8bit blue channel of pixel
         } channels;                     //!< The pixels divided in channels
-        unsigned long full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
+        uint32_t full_pixel;       //!< The 32bit full pixel containing all channels in RGBA format.
     };
 
     //! [R5] Convert low level colors
@@ -310,40 +311,40 @@ namespace o3engine
         //! Cast color to color_rgba_t
         inline color_rgba_t castAsRGBA() const
         {   color_rgba_t rgba;
-            rgba.channels.red = (unsigned char)(red * 255.0);
-            rgba.channels.green = (unsigned char)(green * 255.0);
-            rgba.channels.blue = (unsigned char)(blue * 255.0);
-            rgba.channels.alpha = (unsigned char)(alpha * 255.0);
+            rgba.channels.red = (uint8_t)(red * 255.0);
+            rgba.channels.green = (uint8_t)(green * 255.0);
+            rgba.channels.blue = (uint8_t)(blue * 255.0);
+            rgba.channels.alpha = (uint8_t)(alpha * 255.0);
             return rgba;
         }
 
         //! Cast color to color_bgra_t
         inline color_bgra_t castAsBGRA() const
         {   color_bgra_t bgra;
-            bgra.channels.red = (unsigned char)(red * 255.0);
-            bgra.channels.green = (unsigned char)(green * 255.0);
-            bgra.channels.blue = (unsigned char)(blue * 255.0);
-            bgra.channels.alpha = (unsigned char)(alpha * 255.0);
+            bgra.channels.red = (uint8_t)(red * 255.0);
+            bgra.channels.green = (uint8_t)(green * 255.0);
+            bgra.channels.blue = (uint8_t)(blue * 255.0);
+            bgra.channels.alpha = (uint8_t)(alpha * 255.0);
             return bgra;
         }
 
         //! Cast color to color_abgr_t
         inline color_abgr_t castAsABGR() const
         {   color_abgr_t abgr;
-            abgr.channels.red = (unsigned char)(red * 255.0);
-            abgr.channels.green = (unsigned char)(green * 255.0);
-            abgr.channels.blue = (unsigned char)(blue * 255.0);
-            abgr.channels.alpha = (unsigned char)(alpha * 255.0);
+            abgr.channels.red = (uint8_t)(red * 255.0);
+            abgr.channels.green = (uint8_t)(green * 255.0);
+            abgr.channels.blue = (uint8_t)(blue * 255.0);
+            abgr.channels.alpha = (uint8_t)(alpha * 255.0);
             return abgr;
         }
 
         //! Cast color to color_argb_t
         inline color_argb_t castAsARGB() const
         {   color_argb_t argb;
-            argb.channels.red = (unsigned char)(red * 255.0);
-            argb.channels.green = (unsigned char)(green * 255.0);
-            argb.channels.blue = (unsigned char)(blue * 255.0);
-            argb.channels.alpha = (unsigned char)(alpha * 255.0);
+            argb.channels.red = (uint8_t)(red * 255.0);
+            argb.channels.green = (uint8_t)(green * 255.0);
+            argb.channels.blue = (uint8_t)(blue * 255.0);
+            argb.channels.alpha = (uint8_t)(alpha * 255.0);
             return argb;
         }
 

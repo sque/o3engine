@@ -19,7 +19,7 @@ namespace o3engine
 	class Image
 	{
     public:
-        //! Definition of type used for meausuring size
+        //! Definition of type used for measuring size
         typedef unsigned long size_type;
         //! Definition of the pixel type
         typedef color_rgba_t pixel_type;
@@ -164,7 +164,7 @@ namespace o3engine
             but only the canvas of it. If the canvas is enlarged the
             new area will have random pixels, if the canvas is shrinked
             the image will be clipped.
-        @return @b True if it resized succesfully, @b false in any error.
+        @return @b True if it resized successfully, @b false in any error.
         */
         bool resizeCanvas(size_type new_width, size_type new_height);
 

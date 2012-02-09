@@ -203,7 +203,7 @@ namespace o3engine
 			: SkinnedObject(name)
 		{
 			slices = 20;
-			x_radius = x_radius = 1;
+			x_radius = y_radius = 1;
 		}
 
 		//! Construct a circle

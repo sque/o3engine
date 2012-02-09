@@ -93,4 +93,24 @@ namespace o3engine
 		}
 		return true;
 	}
+
+	Image Texture::downloadImage() {
+		GLint width = 0, height = 0;
+
+		glBindTexture(GL_TEXTURE_2D, m_gli_texture);
+		glGetTexLevelParameteriv(GL_TEXTURE_2D,	0, GL_TEXTURE_WIDTH, &width);
+		glGetTexLevelParameteriv(GL_TEXTURE_2D,	0, GL_TEXTURE_HEIGHT, &height);
+		printf("Texture level parameter %d %d \n", width, height);
+		Image img(width, height);
+		glGetTexImage(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGBA,
+			GL_UNSIGNED_INT_8_8_8_8,
+			&img.pixel(0,0));
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		return img;
+	}
 }

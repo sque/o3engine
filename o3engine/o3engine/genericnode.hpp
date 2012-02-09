@@ -16,7 +16,7 @@ namespace o3engine
 	{
 	friend class GenericScene;
 	public:
-		// Map of childs
+		// Map of children
 		typedef map<string, GenericNode *>::iterator ChildIterator;
 		typedef map<string, GenericNode *> ChildMap;
 
@@ -56,7 +56,7 @@ namespace o3engine
 		// Draw all the objects of this node
 		void drawObjects(bool bSolid);
 
-		// Check if it has transperant objects
+		// Check if it has transparent objects
 		inline bool hasTransperantObjects()
 		{	return (v_attachedTransObjects.size() > 0);	}
 

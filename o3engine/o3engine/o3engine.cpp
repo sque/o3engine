@@ -100,7 +100,8 @@ namespace o3engine
 	}
 
 	int O3Engine::init(int argc, char ** argv)
-	{   // Start glut
+	{
+		// Start glut
 		glutInit(&argc, argv);
 
         // Initialize platform (Window, Input, Timers)
@@ -141,8 +142,8 @@ namespace o3engine
 	}
 
     void O3Engine::onWindowResized(int old_width, int old_height, int new_width, int new_height)
-	{	RenderOutputIterator it_output;
-
+	{
+    	RenderOutputIterator it_output;
 
 		// Call viewport's reshaped function
 		for(it_output = mv_render_outputs.begin();it_output != mv_render_outputs.end();it_output++)
@@ -158,7 +159,8 @@ namespace o3engine
 
 	// Call back function for idle
 	void O3Engine::onWindowIdle()
-	{   FrameListener * p_fl;
+	{
+		FrameListener * p_fl;
 
 		if (m_frame_listeners_paused)
 			return;

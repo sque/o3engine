@@ -15,7 +15,7 @@ namespace o3engine
 	class Camera
 	{
 	friend class SceneNode;
-	private:
+	protected:
 		Skybox * pSkybox;       	//!< Pointer to skybox of this camera
 		SceneNode * pAttachedNode;	//!< Pointer to attached node;
 
@@ -26,24 +26,26 @@ namespace o3engine
 		// Camera parameter
 		Real left, top, bottom, right, width, height, lim_near, lim_far;
 		Real aspect;                          //! Aspect ratio of camera
-		Real fovY;                            //! The theta of the prespective
+		Real fovY;                            //! The theta of the perspective
 
 		// Initialize Values
 		void _initvalues(void);
 
-		//! Calculate Frustum values from prespective angle
+		//! Calculate Frustum values from perspective angle
 		void calcFromPrespective();
 	public:
 
 		//! Default constructor
 		Camera()
-		{   _initvalues();
+		{
+			_initvalues();
 			calcFromPrespective();
 		}
 
 		//! Constructor with basic parameters
 		Camera(const Vector3 & _target,const Vector3 & _up_vector)
-		{   _initvalues();
+		{
+			_initvalues();
 			target_point = _target;
 			up_vector = _up_vector;
 			calcFromPrespective();
@@ -51,7 +53,8 @@ namespace o3engine
 
 		//! Constructor with extended parameters
 		Camera(const Vector3 & _target, const Vector3 & _up_vector, Real fovy, Real _near, Real _far)
-		{   _initvalues();
+		{
+			_initvalues();
 			target_point = _target;
 			up_vector = _up_vector;
 			lim_near = _near;
@@ -128,7 +131,7 @@ namespace o3engine
 		{	aspect = _aspect;	calcFromPrespective();	}
 
 		// Run gluLookAt with those paramters
-		inline void useme_to_gluLookAt()
+		inline virtual void useme_to_gluLookAt()
 		{   gluLookAt(0, 0, 0,
 				target_point.x, target_point.y, target_point.z,
 				up_vector.x, up_vector.y, up_vector.z
@@ -136,7 +139,7 @@ namespace o3engine
 		}
 
 		// Run glFrustum with a specific aspect ratio
-		inline void useme_to_glFrustum()
+		inline virtual void useme_to_glFrustum()
 		{   glFrustum(left, right, bottom ,top, lim_near, lim_far);    }
 
 		//! Attach a skybox

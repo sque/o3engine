@@ -44,11 +44,14 @@ namespace o3engine
 		//! Construct and load an image from file
 		Texture(const string & name, const string & fname, bool use_mipmaps = true);
 
-		//! Construct and load an image from memmory
+		//! Construct and load an image from memory
 		Texture(const string & name, const Image & tex_img, bool use_mipmaps = true);
 
 		//! Load a texture from an existing image
 		bool setImage(const Image & img, bool _use_mipmaps = true);
+
+		//! Download image from gpu memory
+		Image downloadImage();
 
 		//! Set wrap on S axis (Horizontal)
 		inline void setWrapOnS(bool wrap_onS)

@@ -21,7 +21,7 @@ namespace o3engine
     /**
         To use the o3engine library you must create one O3Engine object. This is the
         root object of your framework and the main organizer. After allocating O3Engine
-        you must initialize using init() before using any componment of the library.
+        you must initialize using init() before using any component of the library.
     @par Class Characteristics
         O3Engine is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
     */
@@ -36,7 +36,7 @@ namespace o3engine
 	friend class RenderOutput;          //!< Affiliate with render outputs
 
 	private:
-	    // General objecs
+	    // General objects
 		unsigned m_frame_counter;       //!< General frame counter, needed for fps counter
 		bool m_frame_listeners_paused;	//!< A flag if framelisteners have been paused
 		Renderer * mp_renderer;         //!< A pointer to renderer
@@ -49,7 +49,7 @@ namespace o3engine
 		ObjectManager * mp_object_manager;      //!< Object manager
 		Platform * mp_platform;                 //!< Platform manager
 
-        //! All the activities that must be done on costructor
+        //! All the activities that must be done on constructor
 		void generalConstructor(int c, char** v);
 
 		//! Setup opengl state
@@ -110,10 +110,10 @@ namespace o3engine
         //! @name Control general rendering
         //! @{
 
-        //! Initailize engine
+        //! Initialize engine
         /**
             This function must be called @b BEFORE using
-            any componment of the library.
+            any component of the library.
         */
 		int init(int argc, char ** argv);
 
@@ -147,7 +147,7 @@ namespace o3engine
 
 		//! @}
 
-        //! @name Access sub componments of the engine
+        //! @name Access sub components of the engine
         //! @{
 
 		//! Reference to the material manager singleton

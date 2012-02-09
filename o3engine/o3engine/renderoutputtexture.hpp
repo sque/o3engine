@@ -9,7 +9,7 @@ namespace o3engine
 {
     //! [R4] An output to a texture (RTT)
 	/**
-	    Implemetation of RenderOutput target on a texture. This is
+	    Implementation of RenderOutput target on a texture. This is
 	    also known as RenderToTexture (RTT).
 	@par Class Characteristics
          RenderOutputTexture is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page

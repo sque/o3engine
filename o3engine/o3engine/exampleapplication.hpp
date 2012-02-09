@@ -36,7 +36,7 @@ namespace o3engine
 	private:
 		void setupEngine()
 		{
-			// Initialize egine
+			// Initialize engine
 			m_engine.init();
 			enableFrameListening();
 			enableKeyboardListening();
