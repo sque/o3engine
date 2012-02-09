@@ -95,8 +95,8 @@ namespace o3engine
 
         //! Scale operator
         inline Triangle3 operator*(Real factor) const
-        {   Triangle3 tmp_t3(point_a * factor, point_b * factor, point_c * factor);
-            return tmp_t3;
+        {
+        	return Triangle3(point_a * factor, point_b * factor, point_c * factor);
         }
 
         //! Move triangle
@@ -105,8 +105,8 @@ namespace o3engine
 
         //! Translate a copy of this triangle
         inline Triangle3 operator+(const Vector3 & trans) const
-        {   Triangle3 tmp_t3(point_a + trans, point_b + trans, point_c + trans);
-            return tmp_t3;
+        {
+            return Triangle3(point_a + trans, point_b + trans, point_c + trans);;
         }
         //! @}
 

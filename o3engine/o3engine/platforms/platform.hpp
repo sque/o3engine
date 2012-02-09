@@ -121,7 +121,7 @@ namespace o3engine
         WindowEventsListener * getWindowEventsListener();
         //! @}
 
-        //! Called by engine to initilize platform
+        //! Called by engine to initialize platform
 		bool init();
 	};
 }

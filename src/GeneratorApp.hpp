@@ -76,18 +76,21 @@ public:
 
 class GeneratorApp {
 public :
+	O3Engine m_engine;
+	GeneratorApp() {
+		// Start engine
+		m_engine.init(0, NULL);
+	}
 
 	void start() {
 		//pcache_manager = new ResourceCacheManager();
 
-		// Start engine
-		O3Engine m_engine;
-		m_engine.init(0, NULL);
+
 
 		// Set up window
 		Platform::getSingleton().setWindowTitle("hy672 Project");
 		Platform::getSingleton().setWindowSize(800, 600);
-		Platform::getSingleton().setWindowBackColor(Color::WHITE);
+		Platform::getSingleton().setWindowBackColor(Color::RED);
 
 		// Set up renderer
 		SimpleRenderer *prenderer_simple;
@@ -116,7 +119,7 @@ public :
 
 		//Sphere *psphere = new Sphere("test_sphere");
 		//psphere->setSlices(20);
-		Material * pmat  =new Material("mat black");
+		Material * pmat = new Material("mat black");
 		pmat->setShininess(0);
 		pmat->setAmbient(Color::BLACK);
 		Cube * pcube = new Cube("test_cube");
@@ -126,6 +129,11 @@ public :
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
 
 		m_engine.startRendering();
+//		while(1) {
+//			sm.getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Degree(30)));
+//			m_engine.renderOneFrame();
+//			sleep(1);
+//		}
 	}
 
 };

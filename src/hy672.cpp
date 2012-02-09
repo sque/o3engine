@@ -6,8 +6,8 @@
 
 int main(int argc, char ** argv) {
 
+
 	GeneratorApp ap;
 
 	ap.start();
-
 }

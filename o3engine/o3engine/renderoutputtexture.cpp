@@ -19,9 +19,9 @@ namespace o3engine
 			// Bind to fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
 
-			/*glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
+			glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
 			                         width, height);
-*/
+
 			// Bind texture
 			glBindTexture(GL_TEXTURE_2D, m_gli_texture);
 
@@ -70,7 +70,7 @@ namespace o3engine
 			glViewport(0, 0, m_width, m_height);
 
 			// Set clear color to empty
-			::glClearColor(1, 1, 0, 1);
+			glClearColor(Color::BLUE);
 
 			// Clear frame buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -100,7 +100,7 @@ namespace o3engine
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// Disable texturing
-			glBindTexture(GL_TEXTURE_2D,0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 }

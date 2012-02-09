@@ -136,7 +136,7 @@ namespace o3engine
 		inline bool operator==(const Quaternion & r) const
 		{	return (x == r.x) && (y == r.y) && (z == r.z) && (w == r.w); 	}
 
-		//! Compare differency operator
+		//! Compare difference operator
 		inline bool operator!=(const Quaternion & r) const
 		{	return !operator==(r); 	}
 

@@ -247,7 +247,8 @@ namespace o3engine
 		 @param b Blue color channel (0.0 to 1.0)
 		 @param a Alpha color channel (0.0 to 1.0)
 		 */
-		inline Color(Real r, Real g, Real b, Real a = 1.0):red(r), green(g), blue(b), alpha(a){}
+		inline Color(Real r, Real g, Real b, Real a = 1.0)
+			:red(r), green(g), blue(b), alpha(a){}
 
 		//! Construct from 32 bit pixel
 		/**
@@ -320,32 +321,35 @@ namespace o3engine
 
         //! Cast color to color_bgra_t
         inline color_bgra_t castAsBGRA() const
-        {   color_bgra_t bgra;
-            bgra.channels.red = (uint8_t)(red * 255.0);
-            bgra.channels.green = (uint8_t)(green * 255.0);
-            bgra.channels.blue = (uint8_t)(blue * 255.0);
-            bgra.channels.alpha = (uint8_t)(alpha * 255.0);
-            return bgra;
+        {
+        	return color_bgra_t(
+					(uint8_t)(blue * 255.0),
+					(uint8_t)(green * 255.0),
+					(uint8_t)(red * 255.0),
+					(uint8_t)(alpha * 255.0)
+        		);
         }
 
         //! Cast color to color_abgr_t
         inline color_abgr_t castAsABGR() const
-        {   color_abgr_t abgr;
-            abgr.channels.red = (uint8_t)(red * 255.0);
-            abgr.channels.green = (uint8_t)(green * 255.0);
-            abgr.channels.blue = (uint8_t)(blue * 255.0);
-            abgr.channels.alpha = (uint8_t)(alpha * 255.0);
-            return abgr;
+        {
+        	return color_abgr_t(
+        			(uint8_t)(alpha * 255.0),
+        			(uint8_t)(blue * 255.0),
+        			(uint8_t)(green * 255.0),
+        			(uint8_t)(red * 255.0)
+        		);
         }
 
         //! Cast color to color_argb_t
         inline color_argb_t castAsARGB() const
-        {   color_argb_t argb;
-            argb.channels.red = (uint8_t)(red * 255.0);
-            argb.channels.green = (uint8_t)(green * 255.0);
-            argb.channels.blue = (uint8_t)(blue * 255.0);
-            argb.channels.alpha = (uint8_t)(alpha * 255.0);
-            return argb;
+        {
+        	return color_argb_t(
+        			(uint8_t)(alpha * 255.0),
+        			(uint8_t)(red * 255.0),
+        			(uint8_t)(green * 255.0),
+        			(uint8_t)(blue * 255.0)
+            );
         }
 
         //! @}
@@ -397,12 +401,13 @@ namespace o3engine
 		 @return The color of the point at the defined place inside the gradient.
 		 */
 		inline Color gradientLinear(const Color & target, Real step) const
-		{   Color tmp_c = *this;
-			tmp_c.red += ((target.red - red) * step);
-			tmp_c.blue += ((target.blue - blue) * step);
-			tmp_c.green += ((target.green - green) * step);
-			tmp_c.alpha += ((target.alpha - alpha) * step);
-			return tmp_c;
+		{
+			return Color(
+					red + ((target.red - red) * step),
+					blue + ((target.blue - blue) * step),
+					green + ((target.green - green) * step),
+					alpha + ((target.alpha - alpha) * step)
+					);
 		}
 
         //! @name Comparison operators

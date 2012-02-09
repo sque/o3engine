@@ -8,23 +8,23 @@ namespace o3engine
 {
 	//! [R5] Class representing a vector in 3D space
 	/**
-		This class is usefull for representing any kind of vector in 3D space.
-		It is light and generally fast and containes a number of feature
-		very usefull when working with vectors. It also provides overloaded arithmetic
-		operators to faciliate the interaction of Vector3 objects.
-
-	 @par Class Characteristics
-         Vector3 is @ref copyable_page, @ref noninherit_page and follows the @ref sfn_page
-     @ingroup base_group
+	 * This class is useful for representing any kind of vector in 3D space.
+	 * It is light and generally fast and contains a number of feature
+	 * very useful when working with vectors. It also provides overloaded arithmetic
+	 * operators to facilitate the interaction of Vector3 objects.
+	 *
+	 * @par Class Characteristics
+	 * 	Vector3 is @ref copyable_page, @ref noninherit_page and follows the @ref sfn_page
+	 * @ingroup base_group
 	 */
 	class Vector3
 	{
 	public:
-        //! The value of X componment.
+        //! The value of X component.
 		Real x;
-        //! The value of Y componment.
+        //! The value of Y component.
 		Real y;
-		//! The value of Z componment.
+		//! The value of Z component.
 		Real z;
 
 		//! @name Common special vectors
@@ -59,27 +59,28 @@ namespace o3engine
 
 		//! Construct with predefined values
 		/**
-            Construct and initialize the Vector3 with custom values, which are passed
-            as paramaters at the constructor
-		 @param _x The X value of 3d vector.
-		 @param _y The Y value of 3d vector.
-		 @param _z The Z value of 3d vector
+		 * Construct and initialize the Vector3 with custom values, which are passed
+		 * as parameters at the constructor
+		 * @param _x The X value of 3d vector.
+		 * @param _y The Y value of 3d vector.
+		 * @param _z The Z value of 3d vector
 		 */
-		inline Vector3(Real _x, Real _y, Real _z):x(_x),y(_y),z(_z){}
+		inline Vector3(Real _x, Real _y, Real _z)
+			:x(_x),y(_y),z(_z){}
 
 		//! Construct a Vector3 from Vector2
 		/**
-             Sometimes we want to upgrade from 2D space to 3D, this is a fast
-             way to translate 2D coordinates on 3D on XY plane with Z = 0. This means
-             that the new Vector3 object will have x and y values equal to those of
-             Vector2 and z value equal to zero.
-		 @param v2 The Vector2 object that will use to initialize
-         @param _z The Z factor of this object. By default it is initialized to zero.
-
+		 * Sometimes we want to upgrade from 2D space to 3D, this is a fast
+		 * way to translate 2D coordinates on 3D on XY plane with Z = 0. This means
+		 * that the new Vector3 object will have x and y values equal to those of
+		 * Vector2 and z value equal to zero.
+		 * @param v2 The Vector2 object that will use to initialize
+		 * @param _z The Z factor of this object. By default it is initialized to zero.
 		 */
-		inline Vector3(const Vector2 & v2, Real _z = 0):x(v2.x), y(v2.y), z(_z){}
+		inline Vector3(const Vector2 & v2, Real _z = 0)
+			:x(v2.x), y(v2.y), z(_z){}
 
-    	//! @name Operators of Vector3 object (textual or argebrical)
+    	//! @name Operators of Vector3 object (textual or algebraically)
 		//! @{
 
 		//! Translate the object based on 3 values representing the translation on 3 axis.
@@ -104,16 +105,16 @@ namespace o3engine
 
     	//! Direct member access operator (Constant)
 		/**
-			You can retrieve a parameter of Vector3 in a way that it
-			was an array of 3 values. Lower (0) is <b>X</b> and higher (2) is <b>Z</b>
-		*/
+		 * You can retrieve a parameter of Vector3 in a way that it
+		 * was an array of 3 values. Lower (0) is <b>X</b> and higher (2) is <b>Z</b>
+		 */
 		inline Real operator[] (int mem) const
 		{   return (&x)[mem];   }
 
 		//! Direct member access operator
 		/**
-			You can retrieve a parameter of Vector3 in a way that it
-			was an array of 3 values. Lower (0) is <b>X</b> and higher (2) is <b>Z</b>
+		 * You can retrieve a parameter of Vector3 in a way that it
+		 * was an array of 3 values. Lower (0) is <b>X</b> and higher (2) is <b>Z</b>
 		*/
 		inline Real & operator[] (int mem)
 		{   return (&x)[mem];   }
@@ -121,24 +122,21 @@ namespace o3engine
 
     	//! Addition operator
 		/**
-            Performs a vector addition and returns the results. This action is exactly
-            the same as the translation. The current objects remains the same after the operation.
-		 @param r The Vector3 object representing the r-value of the addition.
-		 @return A Vector3 object with the result
+		 * Performs a vector addition and returns the results. This action is exactly
+		 * the same as the translation. The current objects remains the same after the operation.
+		 * @param r The Vector3 object representing the r-value of the addition.
+		 * @return A Vector3 object with the result
 		 */
 		inline Vector3 operator + (const Vector3 &r) const
-		{   Vector3 temp = *this;
-			temp.x += r.x;
-			temp.y += r.y;
-			temp.z += r.z;
-			return temp;
+		{
+			return Vector3(x + r.x, y + r.y, z + r.z);
 		}
 
 		//! Self-Addition operator
 		/**
-            Performs a vector addition on the current object and becomes the result of the operation.
-		 @param r The Vector3 object representing the r-value of the addition.
-		 @return A reference to the same object, which is also the result of the operation
+		 * Performs a vector addition on the current object and becomes the result of the operation.
+		 * @param r The Vector3 object representing the r-value of the addition.
+		 * @return A reference to the same object, which is also the result of the operation
 		 */
 		inline Vector3 & operator += (const Vector3 &r)
 		{
@@ -148,53 +146,47 @@ namespace o3engine
 			return *this;
 		}
 
-		//! Substraction operator
+		//! Subtraction operator
 		/**
-            Substracts a vector from this one and returns the result.
-		 @param r The Vector3 object representing the r-value of the substraction.
-		 @return A Vector3 object holding the result of the substraction.
+		 * Subtracts a vector from this one and returns the result.
+		 * @param r The Vector3 object representing the r-value of the subtraction.
+		 * @return A Vector3 object holding the result of the subtraction.
 		 */
 		inline Vector3 operator - (const Vector3 &r) const
-		{   Vector3 tmp_v3 = *this;
-			tmp_v3.x -= r.x;
-			tmp_v3.y -= r.y;
-			tmp_v3.z -= r.z;
-			return tmp_v3;
+		{
+			return Vector3(x-r.x, y-r.y, z-r.z);
 		}
 
-		//! Self-Substraction operator
+		//! Self-Subtraction operator
 		/**
-            Substracts a vector from this one and becomes the result of the operation.
-		 @param r The Vector3 object representing the r-value of the substraction.
-		 @return A reference to the same object, which is also the result of the operation.
+		 * Subtracts a vector from this one and becomes the result of the operation.
+		 * @param r The Vector3 object representing the r-value of the subtraction.
+		 * @return A reference to the same object, which is also the result of the operation.
 		 */
 		inline Vector3 & operator -= (const Vector3 &r)
 		{
 			x -= r.x;
 			y -= r.y;
 			z -= r.z;
-			return (*this);
+			return *this;
 		}
 
 		//! Scale operator
 		/**
-            Scales all values of the vector by a factor.
-		 @param scale_factor The factor by which the parameters of vector will be multiplied with.
-		 @return A Vector3 object holding the result of the operation.
+		 * Scales all values of the vector by a factor.
+		 * @param scale_factor The factor by which the parameters of vector will be multiplied with.
+		 * @return A Vector3 object holding the result of the operation.
 		 */
 		inline Vector3 operator * (Real scale_factor) const
-		{   Vector3 tmp_v3 = *this;
-			tmp_v3.x *= scale_factor;
-			tmp_v3.y *= scale_factor;
-			tmp_v3.z *= scale_factor;
-			return tmp_v3;
+		{
+			return Vector3(x*scale_factor, y*scale_factor, z*scale_factor);
 		}
 
 		//! Multiply operator
 		/**
-            Multiplies two vectors by multiplying element-by-element.
-		 @param r The r-value of the operation
-		 @return A Vector3 object holding the result of the operation.
+		 * Multiplies two vectors by multiplying element-by-element.
+		 * @param r The r-value of the operation
+		 * @return A Vector3 object holding the result of the operation.
 		 */
 		inline Vector3 operator * (const Vector3 & r) const
 		{
@@ -203,12 +195,13 @@ namespace o3engine
 
 		//! Self-Scale operator
 		/**
-            Scales all values of the vector by a factor and becomes the result of the operation.
-		 @param scale_factor The factor by which the parameters of vector will be multiplied with.
-		 @return A reference to the same object, which is also the result of the operation.
+		 * Scales all values of the vector by a factor and becomes the result of the operation.
+		 * @param scale_factor The factor by which the parameters of vector will be multiplied with.
+		 * @return A reference to the same object, which is also the result of the operation.
 		 */
 		inline const Vector3 & operator *=(Real scale_factor)
-		{   x *= scale_factor;
+		{
+			x *= scale_factor;
 			y *= scale_factor;
 			z *= scale_factor;
 			return *this;
@@ -216,41 +209,42 @@ namespace o3engine
 
 		//! Self-Multiply operator
 		/**
-            Multiplies this vector and another by multiplying element-by-element.
-            The result is saved in this object again.
-		 @param r The r-value of the operation
-		 @return A reference to the same object, which is also the result of the operation.
+		 * Multiplies this vector and another by multiplying element-by-element.
+		 * The result is saved in this object again.
+		 * @param r The r-value of the operation
+		 * @return A reference to the same object, which is also the result of the operation.
 		 */
 		inline Vector3 & operator *= (const Vector3 & r)
-		{	x *= r.x; y *= r.y; z *= r.z;
+		{
+			x *= r.x; y *= r.y; z *= r.z;
 			return *this;
 		}
 
 		//! Opposite operator
 		/**
-            It will calculate and return the oposite vector.
-		 @return A Vector3 object holding the opposite vector
-		 @see getOpposite
+		 * It will calculate and return the opposite vector.
+		 * @return A Vector3 object holding the opposite vector
+		 * @see getOpposite
 		 */
 		inline Vector3 operator - () const
-		{   return Vector3(-x, -y, -z); }
+		{	return Vector3(-x, -y, -z); }
 
 		//! Get the opposite vector
 		/**
-            It will calculate and return the oposite vector.
-		 @return A Vector3 object holding the opposite vector
-		 @see operator-
+		 * It will calculate and return the opposite vector.
+		 * @return A Vector3 object holding the opposite vector
+		 * @see operator-
 		 */
 		inline Vector3 opposite() const
-		{   return Vector3(-x,-y,-z);   }
+		{	return Vector3(-x,-y,-z);   }
 
-		//! Normalise vector
+		//! Normalize vector
 		/**
-			It will calculate the unit vector that has the same direction as this one and
-			replace the current values.
-		@return The old length of this vector
-		@see normal
-		*/
+		 * It will calculate the unit vector that has the same direction as this one and
+		 * replace the current values.
+		 * @return The old length of this vector
+		 * @see normal
+		 */
 		inline Real normalize()
 		{
 			Real fLength = math::sqrt( x * x + y * y + z * z );
@@ -269,11 +263,11 @@ namespace o3engine
 
 		//! Get the normal vector of this vector
 		/**
-			It will calculate the unit vector the same direction as this one and return
-			it without affecting this one.
-		@return The normal vector.
-		@see normalize
-		*/
+		 * It will calculate the unit vector the same direction as this one and return
+		 * it without affecting this one.
+		 * @return The normal vector.
+		 * @see normalize
+		 */
 		inline Vector3 normal() const
 		{   Vector3 tmp_normalized(*this);
 			tmp_normalized.normalize();
@@ -287,31 +281,30 @@ namespace o3engine
 
 		//! Calculate the cross-product of this vector with another
 		/**
-			The cross-product is normally used to calculate the normal
-			vector of a plane, by calculating the cross-product of 2
-			non-equivalent vectors which lie on the plane (e.g. 2 edges
-			of a triangle).
-		@param
-			r Vector which, together with this one, will be used to
-			calculate the cross-product.
-		@return
-			A vector which is the result of the cross-product. This
-			vector will <b>NOT</b> be normalised, to maximise efficiency
-			- call Vector3::normalise on the result if you wish this to
-			be done. As for which side the resultant vector will be on, the
-			returned vector will be on the side from which the arc from 'this'
-			to rkVector is anticlockwise, e.g. UNIT_Y.crossProduct(UNIT_Z)
-			= UNIT_X, whilst UNIT_Z.crossProduct(UNIT_Y) = -UNIT_X.
-			This is because OGRE uses a right-handed coordinate system.
-		@par
-			For a clearer explanation, look a the left and the bottom edges
-			of your monitor's screen. Assume that the first vector is the
-			left edge and the second vector is the bottom edge, both of
-			them starting from the lower-left corner of the screen. The
-			resulting vector is going to be perpendicular to both of them
-			and will go <i>inside</i> the screen, towards the cathode tube
-			(assuming you're using a CRT monitor, of course).
-		@note This function is based on OGRE's implementation
+		 * The cross-product is normally used to calculate the normal
+		 * vector of a plane, by calculating the cross-product of 2
+		 * non-equivalent vectors which lie on the plane (e.g. 2 edges
+		 * of a triangle).
+		 * @param
+		 * r Vector which, together with this one, will be used to
+		 * calculate the cross-product.
+		 * @return
+		 * A vector which is the result of the cross-product. This
+		 * vector will <b>NOT</b> be normalized, to maximize efficiency
+		 * - call Vector3::normalize on the result if you wish this to
+		 * be done. As for which side the resultant vector will be on, the
+		 * returned vector will be on the side from which the arc from 'this'
+		 * to rkVector is anticlockwise, e.g. UNIT_Y.crossProduct(UNIT_Z)
+		 * = UNIT_X, whilst UNIT_Z.crossProduct(UNIT_Y) = -UNIT_X.
+		 * This is because OGRE uses a right-handed coordinate system.
+		 * @parFor a clearer explanation, look a the left and the bottom edges
+		 * of your monitor's screen. Assume that the first vector is the
+		 * left edge and the second vector is the bottom edge, both of
+		 * them starting from the lower-left corner of the screen. The
+		 * resulting vector is going to be perpendicular to both of them
+		 * and will go <i>inside</i> the screen, towards the cathode tube
+		 * (assuming you're using a CRT monitor, of course).
+		 * @note This function is based on OGRE's implementation
 		*/
 		inline Vector3 crossProduct( const Vector3 & r) const
 		{
@@ -323,20 +316,20 @@ namespace o3engine
 
 		//! Calculates the dot (scalar) product of this vector with another.
 		/**
-		@param
-			r Vector3 with which to calculate the dot product (together
-			with this one).
-		@return
-			A float representing the dot product value.
-		@remarks
-			The dot product can be used to calculate the angle between 2
-			vectors. If both are unit vectors, the dot product is the
-			cosine of the angle; otherwise the dot product must be
-			divided by the product of the lengths of both vectors to get
-			the cosine of the angle. This result can further be used to
-			calculate the distance of a point from a plane.
-		@note This function is based on OGRE's implementation
-		*/
+		 * @param
+		 * r Vector3 with which to calculate the dot product (together
+		 * with this one).
+		 * @return
+		 * A float representing the dot product value.
+		 * @remarks
+		 * The dot product can be used to calculate the angle between 2
+		 * vectors. If both are unit vectors, the dot product is the
+		 * cosine of the angle; otherwise the dot product must be
+		 * divided by the product of the lengths of both vectors to get
+		 * the cosine of the angle. This result can further be used to
+		 * calculate the distance of a point from a plane.
+		 * @note This function is based on OGRE's implementation
+		 */
 		inline Real dotProduct(const Vector3 & r) const
 		{
 			return x * r.x + y * r.y + z * r.z;
@@ -344,22 +337,22 @@ namespace o3engine
 
 		//! Calculate the distance between this and another vector
 		/**
-            If you want to compare 2 distances use squaredDistance as
-            it is less expensive to calculate than this.
-		 @param r The vector that will calculate how far is from us.
-		 @return The distance between two vectors.
-		 @see squaredDistance
+		 * If you want to compare 2 distances use squaredDistance as
+		 * it is less expensive to calculate than this.
+		 * @param r The vector that will calculate how far is from us.
+		 * @return The distance between two vectors.
+		 * @see squaredDistance
 		 */
 		inline Real distance(const Vector3 & r) const
 		{   return (*this - r).length();    }
 
 		//! Calculate the squared distance between this and another vector
 		/**
-            If you want real distance use Vector3::distance insteade of this
-            but if you want to just compare distances this is better.
-		 @param r The vector that will calculate how far is from us.
-		 @return The squared distance between two vectors.
-		 @see distance
+		 * If you want real distance use Vector3::distance instead of this
+		 * but if you want to just compare distances this is better.
+		 * @param r The vector that will calculate how far is from us.
+		 * @return The squared distance between two vectors.
+		 * @see distance
 		 */
 		inline Real squaredDistance(const Vector3 & r) const
 		{   return (*this - r).squaredLength(); }
@@ -368,51 +361,52 @@ namespace o3engine
 
 		//! Get the length of the vector
 		/**
-            It will calculate the length of this vector.
-		 @return The length of this vector
-		 @see getSquaredLength
+		 * It will calculate the length of this vector.
+		 * @return The length of this vector
+		 * @see getSquaredLength
 		 */
 		inline Real length() const
 		{   return math::sqrt(x * x + y * y + z * z);     }
 
 		//! Get the squared length of the vector
 		/**
-            It will calculate the squared length of this vector. Although this value is useless
-            for direct usage, it is wise to use it when you want to compare lengths of vectors
-            as it is quite faster operation. If you need real lenth use getLength
-		 @return The squared length of this vector
-		 @see getLength
+		 * It will calculate the squared length of this vector. Although this value is useless
+		 * for direct usage, it is wise to use it when you want to compare lengths of vectors
+		 * as it is quite faster operation. If you need real length use getLength
+		 * @return The squared length of this vector
+		 * @see getLength
 		 */
 		inline Real squaredLength() const
 		{   return x * x + y * y + z * z;   }
 
 		//! Interpolated transaction to a destination Vector3 object.
 		/**
-			With interpolation you can easily calculate the intercalary vectors
-			between this vector and a target one. Very usefull for creating
-			smooth movements on simulated world.
-		@param dst The target Vector3 object
-		@param factor The step of the transaction which is a value
-			between 0.0 and 1.0. If the factor is 0 then the result is the current
-			Vector3 object. If the value is 1 the result is the target Vector3 object and
-			all the middle values provides the step of the transaction from current position
-			to the target one.
-		@return The result of the calculation.
-		*/
+		 * With interpolation you can easily calculate the intercalary vectors
+		 * between this vector and a target one. Very useful for creating
+		 * smooth movements on simulated world.
+		 * @param dst The target Vector3 object
+		 * @param factor The step of the transaction which is a value
+		 * 	between 0.0 and 1.0. If the factor is 0 then the result is the current
+		 * 	Vector3 object. If the value is 1 the result is the target Vector3 object and
+		 * 	all the middle values provides the step of the transaction from current position
+		 * 	to the target one.
+		 * 	@return The result of the calculation.
+		 */
 		inline Vector3 interpolated(const Vector3 & dst, Real factor) const
-		{   Vector3 tmp_v3 = *this;
-			tmp_v3.x += ((dst.x - x) * factor);
-			tmp_v3.y += ((dst.y - y) * factor);
-			tmp_v3.z += ((dst.z - z) * factor);
-			return tmp_v3;
+		{
+			return Vector3(
+				x +((dst.x - x) * factor),
+				y + ((dst.y - y) * factor),
+				z + ((dst.z - z) * factor));
 		}
 
 		//! Calculate the midpoint of this vector with another
 		inline Vector3 midPoint(const Vector3 & r) const
-		{   return Vector3(
-                ( x + r.x ) * 0.5,
-                ( y + r.y ) * 0.5,
-                ( z + r.z ) * 0.5 );
+		{
+			return Vector3(
+				( x + r.x ) * 0.5,
+				( y + r.y ) * 0.5,
+				( z + r.z ) * 0.5 );
 		}
 
         //! @name Comparison operators

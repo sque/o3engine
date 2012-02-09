@@ -53,8 +53,7 @@ namespace o3engine
 		void generalConstructor(int c, char** v);
 
 		//! Setup opengl state
-
-		void initOpenGLState();
+		void setupOpenGLState();
 
 		//! @name Manager active render output
 		//! @{
@@ -129,6 +128,11 @@ namespace o3engine
         @bug This doesn't work on glut platform
         */
 		void stopRendering();
+
+		/**
+		 * Render a frame
+		 */
+		void renderOneFrame();
 
         //! Calculate fps
 		Real getFps();

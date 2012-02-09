@@ -114,7 +114,7 @@ namespace o3engine
 		glewInit();
 
         // Initialize opengl state
-		initOpenGLState();
+		setupOpenGLState();
 
 		// Create font manager
 		mp_font_manager = new FontManager();
@@ -174,7 +174,10 @@ namespace o3engine
 		glutPostRedisplay();
 	}
 
-	void O3Engine::onWindowRepaint()
+	/**
+	 * Render a frame
+	 */
+	void O3Engine::renderOneFrame()
 	{
 		// Call renderer
 		if (mp_renderer)
@@ -189,8 +192,13 @@ namespace o3engine
 		m_frame_counter++;
 	}
 
+	void O3Engine::onWindowRepaint()
+	{
+		renderOneFrame();
+	}
+
 	// Setup opengl state
-	void O3Engine::initOpenGLState()
+	void O3Engine::setupOpenGLState()
 	{
 		// Set up OpenGL parameters
 		glShadeModel(GL_SMOOTH);

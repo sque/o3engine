@@ -24,7 +24,6 @@ public:
 
 	inline virtual void useme_to_glFrustum()
 	{
-		//glOrtho(left, right, bottom ,top, lim_near, lim_far);
 		glOrtho(-ortho_width/2, ortho_width/2, -ortho_height/2, ortho_height/2, lim_near, lim_far);
 	}
 };
