@@ -19,8 +19,7 @@ namespace o3engine
 			// Bind to fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
 
-			glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
-			                         width, height);
+			glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);
 
 			// Bind texture
 			glBindTexture(GL_TEXTURE_2D, m_gli_texture);

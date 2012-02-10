@@ -105,8 +105,8 @@ namespace o3engine
 		glGetTexImage(
 			GL_TEXTURE_2D,
 			0,
-			GL_RGBA,
-			GL_UNSIGNED_INT_8_8_8_8,
+			GL_BGRA,
+			GL_UNSIGNED_BYTE,
 			&img.pixel(0,0));
 
 		glBindTexture(GL_TEXTURE_2D, 0);

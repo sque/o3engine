@@ -10,7 +10,7 @@
 
 #include <o3engine/camera.hpp>
 
-using namespace o3engine;
+namespace o3engine {
 
 class OrthoCamera : public Camera{
 protected:
@@ -28,5 +28,6 @@ public:
 	}
 };
 
+}
 
 #endif /* ORTHOCAMERA_HPP_ */

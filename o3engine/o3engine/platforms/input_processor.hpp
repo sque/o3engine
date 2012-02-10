@@ -57,7 +57,7 @@ namespace o3engine
 		//! Keyboard listener iterator
 		typedef vector<KeyboardListener *>::iterator KeyboardListenerIterator;
 
-		//! Keyboard listeneres vector
+		//! Keyboard listeners vector
 		vector<KeyboardListener *> mv_keyboard_listeners;
 
 		//! Register keyboard listener

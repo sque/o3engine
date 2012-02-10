@@ -14,6 +14,7 @@
 #include <o3engine/renderoutputtexture.hpp>
 #include <boost/format.hpp>
 #include "OrthoCamera.hpp"
+#include <GL/glx.h>
 
 using namespace std;
 using namespace o3engine;
@@ -127,6 +128,10 @@ public :
 		sm.getRootNode().createChild("model")->attachObject(pcube);
 		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
+
+
+		//void (*swapInterval)(int) = glXGetProcAddress(((const GLubyte*) "glXSwapIntervalMESA");
+		glXSwapIntervalMESA(0);
 
 		m_engine.startRendering();
 //		while(1) {
