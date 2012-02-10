@@ -86,12 +86,13 @@ public :
 	void start() {
 		//pcache_manager = new ResourceCacheManager();
 
-
-
 		// Set up window
-		Platform::getSingleton().setWindowTitle("hy672 Project");
+		o3engine::Window & wnd_main = m_engine.getPlatformManager().createWindow("main", 800, 600);
+		wnd_main.setTitle("hy672 Project");
+		wnd_main.setBackColor(Color::RED);
+		/*Platform::getSingleton().setWindowTitle("hy672 Project");
 		Platform::getSingleton().setWindowSize(800, 600);
-		Platform::getSingleton().setWindowBackColor(Color::RED);
+		Platform::getSingleton().setWindowBackColor(Color::RED);*/
 
 		// Set up renderer
 		SimpleRenderer *prenderer_simple;
@@ -130,8 +131,10 @@ public :
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
 
 
-		//void (*swapInterval)(int) = glXGetProcAddress(((const GLubyte*) "glXSwapIntervalMESA");
-		glXSwapIntervalMESA(0);
+		void (*swapInterval)(int);
+		swapInterval = (void (*)(int))glXGetProcAddress((const GLubyte*) "glXSwapIntervalMESA");
+
+		swapInterval(0);
 
 		m_engine.startRendering();
 //		while(1) {

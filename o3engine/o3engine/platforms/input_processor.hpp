@@ -6,42 +6,39 @@
 #include "./keyboard_listener.hpp"
 #include <vector>
 
-namespace o3engine
-{
+namespace o3engine {
 
-
-	//! [R4] Engine for monitor and inform about mouse and keyboard events
+	//! [R4] Engine for monitor and inform about mouse and keyboard events on a window
 	/**
-        InputProcessor is used by Platform for input back-end, there is no need
-        to create an object, it is done automatically by Platform at the initialization stage.
-        To listen for events use KeyboardListener or MouseListener.
-    @par Class Characteristics
-        InputProcessor is @ref singleton_page, @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
-    */
-	class InputProcessor: public Singleton<InputProcessor>
-	{
-    friend class MouseListener;
-    friend class KeyboardListener;
-    friend class impl;
-    private:
-        // Pimp idiom
-        class impl;
-        impl * pimpl;
+	 * InputProcessor is used by Platform for input back-end, there is no need
+	 * to create an object, it is done automatically by Platform at the initialization stage.
+	 * To listen for events use KeyboardListener or MouseListener.
+	 * @par Class Characteristics
+	 *  InputProcessor is @ref singleton_page, @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
+	 */
+	class InputProcessor: public Singleton<InputProcessor> {
+		friend class MouseListener;
+		friend class KeyboardListener;
+		friend class impl;
+	private:
+		// Pimp idiom
+		class impl;
+		impl * pimpl;
 
-        // Uncopiable
-        InputProcessor(const InputProcessor &);
-        InputProcessor & operator=(const InputProcessor &);
+		// Uncopiable
+		InputProcessor(const InputProcessor &);
+		InputProcessor & operator=(const InputProcessor &);
 
-        //! @name Mouse listeners management
-        //! @{
+		//! @name Mouse listeners management
+		//! @{
 
-        //! Mouse Listener iterator
+		//! Mouse Listener iterator
 		typedef vector<MouseListener *>::iterator MouseListenerIterator;
 
 		//! Mouse listeners vector
 		vector<MouseListener *> mv_mouse_listeners;
 
-        //! Register a mouse listener
+		//! Register a mouse listener
 		bool registerListener(MouseListener * p_mlistener);
 
 		//! Unregister a mouse listener
@@ -49,10 +46,10 @@ namespace o3engine
 
 		//! Check if listener is registered
 		bool isListenerRegistered(MouseListener * p_mlistener);
-        //! @}
+		//! @}
 
-        //! @name Keyboard listeners management
-        //! @{
+		//! @name Keyboard listeners management
+		//! @{
 
 		//! Keyboard listener iterator
 		typedef vector<KeyboardListener *>::iterator KeyboardListenerIterator;
@@ -66,9 +63,9 @@ namespace o3engine
 		//! Unregister keyboard listener
 		bool unregisterListener(KeyboardListener * p_klistener);
 
-        //! Check if listener is registered
+		//! Check if listener is registered
 		bool isListenerRegistered(KeyboardListener * p_mlistener);
-        //! @}
+		//! @}
 
 		//! Pointer to current mouse state
 		MouseState m_mouse_state;
@@ -102,14 +99,16 @@ namespace o3engine
 		InputProcessor();
 
 		//! Destructor
-		~InputProcessor(){}
+		~InputProcessor() {
+		}
 
 		//! Start capturing events
 		void startCapture();
 
-        //! Check if a keyboard key is pressed
-		bool isVTKeyPressed(int vtk)
-		{   return mv_key_state[vtk];    }
+		//! Check if a keyboard key is pressed
+		bool isVTKeyPressed(int vtk) {
+			return mv_key_state[vtk];
+		}
 	};
 }
 #endif

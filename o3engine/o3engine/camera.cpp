@@ -2,11 +2,9 @@
 #include "./renderoutput.hpp"
 #include "./scenenode.hpp"
 
-namespace o3engine
-{
+namespace o3engine {
 	// Initialize Values
-	void Camera::_initvalues(void)
-	{
+	void Camera::_initvalues(void) {
 		target_point = Vector3::UNIT_Z;
 		up_vector = Vector3::UNIT_Y;
 		lim_near = 1;
@@ -17,17 +15,15 @@ namespace o3engine
 		pAttachedNode = NULL;
 	}
 
-	Camera::~Camera()
-	{
+	Camera::~Camera() {
 		if (pAttachedNode)
 			pAttachedNode->dettachCamera();
 	}
 
-	// Calculate Frustum values from prespective angle
-	void Camera::calcFromPrespective()
-	{
+	// Calculate Frustum values from perspective angle
+	void Camera::calcFromPrespective() {
 		Real fov2;
-		fov2 = ((fovY* math::PI) / 180.0) / 2.0;
+		fov2 = ((fovY * math::PI) / 180.0) / 2.0;
 		top = lim_near / (math::cos(fov2) / math::sin(fov2));
 		bottom = -top;
 		right = top * aspect;
@@ -36,8 +32,7 @@ namespace o3engine
 		height = top - bottom;
 	}
 
-	void Camera::drawCamera()
-	{
+	void Camera::drawCamera() {
 		// Setup camera lens
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -46,7 +41,7 @@ namespace o3engine
 
 		// Reset ModelView matrix
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity ();
+		glLoadIdentity();
 
 		// Setup camera
 		useme_to_gluLookAt();

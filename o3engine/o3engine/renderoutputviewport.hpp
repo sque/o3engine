@@ -5,57 +5,66 @@
 #include "./renderoutput.hpp"
 #include "./platforms/mouse_listener.hpp"
 
-namespace o3engine
-{
+namespace o3engine {
+
 	//! [R4] An output to a viewport of a window
 	/**
-	    Implemetation of RenderOutput target on a window's viewport.
-	@par Class Characteristics
-         RenderOutputViewport is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
-    */
-	class RenderOutputViewport : public RenderOutput, public MouseListener
-	{
+	 * Implementation of RenderOutput target on a window's viewport.
+	 * @par Class Characteristics
+	 * RenderOutputViewport is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
+	 */
+	class RenderOutputViewport: public RenderOutput, public MouseListener {
 	private:
-        // Non copyable object
-        RenderOutputViewport(const RenderOutputViewport &);
-        RenderOutputViewport& operator=(const RenderOutputViewport &);
+		// Non copyable object
+		RenderOutputViewport(const RenderOutputViewport &);
+		RenderOutputViewport& operator=(const RenderOutputViewport &);
 
 	protected:
-		int m_bottom_offset;			//!< Bottom offset of viewport
-		int m_left_offset;				//!< Left offset of viewport
+		int m_bottom_offset; 	//!< Bottom offset of viewport
+		int m_left_offset; 		//!< Left offset of viewport
 
-    	virtual void onInputCameraChanged();
+		virtual void onInputCameraChanged();
 	public:
 
 		//! Construct and initialize with desired parameters
 		/**
-        @param width The width of the RenderOutput object
-        @param height The height of the RenderOutput object
-        @param left The left offset of viewport on the window
-        @param bottom The bottom offset of viewport on the window
-        */
-		RenderOutputViewport(int width, int height, int left,  int bottom);
+		 * @param width The width of the RenderOutput object
+		 * @param height The height of the RenderOutput object
+		 * @param left The left offset of viewport on the window
+		 * @param bottom The bottom offset of viewport on the window
+		 */
+		RenderOutputViewport(int width, int height, int left, int bottom);
 
 		//! Destructor
 		virtual ~RenderOutputViewport();
 
 		//! Get bottom margin of viewport on the window
-		inline void setBottomOffset(int bottom_offset) { m_bottom_offset = bottom_offset;	}
+		inline void setBottomOffset(int bottom_offset) {
+			m_bottom_offset = bottom_offset;
+		}
 
 		//! Set left margin of viewport on the window
-		inline void setLeftOffset(int left_offset) { m_left_offset = left_offset;	}
+		inline void setLeftOffset(int left_offset) {
+			m_left_offset = left_offset;
+		}
 
 		//! Get bottom margin of viewport on the window
-		inline int getBottomOffset() const { return m_bottom_offset;	}
+		inline int getBottomOffset() const {
+			return m_bottom_offset;
+		}
 
 		//! Get left margin of viewport on the window
-		inline int getLeftOffset() const { return m_left_offset;	}
+		inline int getLeftOffset() const {
+			return m_left_offset;
+		}
 
 		//! @name Events from RenderOutput
 		//! @{
-		inline virtual void onPreRender()
-		{	glViewport(m_left_offset, m_bottom_offset, m_width, m_height);	}
-		inline virtual void onPostRender(){}
+		inline virtual void onPreRender() {
+			glViewport(m_left_offset, m_bottom_offset, m_width, m_height);
+		}
+		inline virtual void onPostRender() {
+		}
 		virtual void onWindowResize(int new_width, int new_height);
 		//! @}
 

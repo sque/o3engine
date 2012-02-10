@@ -7,16 +7,15 @@
 
 #include "./prereqs.hpp"
 
-namespace o3engine
-{
-    //! [R4] A function to create time sensitive objects.
+namespace o3engine {
+
+	//! [R4] A function to create time sensitive objects.
 	/**
-	    Very usefull for objects that needs to know how much time passed since last action.
-	 @par Class Characteristics
-         TimeSensitive is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
-    */
-	class TimeSensitive
-	{
+	 * Very useful for objects that needs to know how much time passed since last action.
+	 * @par Class Characteristics
+	 * TimeSensitive is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
+	 */
+	class TimeSensitive {
 	private:
 		//! A number of seconds representing last time
 		Real m_last_time;
@@ -34,14 +33,15 @@ namespace o3engine
 		//! Destructor
 		virtual ~TimeSensitive();
 
-	    //! Returns how much time passed since last time that this function was called.
+		//! Returns how much time passed since last time that this function was called.
 		/**
-		    This function returns REAL time and not CPU time. The timer is reseted at the contruction of
-            the object and every time this function is called. The accuracy of this function is near 1/1000 seconds
-		@return The time passed in seconds.
+		 * This function returns REAL time and not CPU time. The timer is reseted at the construction of
+		 * the object and every time this function is called. The accuracy of this function is near 1/1000 seconds.
+		 * @return The time passed in seconds.
 		 */
 		Real timePassed();
 	};
+
 }
 
 #endif

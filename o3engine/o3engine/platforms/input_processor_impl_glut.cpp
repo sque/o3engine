@@ -11,7 +11,6 @@ namespace o3engine {
 			MouseState & mst = p_ip->m_mouse_state;
 			E_MS_BUTTONS my_but;
 			E_MS_BUTTON_STATES my_action;
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Button event
 			// Translate to local enumerations
@@ -63,6 +62,7 @@ namespace o3engine {
 			}
 
 			// Process mouse move
+			int y; // TODO: window fix  = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 			p_ip->raiseMouseMoved(x, y);
 
 		}
@@ -71,7 +71,7 @@ namespace o3engine {
 		static void _func_motion(int x, int inv_y) {
 			InputProcessor * p_ip =
 					(InputProcessor *) InputProcessor::getSingletonPtr();
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -82,7 +82,7 @@ namespace o3engine {
 			InputProcessor * p_ip =
 					(InputProcessor *) InputProcessor::getSingletonPtr();
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -99,7 +99,7 @@ namespace o3engine {
 			InputProcessor * p_ip =
 					(InputProcessor *) InputProcessor::getSingletonPtr();
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -121,7 +121,7 @@ namespace o3engine {
 			InputProcessor * p_ip =
 					(InputProcessor *) InputProcessor::getSingletonPtr();
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -138,7 +138,7 @@ namespace o3engine {
 			InputProcessor * p_ip =
 					(InputProcessor *) InputProcessor::getSingletonPtr();
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -186,7 +186,7 @@ namespace o3engine {
 				return KB_VTKEY_ENTER;
 			}
 			// Invalid
-			printf("GlutInput: Unmapped Ascii Character (0x%X - %02d)\n", asc, asc);
+			fprintf(stderr, "GlutInput: Unmapped ASCII Character (0x%X - %02d)\n", asc, asc);
 			return KB_VTKEY_UNKNOWN;
 		}
 

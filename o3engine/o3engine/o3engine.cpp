@@ -6,12 +6,12 @@ namespace o3engine {
 	//- SINGLETON Initialization
 	template<> O3Engine* Singleton<O3Engine>::ms_singleton = 0;
 
-	// Console output log for free image erros
+	// Console output log for free image errors
 	static void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
 		printf("\n*** ");
 		if (fif != FIF_UNKNOWN)
 			printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
-		printf(message);
+		printf("%s", message);
 		printf(" ***\n");
 	}
 
@@ -55,7 +55,7 @@ namespace o3engine {
 		return false;
 	}
 
-	// Dettach framelistener
+	// Detach framelistener
 	bool O3Engine::unregisterFrameListener(FrameListener * p_fl) {
 		list<FrameListener *>::iterator it;
 		bool removed_current_listener = false;
@@ -205,9 +205,9 @@ namespace o3engine {
 		mv_render_outputs.push_back(p_output);
 
 		// On activation we must raise window resize event to reinitialize if needed.
-		p_output->onWindowResize(mp_platform->getWindowWidth(),
+		/* TODO: window fix p_output->onWindowResize(mp_platform->getWindowWidth(),
 				mp_platform->getWindowHeight());
-
+*/
 		return true;
 	}
 
@@ -224,9 +224,7 @@ namespace o3engine {
 
 	// Get an output by its name
 	bool O3Engine::isRenderOutputActivated(RenderOutput * p_output) {
-		if (find(mv_render_outputs.begin(), mv_render_outputs.end(), p_output)
-				== mv_render_outputs.end())
-			return false;
-		return true;
+		return (find(mv_render_outputs.begin(), mv_render_outputs.end(), p_output)
+				!= mv_render_outputs.end());
 	}
 }
