@@ -101,7 +101,7 @@ namespace o3engine {
 		Platform::getSingleton().init();
 
 		// Set us as the window events listeners
-		Platform::getSingleton().setWindowEventsListener(this);
+		//Platform::getSingleton().setWindowEventsListener(this);
 
 		// Start glew
 		glewInit();
@@ -118,7 +118,7 @@ namespace o3engine {
 	// Start rendering
 	void O3Engine::startRendering() {
 		// Start input capturing
-		Platform::getSingleton().getInputProcessor().startCapture();
+		//Platform::getSingleton().getInputProcessor().startCapture();
 
 		// Reset timer counter
 		timePassed();
@@ -130,23 +130,6 @@ namespace o3engine {
 	void O3Engine::stopRendering() {
 		// Setup Callback functions
 		//glutLeaveMainLoop();
-	}
-
-	void O3Engine::onWindowResized(int old_width, int old_height, int new_width,
-			int new_height) {
-		RenderOutputIterator it_output;
-
-		// Call viewport's reshaped function
-		for (it_output = mv_render_outputs.begin();
-				it_output != mv_render_outputs.end(); it_output++)
-			(*it_output)->onWindowResize(new_width, new_height);
-
-		// Call Renderer
-		if (mp_renderer != NULL)
-			mp_renderer->reshape(new_width, new_height);
-
-		// Redraw
-		glutPostRedisplay();
 	}
 
 	// Call back function for idle
@@ -174,17 +157,8 @@ namespace o3engine {
 		if (mp_renderer)
 			mp_renderer->render();
 
-		glFlush();
-
-		// Swap Buffers
-		glutSwapBuffers();
-
 		// Calculate fps
 		m_frame_counter++;
-	}
-
-	void O3Engine::onWindowRepaint() {
-		renderOneFrame();
 	}
 
 	// Setup opengl state

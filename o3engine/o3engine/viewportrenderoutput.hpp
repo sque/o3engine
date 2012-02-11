@@ -1,9 +1,9 @@
-#ifndef O3ENGINE_RENDEROUTPUTVIEWPORT_HPP_INCLUDED
-#define O3ENGINE_RENDEROUTPUTVIEWPORT_HPP_INCLUDED
+#ifndef O3ENGINE_VIEWPORTRENDEROUTPUT_HPP_INCLUDED
+#define O3ENGINE_VIEWPORTRENDEROUTPUT_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./renderoutput.hpp"
-#include "./platforms/mouse_listener.hpp"
+#include "./platforms/mouselistener.hpp"
 
 namespace o3engine {
 
@@ -11,13 +11,13 @@ namespace o3engine {
 	/**
 	 * Implementation of RenderOutput target on a window's viewport.
 	 * @par Class Characteristics
-	 * RenderOutputViewport is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
+	 * ViewportRenderOutput is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
 	 */
-	class RenderOutputViewport: public RenderOutput, public MouseListener {
+	class ViewportRenderOutput: public RenderOutput, public MouseListener {
 	private:
 		// Non copyable object
-		RenderOutputViewport(const RenderOutputViewport &);
-		RenderOutputViewport& operator=(const RenderOutputViewport &);
+		ViewportRenderOutput(const ViewportRenderOutput &);
+		ViewportRenderOutput& operator=(const ViewportRenderOutput &);
 
 	protected:
 		int m_bottom_offset; 	//!< Bottom offset of viewport
@@ -33,10 +33,10 @@ namespace o3engine {
 		 * @param left The left offset of viewport on the window
 		 * @param bottom The bottom offset of viewport on the window
 		 */
-		RenderOutputViewport(int width, int height, int left, int bottom);
+		ViewportRenderOutput(int width, int height, int left, int bottom);
 
 		//! Destructor
-		virtual ~RenderOutputViewport();
+		virtual ~ViewportRenderOutput();
 
 		//! Get bottom margin of viewport on the window
 		inline void setBottomOffset(int bottom_offset) {

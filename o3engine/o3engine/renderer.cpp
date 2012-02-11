@@ -7,7 +7,7 @@ namespace o3engine
 	Renderer::Renderer()
 	{
 		// Initialize pointers
-		mp_outputs = &O3Engine::getSingletonPtr()->mv_render_outputs;
+		mp_outputs = &O3Engine::getSingleton().mv_render_outputs;
 	}
 
 }

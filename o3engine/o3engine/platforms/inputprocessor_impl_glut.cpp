@@ -1,13 +1,14 @@
-#include "./input_processor.hpp"
+#include "./inputprocessor.hpp"
+#include "./window_impl_glut.hpp"
 #include "./platform.hpp"
 
 namespace o3engine {
 	class InputProcessor::impl {
 	public:
+
 		static void _func_mouse(int button, int state, int x, int inv_y) {
 			// Get variables
-			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
+			InputProcessor * p_ip = Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
 			MouseState & mst = p_ip->m_mouse_state;
 			E_MS_BUTTONS my_but;
 			E_MS_BUTTON_STATES my_action;
@@ -35,7 +36,7 @@ namespace o3engine {
 				my_but = MS_BUTTON_WHEELDOWN;
 				break;
 			default:
-				// Default button is assing to left
+				// Default button is assign to left
 				my_but = MS_BUTTON_LEFT;
 				break;
 			}
@@ -62,7 +63,7 @@ namespace o3engine {
 			}
 
 			// Process mouse move
-			int y; // TODO: window fix  = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 			p_ip->raiseMouseMoved(x, y);
 
 		}
@@ -70,8 +71,8 @@ namespace o3engine {
 		// Call-back function for mouse motion
 		static void _func_motion(int x, int inv_y) {
 			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
-			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+					Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -80,9 +81,9 @@ namespace o3engine {
 		// Call-back function for keyboard down actions
 		static void _func_keyb_down(unsigned char key, int x, int inv_y) {
 			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
+					Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -97,9 +98,9 @@ namespace o3engine {
 		// Call-back function for keyboard up actions
 		static void _func_keyb_up(unsigned char key, int x, int inv_y) {
 			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
+					Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -119,9 +120,9 @@ namespace o3engine {
 		// Call-back function for special keys pressed
 		static void _func_keyb_special_down(int gvt, int x, int inv_y) {
 			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
+					Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -136,9 +137,9 @@ namespace o3engine {
 		// Call-back function for special keys release
 		static void _func_keyb_special_up(int gvt, int x, int inv_y) {
 			InputProcessor * p_ip =
-					(InputProcessor *) InputProcessor::getSingletonPtr();
+					Window::impl::m_handles_to_impls[glutGetWindow()]->mp_inputprocessor;
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y;// TODO: window fix   = Platform::getSingleton().getWindowHeight() - inv_y - 1;
+			int y = p_ip->getAssociatedWindow().getHeight() - inv_y - 1;
 
 			// Process mouse move
 			p_ip->raiseMouseMoved(x, y);
@@ -154,7 +155,7 @@ namespace o3engine {
 			p_ip->raiseKeyboardReleased(VtKey);
 		}
 
-		// Converter from ascii to VT
+		// Converter from ASCII to VT
 		static E_KB_VIRTUALKEYS _ascii2vt(unsigned char asc) {
 			// Fast select for small letter
 			if ((asc >= 'a') && (asc <= 'z'))
@@ -241,13 +242,28 @@ namespace o3engine {
 
 	// Start capturing
 	void InputProcessor::startCapture() {
-		glutIgnoreKeyRepeat(1); // Ignore key repeat
-		glutMouseFunc(impl::_func_mouse);
-		glutPassiveMotionFunc(impl::_func_motion);
-		glutMotionFunc(impl::_func_motion);
-		glutKeyboardFunc(impl::_func_keyb_down);
-		glutKeyboardUpFunc(impl::_func_keyb_up);
-		glutSpecialFunc(impl::_func_keyb_special_down);
-		glutSpecialUpFunc(impl::_func_keyb_special_up);
+		::glutSetWindow(getAssociatedWindow().pimpl->m_handle);
+		::glutIgnoreKeyRepeat(1); // Ignore key repeat
+		::glutMouseFunc(impl::_func_mouse);
+		::glutPassiveMotionFunc(impl::_func_motion);
+		::glutMotionFunc(impl::_func_motion);
+		::glutKeyboardFunc(impl::_func_keyb_down);
+		::glutKeyboardUpFunc(impl::_func_keyb_up);
+		::glutSpecialFunc(impl::_func_keyb_special_down);
+		::glutSpecialUpFunc(impl::_func_keyb_special_up);
 	}
+
+	// Stop capturing events;
+	void InputProcessor::stopCapture() {
+			::glutSetWindow(getAssociatedWindow().pimpl->m_handle);
+			::glutMouseFunc(NULL);
+			::glutPassiveMotionFunc(NULL);
+			::glutMotionFunc(NULL);
+			::glutKeyboardFunc(NULL);
+			::glutKeyboardUpFunc(NULL);
+			::glutSpecialFunc(NULL);
+			::glutSpecialUpFunc(NULL);
+		}
+
+
 }

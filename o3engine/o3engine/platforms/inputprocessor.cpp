@@ -1,16 +1,14 @@
-#include "./input_processor.hpp"
+#include "./inputprocessor.hpp"
 #include "../o3engine.hpp"
 #include <algorithm>
 
 namespace o3engine {
 
-	//- SINGLETON Initialization
-	template<> InputProcessor* Singleton<InputProcessor>::ms_singleton = 0;
-
 	// Constructor
-	InputProcessor::InputProcessor() :
-			m_mouse_event(m_mouse_state) {
-		// Initiliaze mouse state
+	InputProcessor::InputProcessor(const Window & wnd) :
+			m_wnd(wnd),
+			m_mouse_event(m_mouse_state){
+		// Initialize mouse state
 		m_mouse_state.m_pos_x = m_mouse_state.m_pos_y = 0;
 
 		// Reset mouse buttons
@@ -98,50 +96,20 @@ namespace o3engine {
 			(*kit)->onKeyboardCharInsert(ch);
 	}
 
-	// Register mouse listener
-	bool InputProcessor::registerListener(MouseListener * p_mlistener) {
-		if (isListenerRegistered(p_mlistener))
+	bool InputProcessor::attachKeyboardListener(KeyboardListener & listener) {
+		if (isKeyboardListenerAttached(listener))
 			return false;
 
-		mv_mouse_listeners.push_back(p_mlistener);
-		return true;
-	}
-
-	// Unregister mouse listener
-	bool InputProcessor::unregisterListener(MouseListener * p_mlistener) {
-		MouseListenerIterator it_m;
-
-		if ((it_m = std::find(mv_mouse_listeners.begin(), mv_mouse_listeners.end(),
-				p_mlistener)) == mv_mouse_listeners.end())
-			return false;
-
-		mv_mouse_listeners.erase(it_m);
-		return true;
-	}
-
-	// Check if listener is registered
-	bool InputProcessor::isListenerRegistered(MouseListener * p_mlistener) {
-		if (std::find(mv_mouse_listeners.begin(), mv_mouse_listeners.end(),
-				p_mlistener) == mv_mouse_listeners.end())
-			return false;
-
-		return true;
-	}
-
-	bool InputProcessor::registerListener(KeyboardListener * p_klistener) {
-		if (isListenerRegistered(p_klistener))
-			return false;
-
-		mv_keyboard_listeners.push_back(p_klistener);
+		mv_keyboard_listeners.push_back(&listener);
 		return true;
 	}
 
 	// Unregister keyboard listener
-	bool InputProcessor::unregisterListener(KeyboardListener * p_klistener) {
+	bool InputProcessor::detachKeyboardListener(KeyboardListener & listener) {
 		KeyboardListenerIterator it_m;
 
 		if ((it_m = std::find(mv_keyboard_listeners.begin(),
-				mv_keyboard_listeners.end(), p_klistener))
+				mv_keyboard_listeners.end(), &listener))
 				== mv_keyboard_listeners.end())
 			return false;
 
@@ -150,9 +118,39 @@ namespace o3engine {
 	}
 
 	// Check if listener is registered
-	bool InputProcessor::isListenerRegistered(KeyboardListener * p_klistener) {
+	bool InputProcessor::isKeyboardListenerAttached(KeyboardListener & listener) {
 		if (std::find(mv_keyboard_listeners.begin(), mv_keyboard_listeners.end(),
-				p_klistener) == mv_keyboard_listeners.end())
+				&listener) == mv_keyboard_listeners.end())
+			return false;
+
+		return true;
+	}
+
+	// Register mouse listener
+	bool InputProcessor::attachMouseListener(MouseListener & listener) {
+		if (isMouseListenerAttached(listener))
+			return false;
+
+		mv_mouse_listeners.push_back(&listener);
+		return true;
+	}
+
+	// Unregister mouse listener
+	bool InputProcessor::detachMouseListener(MouseListener & listener) {
+		MouseListenerIterator it_m;
+
+		if ((it_m = std::find(mv_mouse_listeners.begin(), mv_mouse_listeners.end(),
+				&listener)) == mv_mouse_listeners.end())
+			return false;
+
+		mv_mouse_listeners.erase(it_m);
+		return true;
+	}
+
+	// Check if listener is registered
+	bool InputProcessor::isMouseListenerAttached(MouseListener & listener) {
+		if (std::find(mv_mouse_listeners.begin(), mv_mouse_listeners.end(),
+				&listener) == mv_mouse_listeners.end())
 			return false;
 
 		return true;

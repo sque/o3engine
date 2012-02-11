@@ -2,7 +2,8 @@
 #define O3ENGINE_WINDOW_HPP_INCLUDED
 
 #include "../prereqs.hpp"
-#include "./window_listener.hpp"
+#include "./windowlistener.hpp"
+#include <vector>
 
 namespace o3engine {
 
@@ -15,13 +16,19 @@ namespace o3engine {
 	 * Platform is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
 	class Window {
+		friend class InputProcessor;
+
 	private:
-		Window(const Window &) = delete;
+		Window(const Window &);
 		Window & operator=(const Window &);
 
 		// Pimpl idiom
 		class impl;
 		impl * pimpl;
+
+		typedef std::vector<const WindowEventsListener *> window_listeners_type;
+		window_listeners_type m_wnd_listeners;
+
 	public:
 
 		//! Construct a new window
@@ -58,12 +65,15 @@ namespace o3engine {
 		const Color & getBackColor() const;
 
 		//! Set/Unset windows events listener
-		void setWindowEventsListener(WindowEventsListener * p_listener);
+		void attachWindowEventsListener(WindowEventsListener & listener);
 
-		//! Get the current windows events listener
-		WindowEventsListener * getWindowEventsListener();
+		//! Detach one window event listener
+		bool detachWindowEventsListener(WindowEventsListener & listener);
+
+		//! Get input processor for this window
+		InputProcessor & getInputProcessor();
 	};
-
 }
+
 
 #endif /* O3ENGINE_WINDOW_HPP_INCLUDED */

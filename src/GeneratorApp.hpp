@@ -14,16 +14,12 @@
 #include <o3engine/renderoutputtexture.hpp>
 #include <boost/format.hpp>
 #include "OrthoCamera.hpp"
-#include <GL/glx.h>
 
 using namespace std;
 using namespace o3engine;
 
 
-
-
-
-class FrameProcessor: public FrameListener, public KeyboardListener {
+class FrameProcessor: public FrameListener, public KeyboardListener, public MouseListener {
 public:
 	int count;
 	GenericScene * pscene;
@@ -69,8 +65,13 @@ public:
 			img.saveImageAsPNG("test.png");
 			break;
 		default:
+			std::cout << "Pressed a key!" << vt_key << std::endl;
 			break;
 		}
+	}
+
+	virtual void onMouseMove(const MouseEvent & e) {
+		std::cout << "Moved mouse! " << e.m_rel_x << " " << e.m_rel_y << std::endl;
 	}
 
 };
@@ -87,19 +88,20 @@ public :
 		//pcache_manager = new ResourceCacheManager();
 
 		// Set up window
-		o3engine::Window & wnd_main = m_engine.getPlatformManager().createWindow("main", 800, 600);
+		o3engine::Window wnd_main("main", 800, 600);
 		wnd_main.setTitle("hy672 Project");
-		wnd_main.setBackColor(Color::RED);
-		/*Platform::getSingleton().setWindowTitle("hy672 Project");
-		Platform::getSingleton().setWindowSize(800, 600);
-		Platform::getSingleton().setWindowBackColor(Color::RED);*/
+		wnd_main.setBackColor(Color::BLACK);
+
+		o3engine::Window wnd_bc("bc", 640, 480);
+		wnd_bc.setTitle("Backup window");
+		wnd_bc.setBackColor(Color::YELLOW);
 
 		// Set up renderer
 		SimpleRenderer *prenderer_simple;
 		m_engine.setRenderer(prenderer_simple = new SimpleRenderer());
 
 		RenderOutputTexture * pouttex = new RenderOutputTexture("00_rtt", 320, 240, true);
-		RenderOutputViewport * pout = new RenderOutputViewport(800, 600, 0, 0);
+		ViewportRenderOutput * pout = new ViewportRenderOutput(800, 600, 0, 0);
 		OrthoCamera * pcam = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
 		OrthoCamera * pcam2 = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
 
@@ -110,7 +112,10 @@ public :
 
 		FrameProcessor fp;
 		fp.enableFrameListening();
-		fp.enableKeyboardListening();
+		wnd_bc.getInputProcessor().attachKeyboardListener(fp);
+		wnd_bc.getInputProcessor().startCapture();
+		wnd_main.getInputProcessor().attachMouseListener(fp);
+		wnd_main.getInputProcessor().startCapture();
 
 		GenericScene sm;
 		fp.pscene =  &sm;
@@ -129,12 +134,6 @@ public :
 		sm.getRootNode().createChild("model")->attachObject(pcube);
 		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
-
-
-		void (*swapInterval)(int);
-		swapInterval = (void (*)(int))glXGetProcAddress((const GLubyte*) "glXSwapIntervalMESA");
-
-		swapInterval(0);
 
 		m_engine.startRendering();
 //		while(1) {

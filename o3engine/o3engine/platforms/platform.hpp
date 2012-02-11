@@ -3,7 +3,7 @@
 
 #include "../prereqs.hpp"
 #include "./timer.hpp"
-#include "./input_processor.hpp"
+#include "./inputprocessor.hpp"
 #include "./window.hpp"
 
 namespace o3engine {
@@ -20,9 +20,6 @@ namespace o3engine {
 	private:
 		//! Pointer to timer object
 		Timer * mp_timer;
-
-		//! Pointer to input processor
-		InputProcessor * mp_inputproc;
 
 		// Pimpl idiom
 		class impl;
@@ -45,33 +42,14 @@ namespace o3engine {
 			return *mp_timer;
 		}
 
-		inline InputProcessor * getInputProcessorPtr() {
-			return mp_inputproc;
-		}
-
-		inline InputProcessor & getInputProcessor() {
-			return *mp_inputproc;
-		}
 		//! @}
 
-		//! @name Manage windows
-		//! @{
 
-		//! Create a new window
-		/**
-		 * @param name This is a unique identifier name for the window.
-		 * @param width The width of window
-		 * @param height The height of window
-		 */
-		Window & createWindow(const string & name, int width, int height);
+		//! Enable vsync while rendering
+		void enableVSync();
 
-		//! Get a window based on its name
-		Window & getWindow(const string & name);
-
-		//! Destroy a window based on its name
-		bool destroyWindow(const string &name);
-
-		//! @}
+		//! Disable vsync while rendering
+		void disableVSync();
 
 		//! Called by engine to initialize platform
 		bool init();

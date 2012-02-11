@@ -2,7 +2,7 @@
 #define RENDERER_H_INCLUDED
 
 #include "./prereqs.hpp"
-#include "./renderoutputviewport.hpp"
+#include "./viewportrenderoutput.hpp"
 #include "./camera.hpp"
 #include "./scenenode.hpp"
 #include "./renderoutput.hpp"

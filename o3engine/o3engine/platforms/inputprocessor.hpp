@@ -2,8 +2,8 @@
 #define O3ENGINE_INPUTPROCESSOR_HPP_INCLUDED
 
 #include "../prereqs.hpp"
-#include "./mouse_listener.hpp"
-#include "./keyboard_listener.hpp"
+#include "./mouselistener.hpp"
+#include "./keyboardlistener.hpp"
 #include <vector>
 
 namespace o3engine {
@@ -16,21 +16,18 @@ namespace o3engine {
 	 * @par Class Characteristics
 	 *  InputProcessor is @ref singleton_page, @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
-	class InputProcessor: public Singleton<InputProcessor> {
-		friend class MouseListener;
-		friend class KeyboardListener;
-		friend class impl;
+	class InputProcessor{
 	private:
 		// Pimp idiom
 		class impl;
 		impl * pimpl;
 
+		//! Window reference
+		const Window & m_wnd;
+
 		// Uncopiable
 		InputProcessor(const InputProcessor &);
 		InputProcessor & operator=(const InputProcessor &);
-
-		//! @name Mouse listeners management
-		//! @{
 
 		//! Mouse Listener iterator
 		typedef vector<MouseListener *>::iterator MouseListenerIterator;
@@ -38,34 +35,11 @@ namespace o3engine {
 		//! Mouse listeners vector
 		vector<MouseListener *> mv_mouse_listeners;
 
-		//! Register a mouse listener
-		bool registerListener(MouseListener * p_mlistener);
-
-		//! Unregister a mouse listener
-		bool unregisterListener(MouseListener * p_mlistener);
-
-		//! Check if listener is registered
-		bool isListenerRegistered(MouseListener * p_mlistener);
-		//! @}
-
-		//! @name Keyboard listeners management
-		//! @{
-
 		//! Keyboard listener iterator
 		typedef vector<KeyboardListener *>::iterator KeyboardListenerIterator;
 
 		//! Keyboard listeners vector
 		vector<KeyboardListener *> mv_keyboard_listeners;
-
-		//! Register keyboard listener
-		bool registerListener(KeyboardListener * p_klistener);
-
-		//! Unregister keyboard listener
-		bool unregisterListener(KeyboardListener * p_klistener);
-
-		//! Check if listener is registered
-		bool isListenerRegistered(KeyboardListener * p_mlistener);
-		//! @}
 
 		//! Pointer to current mouse state
 		MouseState m_mouse_state;
@@ -96,19 +70,53 @@ namespace o3engine {
 
 	public:
 		//! Constructor
-		InputProcessor();
+		InputProcessor(const Window & wnd);
 
 		//! Destructor
 		~InputProcessor() {
 		}
 
+		//! Get the associated Window
+		inline const Window & getAssociatedWindow() const {
+			return m_wnd;
+		}
+
 		//! Start capturing events
 		void startCapture();
+
+		//! Stop capturing events;
+		void stopCapture();
 
 		//! Check if a keyboard key is pressed
 		bool isVTKeyPressed(int vtk) {
 			return mv_key_state[vtk];
 		}
+
+		//! @name Keyboard listeners management
+		//! @{
+
+		//! Attach keyboard listener
+		bool attachKeyboardListener(KeyboardListener & listener);
+
+		//! Detach keyboard listener
+		bool detachKeyboardListener(KeyboardListener & listener);
+
+		//! Check if keyboard listener is attached
+		bool isKeyboardListenerAttached(KeyboardListener & listener);
+		//! @}
+
+		//! @name Mouse listeners management
+		//! @{
+
+		//! Register a mouse listener
+		bool attachMouseListener(MouseListener & listener);
+
+		//! Unregister a mouse listener
+		bool detachMouseListener(MouseListener & listener);
+
+		//! Check if listener is registered
+		bool isMouseListenerAttached(MouseListener & listener);
+		//! @}
 	};
 }
 #endif

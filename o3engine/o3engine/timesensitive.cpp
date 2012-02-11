@@ -21,7 +21,7 @@ namespace o3engine {
 
 		// Request a timer if needed
 		if (!mp_timer) {
-			Platform * p_pl = Platform::getSingletonPtr();
+			Platform * p_pl = &Platform::getSingleton();
 			mp_timer = & p_pl->getTimer();
 
 			// Get last time

@@ -42,14 +42,15 @@
 namespace o3engine
 {
 	class Camera;
-	class Viewport;
-	class RenderTarget;
+	class RenderOutput;
+	class ViewportRenderOutput;
 	class Timer;
 	class TimerSensitive;
 	class TreeObject;
 	class Renderer;
 	class Skybox;
 	class Platform;
+	class Window;
 
 	class Texture;
 	class AnimatedTexture;
@@ -65,6 +66,7 @@ namespace o3engine
 
 	class O3Engine;
 	class Node;
+	class InputProcessor;
 	class MouseListener;
 	class KeyboardListener;
 	class Mesh;

@@ -25,7 +25,7 @@ namespace o3engine {
 	 * @par Class Characteristics
 	 * O3Engine is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
-	class O3Engine: protected WindowEventsListener,
+	class O3Engine:
 			private TimeSensitive,
 			public Singleton<O3Engine> {
 
@@ -72,13 +72,7 @@ namespace o3engine {
 		bool isRenderOutputActivated(RenderOutput * p_output);
 		//! @}
 
-		//! @name Events from WindowsEventsListener
-		//! @{
-		void onWindowResized(int old_width, int old_height, int new_width,
-				int new_height);
-		void onWindowRepaint();
 		void onWindowIdle();
-		//! @}
 
 		//! @name Manage frame listeners
 		//! @{

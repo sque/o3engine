@@ -1,11 +1,9 @@
 #ifndef O3ENGINE_KEYBOARDLISTENER_HPP_INCLUDED
 #define O3ENGINE_KEYBOARDLISTENER_HPP_INCLUDED
 
-namespace o3engine
-{
-    //! Keyboard virtual keys enumeration
-	enum E_KB_VIRTUALKEYS
-	{
+namespace o3engine {
+	//! Keyboard virtual keys enumeration
+	enum E_KB_VIRTUALKEYS {
 		KB_VTKEY_ESC = 0,
 		KB_VTKEY_FN1,
 		KB_VTKEY_FN2,
@@ -75,63 +73,44 @@ namespace o3engine
 		KB_VTKEY_X,
 		KB_VTKEY_Y,
 		KB_VTKEY_Z,
-		KB_VTKEY_UNKNOWN,   // Unknown key
-		KB_VTKEY_MAX        // The bottom!
+		KB_VTKEY_UNKNOWN, // Unknown key
+		KB_VTKEY_MAX
+	// The bottom!
 	};
 
 	//! Keyboard virtual key states
-	enum E_KB_VTKEY_STATES
-	{
-		KB_KEY_UP = 0,      // Key is up
-		KB_KEY_DOWN = 1     // Key is down
+	enum E_KB_VTKEY_STATES {
+		KB_KEY_UP = 0, // Key is up
+		KB_KEY_DOWN = 1
+	// Key is down
 	};
 
-    //! [R4] A keyboard events listener interface
+	//! [R4] A keyboard events listener interface
 	/**
-    @par Class Characteristics
-        KeyboardListener is @ref copyable_page, @ref inherit_page and follows the @ref sfn_page
-    */
-	class KeyboardListener
-	{
+	 * @par Class Characteristics
+	 * KeyboardListener is @ref copyable_page, @ref inherit_page and follows the @ref sfn_page
+	 */
+	class KeyboardListener {
 	public:
 		virtual ~KeyboardListener();
 
-        //! @name Control Listener
-        //! @{
-
-		//! Start monitoring for events
-		/**
-		@return
-		    - @b true If the listener activated succesfully
-            - @b false If the listener was already activated
-		    .
-        */
-		bool enableKeyboardListening();
-
-		//! Stop monitoring for events
-		/**
-		@return
-		    - @b true If the listener was previously monitoring
-            - @b false If the listener was not monitoring at all.
-		    .
-        */
-		bool disableKeyboardListening();
-
-		//! Check if listener is activated
-		bool isKeyboardListeningEnabled();
-        //! @}
-
-        //! @name Events that can be implemented by derived classes
+		//! @name Events that can be implemented by derived classes
 		//! @{
 
 		//! Raised when a keyboard key is pressed
-		inline virtual void onKeyboardButtonPressed(E_KB_VIRTUALKEYS vt_key){};
+		inline virtual void onKeyboardButtonPressed(E_KB_VIRTUALKEYS vt_key) {
+		}
+		;
 
 		//! Raised when a keyboard key is released
-		inline virtual void onKeyboardButtonReleased(E_KB_VIRTUALKEYS vt_key){};
+		inline virtual void onKeyboardButtonReleased(E_KB_VIRTUALKEYS vt_key) {
+		}
+		;
 
 		//! Raised when a keyboard key that was released produced a character insertation
-		inline virtual void onKeyboardCharInsert(unsigned char ch){};
+		inline virtual void onKeyboardCharInsert(unsigned char ch) {
+		}
+		;
 
 		//! @}
 	};

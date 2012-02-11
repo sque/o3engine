@@ -1,10 +1,22 @@
 #include "./platform.hpp"
-#include "./input_processor.hpp"
+#include "./inputprocessor.hpp"
+#include <GL/glx.h>
 
 namespace o3engine {
+
 	// Internal implementation of platform
 	class Platform::impl {
 	public:
+
+		void (*swapInterval)(int);
+
+		impl() {
+			swapInterval = (void (*)(int))glXGetProcAddress((const GLubyte*) "glXSwapIntervalMESA");
+		}
+
+		static void callbackIdleFunc() {
+			::glutPostRedisplay();
+		}
 
 	};
 
@@ -27,11 +39,18 @@ namespace o3engine {
 		mp_timer = new Timer();
 		mp_timer->reset();
 
-		// Create input system
-		mp_inputproc = new InputProcessor();
-
 		// Setup Callback functions
-		// TODO: window fixglutIdleFunc(impl::glutFuncIdle);
+		::glutIdleFunc(impl::callbackIdleFunc);
 		return true;
+	}
+
+	// Enable vsync while rendering
+	void Platform::enableVSync() {
+		pimpl->swapInterval(1);
+	}
+
+	//! Disable vsync while rendering
+	void Platform::disableVSync() {
+		pimpl->swapInterval(0);
 	}
 }
