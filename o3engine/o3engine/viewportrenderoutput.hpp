@@ -3,7 +3,7 @@
 
 #include "./prereqs.hpp"
 #include "./renderoutput.hpp"
-#include "./platforms/mouselistener.hpp"
+#include "./platform/window.hpp"
 
 namespace o3engine {
 
@@ -13,27 +13,28 @@ namespace o3engine {
 	 * @par Class Characteristics
 	 * ViewportRenderOutput is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
 	 */
-	class ViewportRenderOutput: public RenderOutput, public MouseListener {
+	class ViewportRenderOutput: public RenderOutput, SurfaceListener {
 	private:
 		// Non copyable object
 		ViewportRenderOutput(const ViewportRenderOutput &);
 		ViewportRenderOutput& operator=(const ViewportRenderOutput &);
 
 	protected:
-		int m_bottom_offset; 	//!< Bottom offset of viewport
-		int m_left_offset; 		//!< Left offset of viewport
+		int m_bottom_offset;	//!< Bottom offset of viewport
+		int m_left_offset;		//!< Left offset of viewport
+		Window & m_window;		//!< Window handler
 
-		virtual void onInputCameraChanged();
 	public:
 
 		//! Construct and initialize with desired parameters
 		/**
-		 * @param width The width of the RenderOutput object
-		 * @param height The height of the RenderOutput object
-		 * @param left The left offset of viewport on the window
-		 * @param bottom The bottom offset of viewport on the window
+		 * @param wnd The window that this viewport is binded at.
+		 * @param width The width of the RenderOutput object.
+		 * @param height The height of the RenderOutput object.
+		 * @param left The left offset of viewport on the window.
+		 * @param bottom The bottom offset of viewport on the window.
 		 */
-		ViewportRenderOutput(int width, int height, int left, int bottom);
+		ViewportRenderOutput(Window & wnd, int width, int height, int left, int bottom);
 
 		//! Destructor
 		virtual ~ViewportRenderOutput();
@@ -60,19 +61,23 @@ namespace o3engine {
 
 		//! @name Events from RenderOutput
 		//! @{
-		inline virtual void onPreRender() {
-			glViewport(m_left_offset, m_bottom_offset, m_width, m_height);
+		inline virtual void render() {
+			::glViewport(m_left_offset, m_bottom_offset, m_width, m_height);
+			renderPipeline();
 		}
-		inline virtual void onPostRender() {
-		}
-		virtual void onWindowResize(int new_width, int new_height);
-		//! @}
 
-		//! @name Events from MouseListener
-		//! @{
-		virtual void onMouseMove(const MouseEvent & e);
-		virtual void onMouseButtonPressed(const MouseEvent & e);
-		virtual void onMouseButtonReleased(const MouseEvent & e);
+
+		virtual void onSurfaceResized(int old_width, int old_height, int new_width, int new_height){
+
+		}
+
+		virtual void onOutputResize(int new_w, int new_h){}
+
+		//! Raised when window must be drawn
+		virtual void onSurfaceRepaint(){
+			render();
+		}
+
 		//! @}
 	};
 }

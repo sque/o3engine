@@ -18,7 +18,6 @@ namespace o3engine
 	protected:
 		//! Pointer to engine
 		O3Engine * mp_engine;
-		Renderer * p_renderer;
 		Node * p_camnode;
 
 		//! Constructor

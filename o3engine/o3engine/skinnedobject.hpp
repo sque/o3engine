@@ -14,7 +14,7 @@ namespace o3engine
 		//! Material of object
 		const Material * pMaterial;
 
-		//! A flag if object is transperant
+		//! A flag if object is transparent
 		bool bTransperant;
 
 		//! The function that will contain the draw code of object

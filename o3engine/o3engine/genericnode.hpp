@@ -9,56 +9,74 @@
 #include <list>
 #include <vector>
 
-namespace o3engine
-{
-    //! A node representation on the GenericSceneManager
-	class GenericNode : public SceneNode
-	{
-	friend class GenericScene;
+namespace o3engine {
+	//! A node representation on the GenericSceneManager
+	class GenericNode: public SceneNode {
+		friend class GenericScene;
 	public:
 		// Map of children
-		typedef map<string, GenericNode *>::iterator ChildIterator;
-		typedef map<string, GenericNode *> ChildMap;
+		typedef map<string, GenericNode *> children_map_type;
 
 		// List of active nodes (used by generic scene)
-		typedef list<GenericNode *> ActiveNodesT;
-		typedef list<GenericNode *>::iterator ActiveNodesIterator;
+		typedef list<GenericNode *> active_nodes_type;
 
 		// List of attached objects
-		typedef vector<DrawableObject *> AttachedObjectsT;
-		typedef vector<DrawableObject *>::iterator AttachedObjectsIterator;
+		typedef vector<DrawableObject *> attached_objects_type;
 
 	protected:
 		// Characteristics of this node
-		Light m_light;                      //!< Data of a light
-		GenericScene * pGenericScene;		//!< A pointer to our generic scene
-		Vector3 v3_position;        		//!< Position of node
-		Vector3 v3_scale;           		//!< Scale factor of node
-		Quaternion qu_orientation;  		//!< Orientation of node
-		string mName;						//!< Name of node
-		AttachedObjectsT v_attachedObjects;			//!< An array with objects
-		AttachedObjectsT v_attachedTransObjects;	//!< A sub list with transperant objects
-		Vector3 v3_gposition;				//!< Cached global position
-		Quaternion qu_gorientation;			//!< Cached global orientation
-		unsigned long cCachedGlobalLoop;	//!< At which render loop it was cached
+
+		//! Data of a light
+		Light m_light;
+
+		//! A pointer to our generic scene
+		GenericScene * pGenericScene;
+
+		//! Position of node
+		Vector3 v3_position;
+
+		//! Scale factor of node
+		Vector3 v3_scale;
+
+		//! Orientation of node
+		Quaternion qu_orientation;
+
+		//! Name of node
+		string mName;
+
+		//! An array with objects
+		attached_objects_type v_attachedObjects;
+
+		//! A sub list with transparent objects
+		attached_objects_type v_attachedTransObjects;
+
+		//! Cached global position
+		Vector3 v3_gposition;
+
+		//! Cached global orientation
+		Quaternion qu_gorientation;
+
+		//! At which render loop it was cached
+		unsigned long cCachedGlobalLoop;
 
 		/**@brief Iterator at the list of our selfs in the
-				list of active nodes at our SceneManager	*/
-		ActiveNodesIterator ActiveNodes_myiterator;
+		 list of active nodes at our SceneManager	*/
+		active_nodes_type::iterator ActiveNodes_myiterator;
 
 		//! Iterator at the list of nodes with active light
-        vector<GenericNode *>::iterator LightNodes_myiterator;
+		vector<GenericNode *>::iterator LightNodes_myiterator;
 
-		bool f_scale;               		//!< A flag showing if node has scaling attributes
-		GenericNode * pParentNode;			//!< Pointer to parent node
-		ChildMap v_childs;          		//!< Map with child nodes
+		bool f_scale; 					//!< A flag showing if node has scaling attributes
+		GenericNode * pParentNode; 		//!< Pointer to parent node
+		children_map_type v_children;	//!< Map with children nodes
 
 		// Draw all the objects of this node
 		void drawObjects(bool bSolid);
 
 		// Check if it has transparent objects
-		inline bool hasTransperantObjects()
-		{	return (v_attachedTransObjects.size() > 0);	}
+		inline bool hasTransperantObjects() {
+			return (v_attachedTransObjects.size() > 0);
+		}
 
 		//! Constructor for child nodes
 		GenericNode(const string & name, GenericNode * parent, const Vector3 & pos);
@@ -66,7 +84,7 @@ namespace o3engine
 		//! Constructor for root node
 		GenericNode(const string & name, SceneManager * pmanager);
 
-		//! Hide destructor so that it is not destructible from the public scope
+		//! Hide destructor so that it is not destructable from the public scope
 		~GenericNode();
 
 		//! Internal implementation of calculate global position and orientation
@@ -94,13 +112,15 @@ namespace o3engine
 		virtual Vector3 & getGlobalPosition();
 
 		// Get the parent node of this node
-		inline GenericNode * getParentNodePtr()
-		{	return pParentNode;		}
+		inline GenericNode * getParentNodePtr() {
+			return pParentNode;
+		}
 
 		//! Create a child node
-		inline GenericNode * createChild(const string & name, const Vector3 & pos = Vector3::ZERO)
-		{	GenericNode * pchild_node = new GenericNode(name, this, pos);
-			v_childs[name] = pchild_node;
+		inline GenericNode * createChild(const string & name, const Vector3 & pos =
+				Vector3::ZERO) {
+			GenericNode * pchild_node = new GenericNode(name, this, pos);
+			v_children[name] = pchild_node;
 			return pchild_node;
 		}
 
@@ -108,68 +128,80 @@ namespace o3engine
 		bool deleteChild(const string & child_name);
 
 		// Get the name of this node
-		inline const string & getName() const
-		{	return mName;	}
+		inline const string & getName() const {
+			return mName;
+		}
 
-		// Get the childs of this node
-		inline ChildMap & getChilds()
-		{	return v_childs;	}
+		// Get the children of this node
+		inline children_map_type & getChildren() {
+			return v_children;
+		}
 
 		// Get a specific child
-		inline GenericNode * getChildPtr(const string & child_name)
-		{	ChildIterator it = v_childs.find(child_name);
+		inline GenericNode * getChildPtr(const string & child_name) {
+			children_map_type::iterator it = v_children.find(child_name);
 
-			if (it != v_childs.end())
+			if (it != v_children.end())
 				return it->second;
 			else
 				return NULL;
 		}
 
 		// Translate node
-		inline void translate(const Vector3 & trans)
-		{	v3_position += trans;	}
+		inline void translate(const Vector3 & trans) {
+			v3_position += trans;
+		}
 
 		// Rotate node
-		inline void rotate(const Quaternion & rot)
-		{	qu_orientation *= rot;	}
+		inline void rotate(const Quaternion & rot) {
+			qu_orientation *= rot;
+		}
 
 		// Yaw node
-		inline void yaw(const Angle & angle)
-		{	qu_orientation *= Quaternion(Vector3::NEGATIVE_UNIT_Y, angle);	}
+		inline void yaw(const Angle & angle) {
+			qu_orientation *= Quaternion(Vector3::NEGATIVE_UNIT_Y, angle);
+		}
 
 		// Roll node
-		inline void roll(const Angle & angle)
-		{	qu_orientation *= Quaternion(Vector3::UNIT_Z, angle);	}
+		inline void roll(const Angle & angle) {
+			qu_orientation *= Quaternion(Vector3::UNIT_Z, angle);
+		}
 
 		// Pitch node
-		inline void pitch(const Angle & angle)
-		{	qu_orientation *= Quaternion(Vector3::NEGATIVE_UNIT_X, angle);	}
+		inline void pitch(const Angle & angle) {
+			qu_orientation *= Quaternion(Vector3::NEGATIVE_UNIT_X, angle);
+		}
 
 		// Get position of node
-		inline Vector3 & getPosition()
-		{	return v3_position;	}
+		inline Vector3 & getPosition() {
+			return v3_position;
+		}
 
 		// Set position of node
-		inline Vector3 & setPosition(const Vector3 & pos)
-		{	return v3_position = pos;	}
+		inline Vector3 & setPosition(const Vector3 & pos) {
+			return v3_position = pos;
+		}
 
 		// Get orientation of node
-		inline Quaternion & getOrientation()
-		{	return qu_orientation;	}
+		inline Quaternion & getOrientation() {
+			return qu_orientation;
+		}
 
 		// Set orientation of node
-		inline Quaternion & setOrientation(const Quaternion & orient)
-		{	return qu_orientation = orient;	}
+		inline Quaternion & setOrientation(const Quaternion & orient) {
+			return qu_orientation = orient;
+		}
 
-        //! Set a light on this node
-        /**
-            To disable light on this node, set a light which is disabled
-        */
-        void setLight(const Light & light);
+		//! Set a light on this node
+		/**
+		 To disable light on this node, set a light which is disabled
+		 */
+		void setLight(const Light & light);
 
-        //! Get the light of this node
-        inline const Light & getLight() const
-        {   return m_light; }
+		//! Get the light of this node
+		inline const Light & getLight() const {
+			return m_light;
+		}
 	};
 }
 

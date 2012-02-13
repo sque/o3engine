@@ -9,9 +9,9 @@
 #define APP_HPP_
 
 #include <o3engine/o3engine.hpp>
-#include <o3engine/simplerenderer.hpp>
 #include <o3engine/genericscene.hpp>
-#include <o3engine/renderoutputtexture.hpp>
+#include <o3engine/texturerenderoutput.hpp>
+#include <o3engine/viewportrenderoutput.hpp>
 #include <boost/format.hpp>
 #include "OrthoCamera.hpp"
 
@@ -23,20 +23,20 @@ class FrameProcessor: public FrameListener, public KeyboardListener, public Mous
 public:
 	int count;
 	GenericScene * pscene;
-	RenderOutputTexture * pouttex;
+	TextureRenderOutput * pouttex;
 	FrameProcessor() {
 		count = 0;
 	}
 
 	virtual void onRenderInterval(Real secs) {
 		count++;
-		if (count % 100 == 0) {
+		if (count % 1000 == 0) {
 			cout << boost::format("FPS: %f.")
 				% O3Engine::getSingleton().getFps() << endl;
 
 		}
 
-		//pscene->getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y,Radian(M_PI * secs)));
+		pscene->getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y,Radian(M_PI * secs)));
 
 	}
 
@@ -88,34 +88,32 @@ public :
 		//pcache_manager = new ResourceCacheManager();
 
 		// Set up window
-		o3engine::Window wnd_main("main", 800, 600);
+		o3engine::Window wnd_main(800, 600);
 		wnd_main.setTitle("hy672 Project");
-		wnd_main.setBackColor(Color::BLACK);
+		wnd_main.setBackColor(Color::WHITE);
 
-		o3engine::Window wnd_bc("bc", 640, 480);
+		/*o3engine::Window wnd_bc("bc", 640, 480);
 		wnd_bc.setTitle("Backup window");
-		wnd_bc.setBackColor(Color::YELLOW);
+		wnd_bc.setBackColor(Color::YELLOW);*/
 
-		// Set up renderer
-		SimpleRenderer *prenderer_simple;
-		m_engine.setRenderer(prenderer_simple = new SimpleRenderer());
-
-		RenderOutputTexture * pouttex = new RenderOutputTexture("00_rtt", 320, 240, true);
-		ViewportRenderOutput * pout = new ViewportRenderOutput(800, 600, 0, 0);
-		OrthoCamera * pcam = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
+		OffScreen off_scrn(320, 240);
+		TextureRenderOutput * pouttex = new TextureRenderOutput(off_scrn, true);
+		ViewportRenderOutput * pout = new ViewportRenderOutput(wnd_main, 800, 600, 0, 0);
+		Camera * pcam = new Camera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y);
 		OrthoCamera * pcam2 = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
 
-		pouttex->setInputCamera(pcam);
+		//pouttex->setInputCamera(pcam);
 		pouttex->enableRendering();
-		pout->setInputCamera(pcam2);
-		pout->enableRendering();
+		//pout->setInputCamera(pcam2);
+		//pout->enableRendering();
+		pout->attachRenderLink(*pcam);
 
 		FrameProcessor fp;
 		fp.enableFrameListening();
-		wnd_bc.getInputProcessor().attachKeyboardListener(fp);
-		wnd_bc.getInputProcessor().startCapture();
+		/*wnd_bc.getInputProcessor().attachKeyboardListener(fp);
+		wnd_bc.getInputProcessor().startCapture();*/
 		wnd_main.getInputProcessor().attachMouseListener(fp);
-		wnd_main.getInputProcessor().startCapture();
+		wnd_main.getInputProcessor().startCapturing();
 
 		GenericScene sm;
 		fp.pscene =  &sm;
@@ -127,14 +125,15 @@ public :
 		//Sphere *psphere = new Sphere("test_sphere");
 		//psphere->setSlices(20);
 		Material * pmat = new Material("mat black");
-		pmat->setShininess(0);
-		pmat->setAmbient(Color::BLACK);
+		//pmat->setShininess(0);
+		//pmat->setAmbient(Color::BLACK);
 		Cube * pcube = new Cube("test_cube");
 		pcube->setMaterial(pmat);
 		sm.getRootNode().createChild("model")->attachObject(pcube);
 		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
 
+		m_engine.getPlatformManager().disableVSync();
 		m_engine.startRendering();
 //		while(1) {
 //			sm.getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Degree(30)));

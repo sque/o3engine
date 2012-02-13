@@ -6,70 +6,91 @@
 #include <vector>
 #include "./materialmanager.hpp"
 
-namespace o3engine
-{
-	class SubMesh
-	{
+namespace o3engine {
+	class SubMesh {
 	protected:
-		typedef std::vector<Face>::iterator FaceIterator;
-		std::vector<Face> v_faces;      // Faces
+		typedef std::vector<Face> faces_type;
+		faces_type v_faces; // Faces
 		Material * pMat;
-		bool bTextCords;                // If it has texture cords
+		bool bTextCords; // If it has texture cords
 
 	public:
 		// Constructor
-		SubMesh(){ pMat = NULL; bTextCords = false; }
+		SubMesh() {
+			pMat = NULL;
+			bTextCords = false;
+		}
 
 		// Copy constructor
-		inline SubMesh(const SubMesh & r){ v_faces = r.v_faces; pMat = r.pMat; bTextCords = r.bTextCords; }
+		inline SubMesh(const SubMesh & r) {
+			v_faces = r.v_faces;
+			pMat = r.pMat;
+			bTextCords = r.bTextCords;
+		}
 
 		// Copy operator
-		inline SubMesh & operator=(const SubMesh & r) { v_faces = r.v_faces; pMat = r.pMat; bTextCords = r.bTextCords; return *this;}
+		inline SubMesh & operator=(const SubMesh & r) {
+			v_faces = r.v_faces;
+			pMat = r.pMat;
+			bTextCords = r.bTextCords;
+			return *this;
+		}
 
 		// Add face to submesh
-		inline void addFace(const Face & _f)
-		{   v_faces.push_back(_f);  }
+		inline void addFace(const Face & _f) {
+			v_faces.push_back(_f);
+		}
 
 		// Set material
-		inline Material * setMaterial(const string & mat)
-		{   return pMat = MaterialManager::getObjectPtr(mat); }
+		inline Material * setMaterial(const string & mat) {
+			return pMat = MaterialManager::getObjectPtr(mat);
+		}
 
 		// Get current material
-		inline const Material * getMaterialPtr() const { return pMat; }
+		inline const Material * getMaterialPtr() const {
+			return pMat;
+		}
 
 		// Enable texturing
-		inline void enableTexturecords() { bTextCords = true; }
+		inline void enableTexturecords() {
+			bTextCords = true;
+		}
 
 		// Use this function to render submesh
-		void useme_to_glRender(bool b_WireFrame, bool b_WireFrameOwnMaterial = true);
+		void useme_to_glRender(bool b_WireFrame,
+				bool b_WireFrameOwnMaterial = true);
 
 		// Translate all points
-		inline void translate(const Vector3 & _trans)
-		{   std::vector<Face>::iterator it;
-			for(it = v_faces.begin();it != v_faces.end();it++)
+		inline void translate(const Vector3 & _trans) {
+			faces_type::iterator it;
+			for (it = v_faces.begin(); it != v_faces.end(); it++)
 				(*it).translate(_trans);
 		}
 
-		inline unsigned long countFaces()
-		{   return (unsigned long)v_faces.size();  }
+		inline unsigned long countFaces() {
+			return (unsigned long) v_faces.size();
+		}
 
 		// Reset submesh
-		inline void Reset() {  v_faces.clear(); pMat = NULL; bTextCords = false; }
+		inline void Reset() {
+			v_faces.clear();
+			pMat = NULL;
+			bTextCords = false;
+		}
 
 		// Calculate Spherical size
-		Real calcSphericalSize() const
-		{   Real size = 0;
-			std::vector<Face>::const_iterator it;
-			for(it = v_faces.begin();it != v_faces.end();it++)
+		Real calcSphericalSize() const {
+			Real size = 0;
+			faces_type::const_iterator it;
+			for (it = v_faces.begin(); it != v_faces.end(); it++)
 				if ((*it).calcSphericalSize() > size)
 					size = (*it).calcSphericalSize();
 
 			return size;
 		}
 
-		// Check if it is transperant
-		bool isTransperant()
-		{
+		// Check if it is transparent
+		bool isTransperant() {
 			if (pMat)
 				return !pMat->getDepthWrite();
 			else

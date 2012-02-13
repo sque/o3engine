@@ -6,7 +6,6 @@ namespace o3engine
 	Billboard::Billboard()
 	{
 		mp_engine = O3Engine::getSingletonPtr();
-		p_renderer = mp_engine->getRendererPtr();
 	}
 
 	// SPHERICAL - CHEAT
@@ -103,7 +102,7 @@ namespace o3engine
 		Real degs = math::radianToDegree(math::arcCos(cosine));
 		Vector3 UpVec = -vObjToCamOnZX.crossProduct(Vector3::UNIT_Z);
 
-		// Rotate the object appropriatly
+		// Rotate the object appropriately
 		glPushMatrix();
 		glRotatef((GLfloat)degs, (GLfloat)UpVec[0], (GLfloat)UpVec[1], (GLfloat)UpVec[2]);
 	}

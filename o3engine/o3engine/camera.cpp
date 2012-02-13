@@ -1,5 +1,5 @@
 #include "./camera.hpp"
-#include "./renderoutput.hpp"
+#include "./scenemanager.hpp"
 #include "./scenenode.hpp"
 
 namespace o3engine {
@@ -11,7 +11,6 @@ namespace o3engine {
 		lim_far = 20;
 		aspect = 1;
 		fovY = 60;
-		pSkybox = NULL;
 		pAttachedNode = NULL;
 	}
 
@@ -32,7 +31,7 @@ namespace o3engine {
 		height = top - bottom;
 	}
 
-	void Camera::drawCamera() {
+	void Camera::render() {
 		// Setup camera lens
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -46,7 +45,12 @@ namespace o3engine {
 		// Setup camera
 		useme_to_gluLookAt();
 
-		if (pAttachedNode)
+		if (pAttachedNode) {
 			pAttachedNode->useme_to_glInvertPosition();
+			pAttachedNode->getMySceneManager()->drawScene(this);
+		}
+
+		renderNext();
 	}
+
 }

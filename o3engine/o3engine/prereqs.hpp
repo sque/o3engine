@@ -18,17 +18,17 @@
 	#include <stdlib.h>
     #include <GL/glew.h>
     #include <GL/gl.h>
-    #include <GL/glut.h>
+    #include <GL/freeglut.h>
 	#define ENGINE_WIN32
 #endif
 #ifdef linux
     #include <GL/glew.h>
-    #include <GL/glut.h>
+    #include <GL/freeglut.h>
     #define ENGINE_LINUX
 #endif
 #ifdef __APPLE__
 	#include <GL/glew.h>
-    #include <GLUT/glut.h>
+    #include <GLUT/freeglut.h>
 	#define ENGINE_OSX
 #endif
 
@@ -47,10 +47,11 @@ namespace o3engine
 	class Timer;
 	class TimerSensitive;
 	class TreeObject;
-	class Renderer;
 	class Skybox;
 	class Platform;
+	class Surface;
 	class Window;
+	class OffScreen;
 
 	class Texture;
 	class AnimatedTexture;

@@ -27,7 +27,6 @@ namespace o3engine {
 		// Initialize variables
 		m_frame_listeners_paused = false;
 		m_frame_counter = 0;
-		mp_renderer = NULL;
 
 		// Allocate managers
 		mp_texture_manager = new TextureManager();
@@ -42,13 +41,13 @@ namespace o3engine {
 	}
 
 	// Attach a framelistener
-	bool O3Engine::registerFrameListener(FrameListener * p_fl) {
-		list<FrameListener *>::iterator it;
+	bool O3Engine::attachFrameListener(FrameListener & framelistener) {
+		framelisteners_type::iterator it;
 
-		if ((it = find(mv_framelisteners.begin(), mv_framelisteners.end(), p_fl))
+		if ((it = find(mv_framelisteners.begin(), mv_framelisteners.end(), &framelistener))
 				== mv_framelisteners.end()) { // Add frame listener to the list
-			p_fl->timePassed();
-			mv_framelisteners.push_back(p_fl);
+			framelistener.timePassed();
+			mv_framelisteners.push_back(&framelistener);
 			return true;
 		}
 
@@ -56,11 +55,11 @@ namespace o3engine {
 	}
 
 	// Detach framelistener
-	bool O3Engine::unregisterFrameListener(FrameListener * p_fl) {
-		list<FrameListener *>::iterator it;
+	bool O3Engine::detachFrameListener(FrameListener & framelistener) {
+		framelisteners_type::iterator it;
 		bool removed_current_listener = false;
 
-		if ((it = find(mv_framelisteners.begin(), mv_framelisteners.end(), p_fl))
+		if ((it = find(mv_framelisteners.begin(), mv_framelisteners.end(), &framelistener))
 				!= mv_framelisteners.end()) { // Correct idle render cycle before removal
 			if (it == m_fl_it) {
 				removed_current_listener = true;
@@ -79,8 +78,8 @@ namespace o3engine {
 		return false;
 	}
 
-	bool O3Engine::isFrameListenerRegistered(FrameListener * p_fl) {
-		if (find(mv_framelisteners.begin(), mv_framelisteners.end(), p_fl)
+	bool O3Engine::isFrameListenerAttached(FrameListener & framelistener) {
+		if (find(mv_framelisteners.begin(), mv_framelisteners.end(), &framelistener)
 				== mv_framelisteners.end())
 			return false;
 		return true;
@@ -94,11 +93,9 @@ namespace o3engine {
 	}
 
 	int O3Engine::init(int argc, char ** argv) {
-		// Start glut
-		glutInit(&argc, argv);
 
 		// Initialize platform (Window, Input, Timers)
-		Platform::getSingleton().init();
+		Platform::getSingleton().init(argc, argv);
 
 		// Set us as the window events listeners
 		//Platform::getSingleton().setWindowEventsListener(this);
@@ -117,14 +114,11 @@ namespace o3engine {
 
 	// Start rendering
 	void O3Engine::startRendering() {
-		// Start input capturing
-		//Platform::getSingleton().getInputProcessor().startCapture();
-
 		// Reset timer counter
 		timePassed();
 
 		// Get in main loop
-		glutMainLoop();
+		mp_platform->startEventLoop(*this);
 	}
 
 	void O3Engine::stopRendering() {
@@ -132,8 +126,7 @@ namespace o3engine {
 		//glutLeaveMainLoop();
 	}
 
-	// Call back function for idle
-	void O3Engine::onWindowIdle() {
+	void O3Engine::onLoopIdle() {
 		FrameListener * p_fl;
 
 		if (m_frame_listeners_paused)
@@ -145,17 +138,6 @@ namespace o3engine {
 			p_fl = *m_fl_it;
 			p_fl->raiseRenderInterval();
 		}
-
-		glutPostRedisplay();
-	}
-
-	/**
-	 * Render a frame
-	 */
-	void O3Engine::renderOneFrame() {
-		// Call renderer
-		if (mp_renderer)
-			mp_renderer->render();
 
 		// Calculate fps
 		m_frame_counter++;

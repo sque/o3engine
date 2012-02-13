@@ -1,30 +1,30 @@
-#ifndef CAMERA_H_INCLUDED
-#define CAMERA_H_INCLUDED
+#ifndef O3ENGINE_CAMERA_HPP_INCLUDED
+#define O3ENGINE_CAMERA_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./skybox.hpp"
+#include "./renderlink.hpp"
 
 namespace o3engine {
 	//! Camera handler
 	/**
-	 This is how camera is represented by the system.
-	 To create a new camera, create an object from this class,
-	 and attach it on node.
+	 * To create a new camera, create an object from this class,
+	 * and attach it on node.
 	 */
-	class Camera {
+	class Camera:
+		public RenderLink{
 		friend class SceneNode;
 	protected:
-		Skybox * pSkybox; //!< Pointer to skybox of this camera
-		SceneNode * pAttachedNode; //!< Pointer to attached node;
+		SceneNode * pAttachedNode;	//!< Pointer to attached node;
 
 		// Camera position
-		Vector3 target_point; //!< Camera's target vector
-		Vector3 up_vector; //!< Camera's up vector
+		Vector3 target_point;		//!< Camera's target vector
+		Vector3 up_vector;			//!< Camera's up vector
 
 		// Camera parameter
 		Real left, top, bottom, right, width, height, lim_near, lim_far;
-		Real aspect; //! Aspect ratio of camera
-		Real fovY; //! The theta of the perspective
+		Real aspect;				//! Aspect ratio of camera
+		Real fovY;					//! The theta of the perspective
 
 		// Initialize Values
 		void _initvalues(void);
@@ -145,7 +145,7 @@ namespace o3engine {
 			calcFromPrespective();
 		}
 
-		// Run gluLookAt with those paramters
+		// Run gluLookAt with those parameters
 		inline virtual void useme_to_gluLookAt() {
 			gluLookAt(0, 0, 0, target_point.x, target_point.y, target_point.z,
 					up_vector.x, up_vector.y, up_vector.z);
@@ -156,33 +156,13 @@ namespace o3engine {
 			glFrustum(left, right, bottom, top, lim_near, lim_far);
 		}
 
-		//! Attach a skybox
-		inline void attachSkybox(Skybox * _pSkybox) {
-			pSkybox = _pSkybox;
-		}
-
-		//! Dettach skybox
-		inline void dettachSkybox() {
-			pSkybox = NULL;
-		}
-
-		//! Get skybox
-		inline Skybox * getSkyboxPtr() {
-			return pSkybox;
-		}
-
-		//! Draw skybox
-		inline void drawSkybox() {
-			if (pSkybox)
-				pSkybox->drawObject(this);
-		}
-
 		inline SceneNode * getAttachedNode() {
 			return pAttachedNode;
 		}
 
-		void drawCamera();
+		void render();
+
 	};
 }
 
-#endif // CAMERA_H_INCLUDED
+#endif

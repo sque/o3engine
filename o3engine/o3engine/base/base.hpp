@@ -21,12 +21,11 @@
 
 
 /**
- @defgroup base_group Base System
- System base is the base module of all the engine. It contains
- the mathematical classes, the convertion functions and all the basic
- data types that the engine needs to work.
-
- @b Base @b System cannot exist alone but it is a independant
- module that can be used by other system of that kind.
+ * @defgroup base_group Base System
+ * System base is the base module of all the engine. It contains
+ * the mathematical classes, the conversion functions and all the basic
+ * data types that the engine needs to work.
+ * @b Base @b System cannot exist alone but it is a independent
+ * module that can be used by other system of that kind.
 */
 #endif

@@ -1,32 +1,24 @@
 #include "./framelistener.hpp"
 #include "./o3engine.hpp"
 
-namespace o3engine
-{
+namespace o3engine {
 	// Destructor
-	FrameListener::~FrameListener()
-	{   // Unregister from engine
+	FrameListener::~FrameListener() { // Unregister from engine
 		disableFrameListening();
 	}
 
 	// Activate FrameListener
-    bool FrameListener::enableFrameListening()
-    {
-        // Registre this frame listener
-        return O3Engine::getSingleton().registerFrameListener(this);
-    }
+	bool FrameListener::enableFrameListening() {
+		return O3Engine::getSingleton().attachFrameListener(*this);
+	}
 
-    // Activate FrameListener
-    bool FrameListener::disableFrameListening()
-    {
-        // Registre this frame listener
-        return O3Engine::getSingleton().unregisterFrameListener(this);
-    }
+	// Activate FrameListener
+	bool FrameListener::disableFrameListening() {
+		return O3Engine::getSingleton().detachFrameListener(*this);
+	}
 
-    // Activate FrameListener
-    bool FrameListener::isFrameListeningEnabled()
-    {
-        // Registre this frame listener
-        return O3Engine::getSingleton().isFrameListenerRegistered(this);
-    }
+	// Activate FrameListener
+	bool FrameListener::isFrameListeningEnabled() {
+		return O3Engine::getSingleton().isFrameListenerAttached(*this);
+	}
 }

@@ -1,10 +1,9 @@
 #include "./skybox.hpp"
-#include "./o3engine.hpp"
+#include "./camera.hpp"
+#include "./scenenode.hpp"
 
-namespace o3engine
-{
-	void Skybox::drawObject(Camera * _pCamera)
-	{
+namespace o3engine {
+	void Skybox::drawObject(Camera * _pCamera) {
 		// Skip it if we don't have textures
 		if (!bHasTextures)
 			return;
@@ -21,98 +20,116 @@ namespace o3engine
 		glTranslate(pNodeCame->getGlobalPosition());
 
 		// Draw front face
-		if (ptextures[FACE_FRONT])
-		{
+		if (ptextures[FACE_FRONT]) {
 			ptextures[FACE_FRONT]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 1);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(0, 0);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
 			glEnd();
 		}
 
 		// Draw back face
-		if (ptextures[FACE_BACK])
-		{
+		if (ptextures[FACE_BACK]) {
 			ptextures[FACE_BACK]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 1);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(0, 0);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
 			glEnd();
 		}
 
 		// Draw left face
-		if (ptextures[FACE_LEFT])
-		{
+		if (ptextures[FACE_LEFT]) {
 			ptextures[FACE_LEFT]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 1);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(0, 0);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
 			glEnd();
 		}
 
 		// Draw right face
-		if (ptextures[FACE_RIGHT])
-		{
+		if (ptextures[FACE_RIGHT]) {
 			ptextures[FACE_RIGHT]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 1);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(0, 0);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
 			glEnd();
 		}
 
 		// Draw top face
-		if (ptextures[FACE_TOP])
-		{
+		if (ptextures[FACE_TOP]) {
 			ptextures[FACE_TOP]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 0);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f((GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(0, 1);
-				glVertex3f(-(GLfloat)half_size, (GLfloat)half_size, -(GLfloat)half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f((GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
+					-(GLfloat) half_size);
 			glEnd();
 		}
 
 		// Draw bottom face
-		if (ptextures[FACE_BOTTOM])
-		{
+		if (ptextures[FACE_BOTTOM]) {
 			ptextures[FACE_BOTTOM]->glBind2d();
 			glBegin(GL_QUADS);
-				glTexCoord2d(0, 0);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 0);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, -(GLfloat)half_size);
-				glTexCoord2d(1, 1);
-				glVertex3f((GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
-				glTexCoord2d(0, 1);
-				glVertex3f(-(GLfloat)half_size, -(GLfloat)half_size, (GLfloat)half_size);
+			glTexCoord2d(0, 0);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 0);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					-(GLfloat) half_size);
+			glTexCoord2d(1, 1);
+			glVertex3f((GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
+			glTexCoord2d(0, 1);
+			glVertex3f(-(GLfloat) half_size, -(GLfloat) half_size,
+					(GLfloat) half_size);
 			glEnd();
 		}
 		// Stop states

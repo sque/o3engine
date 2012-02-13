@@ -3,8 +3,7 @@
 namespace o3engine
 {
 	// Constructor
-	GenericScene::GenericScene()
-	{
+	GenericScene::GenericScene() {
 		// Initialize variable
 		m_loop_counter = 0;
 		m_farcutoff_distance = 1000;
@@ -18,19 +17,18 @@ namespace o3engine
 	}
 
 	// Destructor
-	GenericScene::~GenericScene()
-	{
+	GenericScene::~GenericScene() {
 		// Delete root node
 		delete mp_root_node;
 	}
 
-	void GenericScene::drawScene(Camera * pRenderCamera)
-	{	m_loop_counter++;	// Increase counter
+	void GenericScene::drawScene(Camera * pRenderCamera) {
+		m_loop_counter++;	// Increase counter
 		Real camFovRad = math::degreeToRadian(pRenderCamera->getFovY());
 		Real rad90Deg = math::degreeToRadian(90);
 
 		// Iterators
-		GenericNode::ActiveNodesIterator it;
+		GenericNode::active_nodes_type::iterator it;
 		vector<GenericNode*>::iterator transIt;
 		vector<GenericNode*>::iterator lightIt;
 
@@ -43,25 +41,25 @@ namespace o3engine
 		// Render Lighting
 		//! @todo Write a better implementation of lighting
 		glEnable(GL_LIGHTING);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, m_ambient_light);
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, m_ambient_light);
 		GLint el = 0;
-		for(lightIt = mv_light_nodes.begin();lightIt != mv_light_nodes.end(); lightIt++)
-        {   pnode = (*lightIt);
-            // Update global positions/orientation
+		for(lightIt = mv_light_nodes.begin();lightIt != mv_light_nodes.end(); lightIt++) {
+			pnode = (*lightIt);
+			// Update global positions/orientation
 			pnode->_updateCachedGPos_GOrient(m_loop_counter);
 
 			glPushMatrix();
-                glTranslate(pnode->v3_gposition);
+				glTranslate(pnode->v3_gposition);
 				glRotate(pnode->qu_gorientation);
-                glLight((*lightIt)->getLight(), GL_LIGHT0 + el);
+				glLight((*lightIt)->getLight(), GL_LIGHT0 + el);
 			glPopMatrix();
-            el++;
-        }
+			el++;
+		}
 
 		// Render 1st Pass (Solid Objects)
 		mv_trans_nodes.clear();
-		for(it = mv_activenodes.begin();it != mv_activenodes.end(); it++)
-		{	pnode = *it;
+		for(it = mv_activenodes.begin();it != mv_activenodes.end(); it++) {
+			pnode = *it;
 
 			// Update global positions/orientation
 			pnode->_updateCachedGPos_GOrient(m_loop_counter);
@@ -71,7 +69,7 @@ namespace o3engine
 			// Scene angle clipping
 			if ((m_enabled_clipping) &&
 				(	(camera_relpos.z >= 0) || 	// Fast reject behind XY plane
-                     ((rad90Deg - math::arcSin(-camera_relpos.normal().z)) > camFovRad) ))	// Reject by camera's angle
+					((rad90Deg - math::arcSin(-camera_relpos.normal().z)) > camFovRad) ))	// Reject by camera's angle
 				continue;
 
 			// Limit distance clipping
@@ -79,7 +77,7 @@ namespace o3engine
 				continue;
 
 			glPushMatrix();
-                glTranslate(pnode->v3_gposition);
+				glTranslate(pnode->v3_gposition);
 				glRotate(pnode->qu_gorientation);
 				pnode->drawObjects(true);
 			glPopMatrix();
@@ -89,9 +87,9 @@ namespace o3engine
 				mv_trans_nodes.push_back(pnode);
 		}
 
-		// Render 2nd Pass (Transperant objects)
-		for(transIt = mv_trans_nodes.begin();transIt != mv_trans_nodes.end();transIt++)
-		{	pnode = *transIt;
+		// Render 2nd Pass (Transparent objects)
+		for(transIt = mv_trans_nodes.begin();transIt != mv_trans_nodes.end();transIt++) {
+			pnode = *transIt;
 
 			glPushMatrix();
 				glTranslate(pnode->v3_gposition);

@@ -1,5 +1,5 @@
 #include "./timesensitive.hpp"
-#include "./platforms/platform.hpp"
+#include "./platform/platform.hpp"
 
 namespace o3engine {
 

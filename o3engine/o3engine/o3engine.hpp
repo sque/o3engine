@@ -2,10 +2,9 @@
 #define O3ENGINE_O3ENGINE_HPP_INCLUDED
 
 #include "./prereqs.hpp"
-#include "./platforms/platform.hpp"
+#include "./platform/platform.hpp"
 #include "./materialmanager.hpp"
 #include "./framelistener.hpp"
-#include "./renderer.hpp"
 #include "./fontmanager.hpp"
 #include "./texturemanager.hpp"
 #include "./objectmanager.hpp"
@@ -13,6 +12,7 @@
 // External
 #include <map>
 #include <vector>
+#include <list>
 #include <algorithm>
 
 namespace o3engine {
@@ -27,9 +27,9 @@ namespace o3engine {
 	 */
 	class O3Engine:
 			private TimeSensitive,
-			public Singleton<O3Engine> {
+			public Singleton<O3Engine>,
+			public LoopIdleListener{
 
-		friend class Renderer; 		//!< Affiliate with renderers
 		friend class FrameListener;	//!< Affiliate with frame listeners
 		friend class RenderOutput;	//!< Affiliate with render outputs
 
@@ -37,8 +37,10 @@ namespace o3engine {
 		// General objects
 		unsigned m_frame_counter; 					//!< General frame counter, needed for fps counter
 		bool m_frame_listeners_paused; 				//!< A flag if framelisteners have been paused
-		Renderer * mp_renderer; 					//!< A pointer to renderer
-		list<FrameListener *>::iterator m_fl_it; 	//!< Framelistener iterator
+
+		typedef std::list<FrameListener *> framelisteners_type;
+		framelisteners_type mv_framelisteners;
+		framelisteners_type::iterator m_fl_it; 		//!< Framelistener iterator
 
 		// Managers
 		MaterialManager * mp_material_manager; 	//!< The material manager
@@ -72,23 +74,7 @@ namespace o3engine {
 		bool isRenderOutputActivated(RenderOutput * p_output);
 		//! @}
 
-		void onWindowIdle();
-
-		//! @name Manage frame listeners
-		//! @{
-
-		//! List of all active frame listeners
-		list<FrameListener *> mv_framelisteners;
-
-		//! Register a new FrameListener
-		bool registerFrameListener(FrameListener * p_fl);
-
-		//! Remove a previous registered FrameListener
-		bool unregisterFrameListener(FrameListener * p_fl);
-
-		//! Check if a FrameListener is registered
-		bool isFrameListenerRegistered(FrameListener * p_fl);
-		//! @}
+		void onLoopIdle();
 
 		// Uncopiable
 		O3Engine(const O3Engine&);
@@ -110,24 +96,33 @@ namespace o3engine {
 
 		//! Start rendering
 		/**
-		 This function will enter in an endless loop, updating window constantly
-		 and calling framelisteners between every frame.
+		 * This function will enter in an endless loop, updating window constantly
+		 * and calling framelisteners between every frame.
 		 */
 		void startRendering();
 
 		//! Stop rendering
 		/**
-		 @bug This doesn't work on glut platform
+		 * @bug This doesn't work on glut platform
 		 */
 		void stopRendering();
 
-		/**
-		 * Render a frame
-		 */
-		void renderOneFrame();
-
 		//! Calculate fps
 		Real getFps();
+
+		//! @}
+
+		//! @name Manage frame listeners
+		//! @{
+
+		//! Register a new FrameListener
+		bool attachFrameListener(FrameListener & framelistener);
+
+		//! Remove a previous registered FrameListener
+		bool detachFrameListener(FrameListener & framelistener);
+
+		//! Check if a FrameListener is registered
+		bool isFrameListenerAttached(FrameListener & framelistener);
 
 		//! Pause all frame listeners
 		inline void pauseFrameListeners() {
@@ -143,7 +138,6 @@ namespace o3engine {
 		bool isFrameListenersPaused() const {
 			return m_frame_listeners_paused;
 		}
-
 		//! @}
 
 		//! @name Access sub components of the engine
@@ -167,16 +161,6 @@ namespace o3engine {
 		//! Reference to the platform module
 		inline Platform & getPlatformManager() {
 			return *mp_platform;
-		}
-
-		//! Set current renderer
-		inline Renderer * setRenderer(Renderer * p_r) {
-			return mp_renderer = p_r;
-		}
-
-		//! Reference to current renderer
-		inline Renderer & getRenderer() {
-			return *mp_renderer;
 		}
 
 		//! @}

@@ -12,23 +12,21 @@
 
 #include <assert.h>
 
-namespace o3engine
-{
-    //! [R5] Implementas all the basic features and security that a singleton must have
+namespace o3engine {
+	//! [R5] Implementas all the basic features and security that a singleton must have
 	/**
-     @par Copyright Scott Bilas, 2000
-        Main concept and implementation is work of Scott Bias, this class is
-        little changed
-        Template class for creating single-instance global classes.
-     @ingroup base_group
-     @par Class Characteristics
-         Singleton is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
-	*/
-	template <typename T> class Singleton
-	{
-    private:
-        Singleton(const Singleton &);
-        Singleton & operator=(const Singleton &);
+	 * @par Copyright Scott Bilas, 2000
+	 * Main concept and implementation is work of Scott Bias, this class is
+	 * little changed
+	 * Template class for creating single-instance global classes.
+	 * @ingroup base_group
+	 * @par Class Characteristics
+	 * Singleton is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
+	 */
+	template<typename T> class Singleton {
+	private:
+		Singleton(const Singleton &);
+		Singleton & operator=(const Singleton &);
 
 	protected:
 		//! A pointer to the instance of object
@@ -36,43 +34,41 @@ namespace o3engine
 
 	public:
 
-        //! General Constructor
+		//! General Constructor
 		/**
-            When an object is created, it checks if the internall
-            pointer to NULL otherwise it asserts.
+		 * When an object is created, it checks if the internal
+		 * pointer to NULL otherwise it asserts.
 		 */
-		inline Singleton( void )
-		{
-			assert( !ms_singleton );
-			ms_singleton = static_cast< T* >( this );
+		inline Singleton(void) {
+			assert( !ms_singleton);
+			ms_singleton = static_cast<T*>(this);
 		}
 
 		//! Destructor
-		inline virtual ~Singleton( void )
-		{
+		inline virtual ~Singleton(void) {
 			assert(ms_singleton);
 			ms_singleton = 0;
 		}
 
-        //! Returns a pointer to the singleton
+		//! Returns a pointer to the singleton
 		/**
-            If you want to check if the signleton is allocated check getSingletonPtr() which
-            doesn't assert if the object is unallocated.
-         @return An object by reference to the single-instance object if it is allocated,
-            otherwise it asserts.
+		 * If you want to check if the singleton is allocated check getSingletonPtr() which
+		 * doesn't assert if the object is unallocated.
+		 * @return An object by reference to the single-instance object if it is allocated,
+		 * otherwise it asserts.
 		 */
-		inline static T& getSingleton( void )
-		{
-			assert( ms_singleton );
-			return ( *ms_singleton );
+		inline static T& getSingleton(void) {
+			assert( ms_singleton);
+			return (*ms_singleton);
 		}
 
-        //! Returns a pointer to the singleton
+		//! Returns a pointer to the singleton
 		/**
-		 @return A pointer to the single-instance object.
+		 * @return A pointer to the single-instance object.
 		 */
-		inline static T* getSingletonPtr( void )
-		{return ms_singleton;}
+		inline static T* getSingletonPtr(void) {
+			return ms_singleton;
+		}
 	};
 }
 

@@ -1,8 +1,6 @@
 #include "./color.hpp"
 
-namespace o3engine
-{
-
+namespace o3engine {
 	// Common color constants
 	const Color Color::ZERO = Color(0,0,0,0);
 	const Color Color::BLACK = Color(0,0,0,1);
