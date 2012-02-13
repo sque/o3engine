@@ -26,4 +26,11 @@ namespace o3engine {
 		return false;
 	}
 
+	// Call repaint event
+	void Surface::requestRepaint() {
+		for(surface_listeners_type::iterator it = m_sfc_listeners.begin();
+				it != m_sfc_listeners.end();it++) {
+			(*it)->onSurfaceRepaint();
+		}
+	}
 }

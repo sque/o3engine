@@ -6,6 +6,8 @@
 #define O3ENGINE_GLUT_STATE_HPP_INCLUDED
 
 #include "./../prereqs.hpp"
+#include "./offscreen.hpp"
+#include <map>
 #include <set>
 #include <algorithm>
 
@@ -16,23 +18,24 @@ namespace o3engine {
 	public:
 
 		//! Class with all attributes of a window
-		struct GLUTWindowState {
+		struct WindowState {
 			Window * mp_wnd;
+			void * mp_wnd_pimpl;
 			int	m_glut_id;
 			InputProcessor * mp_input_proc;
 		};
 
-		typedef std::set<Window *> windows_type;
-		typedef std::vector<Window *> glut_to_windows_type;
+		typedef std::map<Window *, WindowState> wnd_to_wndstate_type;
+		typedef std::map<int, WindowState> glut_to_wndstate_type;
 		typedef std::set<OffScreen *> offscreens_type;
 
-		//! A list with all windows
-		windows_type m_windows;
+		//! Map windows based on windows pointer
+		wnd_to_wndstate_type m_wnd_to_wndstate;
 
-		//! A map from glut ids to Window objects
-		glut_to_windows_type m_glut_to_windows;
+		//! Map windows based on windows pointer
+		glut_to_wndstate_type m_glut_to_wndstate;
 
-		//! A list with all off-screens
+		//! A list of all off-screen surfaces
 		offscreens_type m_offscreens;
 
 		//! Check if it has off-screens
@@ -42,25 +45,39 @@ namespace o3engine {
 
 		//! Check if there are windows
 		inline bool has_windows() {
-			return (m_windows.size() != 0);
+			return (m_wnd_to_wndstate.size() != 0);
 		}
 
-		inline void push_window(Window * pwnd, int glut_wnd_id, InputProcessor * pinproc) {
-			m_windows.insert(pwnd);
-			m_glut_to_windows.resize(glut_wnd_id + 1);
-			m_glut_to_windows[glut_wnd_id] = pwnd;
+		//! Push and index a window
+		inline void push_window(Window * pwnd, void * pimpl, int glut_wnd_id, InputProcessor * pinproc) {
+			WindowState wstate = {pwnd, pimpl, glut_wnd_id, pinproc};
+			m_wnd_to_wndstate[pwnd] = wstate;
+			m_glut_to_wndstate[glut_wnd_id] = wstate;
 		}
 
+		//! Remove a window from indexess
 		inline void remove_window(Window * pwnd) {
 
-			windows_type::iterator it = std::find(m_windows.begin(), m_windows.end(), pwnd);
-			if (it != m_windows.end())
-				m_windows.erase(it);
+			m_glut_to_wndstate.erase(m_wnd_to_wndstate[pwnd].m_glut_id);
+			m_wnd_to_wndstate.erase(pwnd);
+		}
 
-			glut_to_windows_type::iterator g2w_it = std::find(
-					m_glut_to_windows.begin(), m_glut_to_windows.end(), pwnd);
-			if (g2w_it != m_glut_to_windows.end())
-				*g2w_it = NULL;
+		//! Ask to repaint offscreen surfaces
+		void redisplay_offscreens() {
+			for(offscreens_type::iterator it = m_offscreens.begin();
+					it != m_offscreens.end(); it++) {
+				(*it)->requestRepaint();
+			}
+		}
+
+		//! Push and index an offscreen surface
+		void push_offscreen(OffScreen * poff) {
+			m_offscreens.insert(poff);
+		}
+
+		//! Remove an offscreen surface
+		void remove_offscreen(OffScreen * poff) {
+			m_offscreens.erase(poff);
 		}
 	};
 

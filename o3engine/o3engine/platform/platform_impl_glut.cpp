@@ -10,7 +10,7 @@ namespace o3engine {
 	class Platform::impl {
 	public:
 		//! Pointer to glut state
-		GLUTState * mp_gstate;
+		static GLUTState * mp_gstate;
 
 		//! Pointer to loop idle listener
 		static LoopIdleListener * mp_idlelistener;
@@ -20,17 +20,22 @@ namespace o3engine {
 
 		// Construct internal object
 		impl() {
-			mp_gstate = GLUTState::getSingletonPtr();
+			mp_gstate = new GLUTState();
 			swapInterval = (void (*)(int))::glXGetProcAddress((const GLubyte*) "glXSwapIntervalMESA");
 		}
 
 		static void callbackIdleFunc() {
 			mp_idlelistener->onLoopIdle();
 			::glutPostRedisplay();
+			if (mp_gstate->has_offscreens()){
+				mp_gstate->redisplay_offscreens();
+				glFinish();
+			}
 		}
 
 	};
 
+	GLUTState * Platform::impl::mp_gstate = 0;
 	LoopIdleListener * Platform::impl::mp_idlelistener = NULL;
 
 	// Constructor
@@ -76,6 +81,11 @@ namespace o3engine {
 		if (!pimpl->mp_gstate->has_windows()) {
 			// When no windows exist, create our own loop
 			while(1) {
+				if (impl::mp_gstate->has_offscreens()){
+					impl::mp_gstate->redisplay_offscreens();
+					glFlush();
+					glFinish();
+				}
 				listener.onLoopIdle();
 				//::glutMainLoopEvent();
 			}

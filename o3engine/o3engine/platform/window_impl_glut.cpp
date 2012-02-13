@@ -11,9 +11,6 @@ namespace o3engine {
 
 		static GLUTState * ms_gstate;
 
-		//! Map from GLUT window handles to Window::impl
-		static std::vector<impl *> m_handles_to_impls;
-
 		//! GLUT window handle
 		int m_handle;
 
@@ -47,9 +44,7 @@ namespace o3engine {
 			m_handle = ::glutCreateWindow("");
 
 			// Save in internal state
-			ms_gstate->add_window(p_wnd, m_handle);
-			m_handles_to_impls.resize(m_handle + 1);
-			m_handles_to_impls[m_handle] = this;
+			ms_gstate->push_window(p_wnd, this, m_handle, p_ip);
 
 			// Setup callback functions
 			::glutReshapeFunc(impl::callbackReshape);
@@ -58,7 +53,7 @@ namespace o3engine {
 
 		~impl() {
 			::glutDestroyWindow(m_handle);
-			m_handles_to_impls[m_handle] = NULL;
+			ms_gstate->remove_window(p_wnd);
 		}
 
 		void setTitle(const string & title) {
@@ -106,16 +101,17 @@ namespace o3engine {
 			}
 
 		static void callbackDisplay() {
-			m_handles_to_impls[glutGetWindow()]->implCallbackDisplay();
+			((Window::impl *)ms_gstate->m_glut_to_wndstate[glutGetWindow()].mp_wnd_pimpl)
+					->implCallbackDisplay();
 		}
 
 		static void callbackReshape(int new_width, int new_height) {
-			m_handles_to_impls[glutGetWindow()]->implCallbackReshape(new_width, new_height);
+			((Window::impl *)ms_gstate->m_glut_to_wndstate[glutGetWindow()].mp_wnd_pimpl)
+					->implCallbackReshape(new_width, new_height);
 		}
 
 	};
 
-	std::vector<Window::impl *> Window::impl::m_handles_to_impls;
 	GLUTState * Window::impl::ms_gstate = 0;
 
 	// Constructor

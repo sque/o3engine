@@ -1,4 +1,5 @@
 #include "./texturerenderoutput.hpp"
+#include "./platform/offscreen.hpp"
 
 namespace o3engine {
 	TextureRenderOutput::TextureRenderOutput(OffScreen & offscreen, bool use_fbo):
@@ -56,7 +57,7 @@ namespace o3engine {
 	}
 
 	void TextureRenderOutput::render() {
-
+		//std::cout << "Texture rendering\n";
 		if (m_use_fbo) {
 			// Bind to back fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
@@ -64,8 +65,8 @@ namespace o3engine {
 			// create viewport
 			glViewport(0, 0, m_width, m_height);
 
-			// Set clear color to empty
-			glClearColor(Color::BLUE);
+			// Set clear color to offscreen's one
+			glClearColor(m_offscreen.getBackColor());
 
 			// Clear frame buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -84,6 +85,9 @@ namespace o3engine {
 
 			// Copy rendered frame to texture
 			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 128, 128, 0);
+
+			// Set clear color to offscreen's one
+			glClearColor(m_offscreen.getBackColor());
 
 			// Clear everything
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

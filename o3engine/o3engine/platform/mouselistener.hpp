@@ -59,7 +59,7 @@ namespace o3engine {
 				m_button_state[i] = r.m_button_state[i];
 		}
 
-		//! Assignement operator
+		//! Assignment operator
 		inline MouseState & operator=(const MouseState & r) {
 			m_pos_x = r.m_pos_x;
 			m_pos_y = r.m_pos_y;

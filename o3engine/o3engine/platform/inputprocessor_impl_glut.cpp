@@ -7,10 +7,9 @@ namespace o3engine {
 
 		static void _func_mouse(int button, int state, int x, int inv_y) {
 			// Get variables
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
-			MouseState & mst = p_ip->m_mouse_state;
+			MouseState & mst = wnd_state.mp_input_proc->m_mouse_state;
 			E_MS_BUTTONS my_but;
 			E_MS_BUTTON_STATES my_action;
 
@@ -58,107 +57,102 @@ namespace o3engine {
 			if (mst.m_button_state[my_but] != my_action) {
 				mst.m_button_state[my_but] = my_action;
 				if (my_action == MS_BUTTON_UP)
-					p_ip->raiseMouseButtonReleased(my_but);
+					wnd_state.mp_input_proc->raiseMouseButtonReleased(my_but);
 				else
-					p_ip->raiseMouseButtonPressed(my_but);
+					wnd_state.mp_input_proc->raiseMouseButtonPressed(my_but);
 			}
 
 			// Process mouse move
-			int y = p_wnd->getHeight() - inv_y - 1;
-			p_ip->raiseMouseMoved(x, y);
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 
 		}
 
 		// Call-back function for mouse motion
 		static void _func_motion(int x, int inv_y) {
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
-			int y = p_wnd->getHeight() - inv_y - 1;
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
 
 			// Process mouse move
-			p_ip->raiseMouseMoved(x, y);
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 		}
 
 		// Call-back function for keyboard down actions
 		static void _func_keyb_down(unsigned char key, int x, int inv_y) {
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y = p_wnd->getHeight() - inv_y - 1;
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
 
 			// Process mouse move
-			p_ip->raiseMouseMoved(x, y);
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 
 			// Save in buffer key
-			p_ip->mv_key_state[VtKey] = true;
+			wnd_state.mp_input_proc->mv_key_state[VtKey] = true;
 
 			// Process character effect
-			p_ip->raiseKeyboardPressed(VtKey);
+			wnd_state.mp_input_proc->raiseKeyboardPressed(VtKey);
 		}
 
 		// Call-back function for keyboard up actions
 		static void _func_keyb_up(unsigned char key, int x, int inv_y) {
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
 			E_KB_VIRTUALKEYS VtKey = _ascii2vt(key);
-			int y = p_wnd->getHeight() - inv_y - 1;
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
 
 			// Process mouse move
-			p_ip->raiseMouseMoved(x, y);
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 
 			// Avoid system exposing 2 releases
-			if (!p_ip->mv_key_state[VtKey])
+			if (!wnd_state.mp_input_proc->mv_key_state[VtKey])
 				return;
 
 			// Save in buffer key
-			p_ip->mv_key_state[VtKey] = false;
+			wnd_state.mp_input_proc->mv_key_state[VtKey] = false;
 
 			// Process keyboard effect
-			p_ip->raiseKeyboardCharInsert(key);
-			p_ip->raiseKeyboardReleased(VtKey);
+			wnd_state.mp_input_proc->raiseKeyboardCharInsert(key);
+			wnd_state.mp_input_proc->raiseKeyboardReleased(VtKey);
 		}
 
 		// Call-back function for special keys pressed
 		static void _func_keyb_special_down(int gvt, int x, int inv_y) {
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y = p_wnd->getHeight() - inv_y - 1;
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
 
 			// Process mouse move
-			p_ip->raiseMouseMoved(x, y);
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 
 			// Save in buffer key
-			p_ip->mv_key_state[VtKey] = true;
+			wnd_state.mp_input_proc->mv_key_state[VtKey] = true;
 
 			// Process character effect
-			p_ip->raiseKeyboardPressed(VtKey);
+			wnd_state.mp_input_proc->raiseKeyboardPressed(VtKey);
 		}
 
 		// Call-back function for special keys release
 		static void _func_keyb_special_up(int gvt, int x, int inv_y) {
-			Window * p_wnd = GLUTState::getSingleton().m_glut_to_windows[glutGetWindow()];
-			InputProcessor * p_ip = &p_wnd->getInputProcessor();
+			GLUTState::WindowState & wnd_state = GLUTState::getSingleton().m_glut_to_wndstate[glutGetWindow()];
 
 			E_KB_VIRTUALKEYS VtKey = _glutvt2vt(gvt);
-			int y = p_wnd->getHeight() - inv_y - 1;
+			int y = wnd_state.mp_wnd->getHeight() - inv_y - 1;
 
 			// Process mouse move
-			p_ip->raiseMouseMoved(x, y);
+			wnd_state.mp_input_proc->raiseMouseMoved(x, y);
 
 			// Avoid system exposing 2 releases
-			if (!p_ip->mv_key_state[VtKey])
+			if (!wnd_state.mp_input_proc->mv_key_state[VtKey])
 				return;
 
 			// Save in buffer key
-			p_ip->mv_key_state[VtKey] = false;
+			wnd_state.mp_input_proc->mv_key_state[VtKey] = false;
 
 			// Process keyboard effect
-			p_ip->raiseKeyboardReleased(VtKey);
+			wnd_state.mp_input_proc->raiseKeyboardReleased(VtKey);
 		}
 
 		// Converter from ASCII to VT
@@ -248,7 +242,7 @@ namespace o3engine {
 
 	// Start capturing
 	void InputProcessor::startCapturing() {
-		::glutSetWindow(getAssociatedWindow().pimpl->m_handle); // TODO: FIX THIS
+		::glutSetWindow(GLUTState::getSingleton().m_wnd_to_wndstate[(Window *)&getAssociatedWindow()].m_glut_id);
 		::glutIgnoreKeyRepeat(1); // Ignore key repeat
 		::glutMouseFunc(impl::_func_mouse);
 		::glutPassiveMotionFunc(impl::_func_motion);
@@ -261,7 +255,7 @@ namespace o3engine {
 
 	// Stop capturing events;
 	void InputProcessor::stopCapturing() {
-		::glutSetWindow(getAssociatedWindow().pimpl->m_handle);
+		::glutSetWindow(GLUTState::getSingleton().m_wnd_to_wndstate[(Window *)&getAssociatedWindow()].m_glut_id);
 		::glutMouseFunc(NULL);
 		::glutPassiveMotionFunc(NULL);
 		::glutMotionFunc(NULL);

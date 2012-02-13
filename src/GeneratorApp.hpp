@@ -30,7 +30,7 @@ public:
 
 	virtual void onRenderInterval(Real secs) {
 		count++;
-		if (count % 1000 == 0) {
+		if (count % 100 == 0) {
 			cout << boost::format("FPS: %f.")
 				% O3Engine::getSingleton().getFps() << endl;
 
@@ -102,7 +102,7 @@ public :
 		Camera * pcam = new Camera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y);
 		OrthoCamera * pcam2 = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
 
-		//pouttex->setInputCamera(pcam);
+		pouttex->attachRenderLink(*pcam);
 		pouttex->enableRendering();
 		//pout->setInputCamera(pcam2);
 		//pout->enableRendering();
@@ -112,8 +112,8 @@ public :
 		fp.enableFrameListening();
 		/*wnd_bc.getInputProcessor().attachKeyboardListener(fp);
 		wnd_bc.getInputProcessor().startCapture();*/
-		wnd_main.getInputProcessor().attachMouseListener(fp);
-		wnd_main.getInputProcessor().startCapturing();
+		/*wnd_main.getInputProcessor().attachMouseListener(fp);
+		wnd_main.getInputProcessor().startCapturing();*/
 
 		GenericScene sm;
 		fp.pscene =  &sm;

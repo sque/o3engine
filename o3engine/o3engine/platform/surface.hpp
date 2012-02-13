@@ -13,8 +13,6 @@ namespace o3engine {
 	 * Platform is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
 	class Surface {
-		friend class Plaform;
-
 	private:
 		Surface(const Surface &);
 		Surface & operator=(const Surface &);
@@ -30,6 +28,9 @@ namespace o3engine {
 
 		// Destructor
 		virtual ~Surface();
+
+		//! @name Callbacks that must be implemented by derived classes
+		//! @{
 
 		//! Get height of surface
 		virtual int getHeight() const = 0;
@@ -49,11 +50,16 @@ namespace o3engine {
 		//! Get background color
 		virtual const Color & getBackColor() const = 0;
 
+		//! @}
+
 		//! Attach a surface listener
 		void attachSurfaceListener(SurfaceListener & listener);
 
 		//! Detach a surface listener
 		bool detachSurfaceListener(SurfaceListener & listener);
+
+		//! Request repaint
+		void requestRepaint();
 
 	};
 }

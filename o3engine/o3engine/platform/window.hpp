@@ -7,17 +7,15 @@
 
 namespace o3engine {
 
-	//! [R4] Abstraction layer to platform windows
+	//! [R4] Abstraction layer for a graphical window
 	/**
-	 * This class is an abstract way to speak with window.
+	 * This class is an abstract way to create and manipulate windows.
 	 * It provides the same API across all platforms but its back-end
 	 * may be implemented differently among systems.
 	 * @par Class Characteristics
 	 * Platform is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
 	class Window :public Surface{
-		friend class InputProcessor;
-		friend class Plaform;
 	public:
 
 		//! Construct a new window

@@ -8,7 +8,7 @@ namespace o3engine
 {
 	//! [R4] A platform independent timer
 	/**
-	 * It is a timer to get real time passed or cpu time passed, and
+	 * It is a timer to get real time passed or CPU time passed, and
 	 * it is platform independent.
 	 * @par Class Characteristics
 	 * Timer is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
