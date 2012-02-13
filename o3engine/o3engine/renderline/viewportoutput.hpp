@@ -1,11 +1,12 @@
 #ifndef O3ENGINE_VIEWPORTRENDEROUTPUT_HPP_INCLUDED
 #define O3ENGINE_VIEWPORTRENDEROUTPUT_HPP_INCLUDED
 
-#include "./prereqs.hpp"
-#include "./renderoutput.hpp"
-#include "./platform/window.hpp"
+#include "./../prereqs.hpp"
+#include "./output.hpp"
+#include "./../platform/window.hpp"
 
 namespace o3engine {
+namespace RenderLine{
 
 	//! [R4] An output to a viewport of a window
 	/**
@@ -13,31 +14,37 @@ namespace o3engine {
 	 * @par Class Characteristics
 	 * ViewportRenderOutput is @ref noncopyable_page, @ref inherit_page and follows the @ref sfn_page
 	 */
-	class ViewportRenderOutput: public RenderOutput, SurfaceListener {
+	class ViewportOutput: public Output, SurfaceListener {
 	private:
 		// Non copyable object
-		ViewportRenderOutput(const ViewportRenderOutput &);
-		ViewportRenderOutput& operator=(const ViewportRenderOutput &);
+		ViewportOutput(const ViewportOutput &);
+		ViewportOutput& operator=(const ViewportOutput &);
 
 	protected:
-		int m_bottom_offset;	//!< Bottom offset of viewport
-		int m_left_offset;		//!< Left offset of viewport
-		Window & m_window;		//!< Window handler
+
+		//! Bottom offset of viewport
+		int m_bottom_offset;
+
+		//! Left offset of viewport
+		int m_left_offset;
+
+		//! Window handler
+		Window & m_window;
 
 	public:
 
 		//! Construct and initialize with desired parameters
 		/**
-		 * @param wnd The window that this viewport is binded at.
+		 * @param wnd The window that this viewport belongs at.
 		 * @param width The width of the RenderOutput object.
 		 * @param height The height of the RenderOutput object.
 		 * @param left The left offset of viewport on the window.
 		 * @param bottom The bottom offset of viewport on the window.
 		 */
-		ViewportRenderOutput(Window & wnd, int width, int height, int left, int bottom);
+		ViewportOutput(Window & wnd, int width, int height, int left, int bottom);
 
 		//! Destructor
-		virtual ~ViewportRenderOutput();
+		virtual ~ViewportOutput();
 
 		//! Get bottom margin of viewport on the window
 		inline void setBottomOffset(int bottom_offset) {
@@ -59,26 +66,20 @@ namespace o3engine {
 			return m_left_offset;
 		}
 
-		//! @name Events from RenderOutput
+		virtual void render();
+
+		//! @name Events from SurfaceListener
 		//! @{
-		inline virtual void render() {
-			::glViewport(m_left_offset, m_bottom_offset, m_width, m_height);
-			renderPipeline();
-		}
 
-
-		virtual void onSurfaceResized(int old_width, int old_height, int new_width, int new_height){
-
-		}
-
-		virtual void onOutputResize(int new_w, int new_h){}
+		virtual void onSurfaceResized(int old_width, int old_height, int new_width, int new_height);
 
 		//! Raised when window must be drawn
-		virtual void onSurfaceRepaint(){
+		inline virtual void onSurfaceRepaint(){
 			render();
 		}
 
 		//! @}
 	};
+}
 }
 #endif

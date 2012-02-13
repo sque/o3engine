@@ -33,8 +33,8 @@ namespace o3engine
 		vector<GenericNode*>::iterator lightIt;
 
 		// Camera's global position
-		Quaternion camera_gorientation_ops = pRenderCamera->getAttachedNode()->getGlobalOrientation().conjugate();
-		Vector3 camera_gposition = pRenderCamera->getAttachedNode()->getGlobalPosition();
+		Quaternion camera_gorientation_ops = pRenderCamera->getSceneNode()->getGlobalOrientation().conjugate();
+		Vector3 camera_gposition = pRenderCamera->getSceneNode()->getGlobalPosition();
 		GenericNode * pnode;
 		Vector3 camera_relpos;
 

@@ -3,7 +3,7 @@
 
 #include "./prereqs.hpp"
 #include "./skybox.hpp"
-#include "./renderlink.hpp"
+#include "./renderline/node.hpp"
 
 namespace o3engine {
 	//! Camera handler
@@ -12,19 +12,26 @@ namespace o3engine {
 	 * and attach it on node.
 	 */
 	class Camera:
-		public RenderLink{
+		public RenderLine::Node{
 		friend class SceneNode;
 	protected:
-		SceneNode * pAttachedNode;	//!< Pointer to attached node;
+		//! Pointer to attached scene node;
+		SceneNode * mp_scene_node;
 
-		// Camera position
-		Vector3 target_point;		//!< Camera's target vector
-		Vector3 up_vector;			//!< Camera's up vector
+		//! Camera's target vector
+		Vector3 m_target_point;
 
-		// Camera parameter
+		//! Camera's up vector
+		Vector3 m_up_vector;
+
+		//! Camera parameter
 		Real left, top, bottom, right, width, height, lim_near, lim_far;
-		Real aspect;				//! Aspect ratio of camera
-		Real fovY;					//! The theta of the perspective
+
+		//! Aspect ratio of camera
+		Real m_aspect_ratio;
+
+		//! The theta of the perspective
+		Real fovY;
 
 		// Initialize Values
 		void _initvalues(void);
@@ -40,19 +47,19 @@ namespace o3engine {
 		}
 
 		//! Constructor with basic parameters
-		Camera(const Vector3 & _target, const Vector3 & _up_vector) {
+		Camera(const Vector3 & target_point, const Vector3 & up_vector){
 			_initvalues();
-			target_point = _target;
-			up_vector = _up_vector;
+			m_target_point = target_point;
+			m_up_vector = up_vector;
 			calcFromPrespective();
 		}
 
 		//! Constructor with extended parameters
-		Camera(const Vector3 & _target, const Vector3 & _up_vector, Real fovy,
+		Camera(const Vector3 & target_point, const Vector3 & up_vector, Real fovy,
 				Real _near, Real _far) {
 			_initvalues();
-			target_point = _target;
-			up_vector = _up_vector;
+			m_target_point = target_point;
+			m_up_vector = up_vector;
 			lim_near = _near;
 			lim_far = _far;
 			fovY = fovy;
@@ -63,22 +70,22 @@ namespace o3engine {
 
 		//! Get camera's target point
 		inline const Vector3 & getTargetPoint() const {
-			return target_point;
+			return m_target_point;
 		}
 
 		//! Set camera's target point
-		inline Vector3 & setTargetPoint(const Vector3 & _target) {
-			return target_point = _target;
+		inline Vector3 & setTargetPoint(const Vector3 & target_point) {
+			return m_target_point = target_point;
 		}
 
 		//! Get camera's up vector
 		inline const Vector3 & getUpVector() {
-			return up_vector;
+			return m_up_vector;
 		}
 
 		//! Set camera's up vector
-		inline Vector3 & setUpVector(const Vector3 & _up) {
-			return up_vector = _up;
+		inline Vector3 & setUpVector(const Vector3 & up_vector) {
+			return m_up_vector = up_vector;
 		}
 
 		//! Get camera's near cut-off distance
@@ -136,32 +143,33 @@ namespace o3engine {
 
 		//! Get camera's aspect ration
 		inline Real getAspectRatio() const {
-			return aspect;
+			return m_aspect_ratio;
 		}
 
 		//! Set camera's aspect ratio
-		inline void setAspectRatio(Real _aspect) {
-			aspect = _aspect;
+		inline void setAspectRatio(Real aspect_ratio) {
+			m_aspect_ratio = aspect_ratio;
 			calcFromPrespective();
 		}
 
 		// Run gluLookAt with those parameters
 		inline virtual void useme_to_gluLookAt() {
-			gluLookAt(0, 0, 0, target_point.x, target_point.y, target_point.z,
-					up_vector.x, up_vector.y, up_vector.z);
+			::gluLookAt(0, 0, 0, m_target_point.x, m_target_point.y, m_target_point.z,
+					m_up_vector.x, m_up_vector.y, m_up_vector.z);
 		}
 
 		// Run glFrustum with a specific aspect ratio
 		inline virtual void useme_to_glFrustum() {
-			glFrustum(left, right, bottom, top, lim_near, lim_far);
+			::glFrustum(left, right, bottom, top, lim_near, lim_far);
 		}
 
-		inline SceneNode * getAttachedNode() {
-			return pAttachedNode;
+		inline SceneNode * getSceneNode() {
+			return mp_scene_node;
 		}
 
 		void render();
 
+		void onStateAltered();
 	};
 }
 

@@ -23,9 +23,6 @@ add_library(o3engine STATIC
 	o3engine.cpp
 	objectmanager.cpp
 	overlay.cpp
-	renderoutput.cpp
-	texturerenderoutput.cpp
-	viewportrenderoutput.cpp
 	skinnedobject.cpp
 	skybox.cpp
 	string_functions.cpp
@@ -63,4 +60,7 @@ add_library(o3engine STATIC
 	platform/glut/offscreen_impl_glut.cpp
 	platform/glut/platform_impl_glut.cpp
 	platform/glut/window_impl_glut.cpp
+	renderline/output.cpp
+	renderline/textureoutput.cpp
+	renderline/viewportoutput.cpp
 )

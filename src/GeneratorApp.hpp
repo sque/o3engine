@@ -10,8 +10,8 @@
 
 #include <o3engine/o3engine.hpp>
 #include <o3engine/genericscene.hpp>
-#include <o3engine/texturerenderoutput.hpp>
-#include <o3engine/viewportrenderoutput.hpp>
+#include <o3engine/renderline/textureoutput.hpp>
+#include <o3engine/renderline/viewportoutput.hpp>
 #include <boost/format.hpp>
 #include "OrthoCamera.hpp"
 
@@ -23,7 +23,7 @@ class FrameProcessor: public FrameListener, public KeyboardListener, public Mous
 public:
 	int count;
 	GenericScene * pscene;
-	TextureRenderOutput * pouttex;
+	RenderLine::TextureOutput * pouttex;
 	FrameProcessor() {
 		count = 0;
 	}
@@ -96,17 +96,16 @@ public :
 		wnd_bc.setTitle("Backup window");
 		wnd_bc.setBackColor(Color::YELLOW);*/
 
-		OffScreen off_scrn(320, 240);
-		TextureRenderOutput * pouttex = new TextureRenderOutput(off_scrn, true);
-		ViewportRenderOutput * pout = new ViewportRenderOutput(wnd_main, 800, 600, 0, 0);
+		//OffScreen off_scrn(320, 240);
+		//RenderLine::TextureOutput * pouttex = new RenderLine::TextureOutput(off_scrn, true);
+		RenderLine::ViewportOutput * pout = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
 		Camera * pcam = new Camera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y);
 		OrthoCamera * pcam2 = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
 
-		pouttex->attachRenderLink(*pcam);
-		pouttex->enableRendering();
+		//pouttex->attachNode(*pcam);
 		//pout->setInputCamera(pcam2);
 		//pout->enableRendering();
-		pout->attachRenderLink(*pcam);
+		pout->attachNode(pcam);
 
 		FrameProcessor fp;
 		fp.enableFrameListening();
@@ -117,7 +116,7 @@ public :
 
 		GenericScene sm;
 		fp.pscene =  &sm;
-		fp.pouttex = pouttex;
+		//fp.pouttex = pouttex;
 		sm.setFarCutOffState(false);
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);

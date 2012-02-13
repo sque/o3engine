@@ -16,7 +16,7 @@ namespace o3engine {
 		glColor3d(255, 255, 255);
 
 		glPushMatrix();
-		SceneNode * pNodeCame = _pCamera->getAttachedNode();
+		SceneNode * pNodeCame = _pCamera->getSceneNode();
 		glTranslate(pNodeCame->getGlobalPosition());
 
 		// Draw front face

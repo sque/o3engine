@@ -69,18 +69,18 @@ namespace o3engine
 		// Dettach camera
 		inline void dettachCamera()
 		{	if (pCamera)
-				pCamera->pAttachedNode = NULL;
+				pCamera->mp_scene_node = NULL;
 			pCamera = NULL;
 		}
 
 		// Attach a camera
 		inline void attachCamera(Camera * _pcamera)
 		{	if (pCamera)
-				pCamera->pAttachedNode = NULL;
+				pCamera->mp_scene_node = NULL;
 			pCamera = _pcamera;
-			if (pCamera->pAttachedNode)
-				pCamera->pAttachedNode->dettachCamera();
-			pCamera->pAttachedNode = this;
+			if (pCamera->mp_scene_node)
+				pCamera->mp_scene_node->dettachCamera();
+			pCamera->mp_scene_node = this;
 		}
 	};
 }

@@ -1,11 +1,13 @@
-#include "./texturerenderoutput.hpp"
-#include "./platform/offscreen.hpp"
+#include "./textureoutput.hpp"
+#include <stdexcept>
 
 namespace o3engine {
-	TextureRenderOutput::TextureRenderOutput(OffScreen & offscreen, bool use_fbo):
-			Texture("TO BE CHANGED"),
-			RenderOutput(offscreen.getWidth(), offscreen.getHeight()), m_use_fbo(use_fbo),
-			m_offscreen(offscreen){
+namespace RenderLine {
+
+	TextureOutput::TextureOutput(OffScreen & offscreen, bool use_fbo) :
+			Texture("TO BE CHANGED"), RenderLine::Output(offscreen.getWidth(),
+					offscreen.getHeight()), m_use_fbo(use_fbo), m_offscreen(
+					offscreen) {
 
 		offscreen.attachSurfaceListener(*this);
 
@@ -20,8 +22,8 @@ namespace o3engine {
 			// Bind to fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
 
-			glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, m_offscreen.getWidth(),
-					m_offscreen.getHeight());
+			glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
+					getWidth(), getHeight());
 
 			// Bind texture
 			glBindTexture(GL_TEXTURE_2D, m_gli_texture);
@@ -33,8 +35,8 @@ namespace o3engine {
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 			// Initialize texture
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA,
-					GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWidth(), getHeight(), 0,
+					GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 			// bind this texture to the current framebuffer obj. as
 			// color_attachement_0
@@ -47,23 +49,23 @@ namespace o3engine {
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 		} else {
 			// Allocate space and disable mipmaps
-			setImage(Image(m_width, m_height, Color::MAGENTA), false);
+			setImage(Image(getWidth(), getHeight(), Color::MAGENTA), false);
 		}
 	}
 
-	TextureRenderOutput::~TextureRenderOutput() {
+	TextureOutput::~TextureOutput() {
 		if (m_use_fbo)
 			glDeleteFramebuffersEXT(1, &m_gli_fbo);
 	}
 
-	void TextureRenderOutput::render() {
+	void TextureOutput::render() {
 		//std::cout << "Texture rendering\n";
 		if (m_use_fbo) {
 			// Bind to back fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
 
 			// create viewport
-			glViewport(0, 0, m_width, m_height);
+			glViewport(0, 0, getWidth(), getHeight());
 
 			// Set clear color to offscreen's one
 			glClearColor(m_offscreen.getBackColor());
@@ -71,14 +73,14 @@ namespace o3engine {
 			// Clear frame buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			renderPipeline();
+			renderNext();
 
 			// 'unbind' the FBO. things will now be drawn to screen as usual
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 		} else {
-			glViewport(0, 0, m_width, m_height);
+			glViewport(0, 0, getWidth(), getHeight());
 
-			renderPipeline();
+			renderNext();
 
 			// Bind to output texture
 			glBindTexture(GL_TEXTURE_2D, m_gli_texture);
@@ -96,4 +98,11 @@ namespace o3engine {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
+
+	void TextureOutput::onSurfaceResized(int old_width, int old_height,
+			int new_width, int new_height) {
+		throw new logic_error("Cannot change size a texture surface!");
+	}
+
+}
 }

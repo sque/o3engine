@@ -31,7 +31,6 @@ namespace o3engine {
 			public LoopIdleListener{
 
 		friend class FrameListener;	//!< Affiliate with frame listeners
-		friend class RenderOutput;	//!< Affiliate with render outputs
 
 	private:
 		// General objects
@@ -54,25 +53,6 @@ namespace o3engine {
 
 		//! Setup opengl state
 		void setupOpenGLState();
-
-		//! @name Manager active render output
-		//! @{
-
-		//! Type definition of render output iterator
-		typedef vector<RenderOutput *>::iterator RenderOutputIterator;
-
-		//! The array with all active outputs
-		vector<RenderOutput *> mv_render_outputs;
-
-		//! Add a new output destination in render queue
-		bool activateRenderOutput(RenderOutput * p_output);
-
-		//! Remove an existing output destination
-		bool deactivateRenderOutput(RenderOutput * p_output);
-
-		//! Get an output by its name
-		bool isRenderOutputActivated(RenderOutput * p_output);
-		//! @}
 
 		void onLoopIdle();
 

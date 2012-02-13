@@ -152,35 +152,4 @@ namespace o3engine {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-
-	// Add a new output destination in render queue
-	bool O3Engine::activateRenderOutput(RenderOutput * p_output) {
-		if (isRenderOutputActivated(p_output))
-			return false;
-
-		mv_render_outputs.push_back(p_output);
-
-		// On activation we must raise window resize event to reinitialize if needed.
-		/* TODO: window fix p_output->onWindowResize(mp_platform->getWindowWidth(),
-				mp_platform->getWindowHeight());
-*/
-		return true;
-	}
-
-	// Remove an existing output destination
-	bool O3Engine::deactivateRenderOutput(RenderOutput * p_output) {
-		RenderOutputIterator out_it;
-
-		if ((out_it = find(mv_render_outputs.begin(), mv_render_outputs.end(),
-				p_output)) == mv_render_outputs.end())
-			return false;
-		mv_render_outputs.erase(out_it);
-		return true;
-	}
-
-	// Get an output by its name
-	bool O3Engine::isRenderOutputActivated(RenderOutput * p_output) {
-		return (find(mv_render_outputs.begin(), mv_render_outputs.end(), p_output)
-				!= mv_render_outputs.end());
-	}
 }

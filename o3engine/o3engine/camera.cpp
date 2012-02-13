@@ -5,18 +5,18 @@
 namespace o3engine {
 	// Initialize Values
 	void Camera::_initvalues(void) {
-		target_point = Vector3::UNIT_Z;
-		up_vector = Vector3::UNIT_Y;
+		m_target_point = Vector3::UNIT_Z;
+		m_up_vector = Vector3::UNIT_Y;
 		lim_near = 1;
 		lim_far = 20;
-		aspect = 1;
+		m_aspect_ratio = 1;
 		fovY = 60;
-		pAttachedNode = NULL;
+		mp_scene_node = NULL;
 	}
 
 	Camera::~Camera() {
-		if (pAttachedNode)
-			pAttachedNode->dettachCamera();
+		if (mp_scene_node)
+			mp_scene_node->dettachCamera();
 	}
 
 	// Calculate Frustum values from perspective angle
@@ -25,7 +25,7 @@ namespace o3engine {
 		fov2 = ((fovY * math::PI) / 180.0) / 2.0;
 		top = lim_near / (math::cos(fov2) / math::sin(fov2));
 		bottom = -top;
-		right = top * aspect;
+		right = top * m_aspect_ratio;
 		left = -right;
 		width = right - left;
 		height = top - bottom;
@@ -45,12 +45,16 @@ namespace o3engine {
 		// Setup camera
 		useme_to_gluLookAt();
 
-		if (pAttachedNode) {
-			pAttachedNode->useme_to_glInvertPosition();
-			pAttachedNode->getMySceneManager()->drawScene(this);
+		if (mp_scene_node) {
+			mp_scene_node->useme_to_glInvertPosition();
+			mp_scene_node->getMySceneManager()->drawScene(this);
 		}
 
 		renderNext();
+	}
+
+	void Camera::onStateAltered(){
+		setAspectRatio((double)mp_state->width / (double)mp_state->height);
 	}
 
 }
