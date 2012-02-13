@@ -1,6 +1,7 @@
-#include "./inputprocessor.hpp"
-#include "./platform.hpp"
+#include "./../inputprocessor.hpp"
 #include "./glut_state.hpp"
+#include "./../window.hpp"
+
 namespace o3engine {
 	class InputProcessor::impl {
 	public:

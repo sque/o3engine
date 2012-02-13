@@ -5,8 +5,8 @@
 #ifndef O3ENGINE_GLUT_STATE_HPP_INCLUDED
 #define O3ENGINE_GLUT_STATE_HPP_INCLUDED
 
-#include "./../prereqs.hpp"
-#include "./offscreen.hpp"
+#include "./../../prereqs.hpp"
+#include "./../offscreen.hpp"
 #include <map>
 #include <set>
 #include <algorithm>

@@ -1,6 +1,6 @@
-#include "./window.hpp"
+#include "./../window.hpp"
 #include "./glut_state.hpp"
-#include "./inputprocessor.hpp"
+#include "./../inputprocessor.hpp"
 #include <iostream>
 
 namespace o3engine {

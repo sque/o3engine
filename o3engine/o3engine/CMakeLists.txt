@@ -23,11 +23,9 @@ add_library(o3engine STATIC
 	o3engine.cpp
 	objectmanager.cpp
 	overlay.cpp
-	renderer.cpp
 	renderoutput.cpp
-	renderoutputtexture.cpp
-	renderoutputviewport.cpp
-	simplerenderer.cpp
+	texturerenderoutput.cpp
+	viewportrenderoutput.cpp
 	skinnedobject.cpp
 	skybox.cpp
 	string_functions.cpp
@@ -54,12 +52,15 @@ add_library(o3engine STATIC
 	tinyxml/tinyxml.cpp
 	tinyxml/tinyxmlerror.cpp
 	tinyxml/tinyxmlparser.cpp
-	platforms/input_processor.cpp
-	platforms/input_processor_impl_glut.cpp
-	platforms/keyboard_listener.cpp
-	platforms/mouse_listener.cpp
-	platforms/platform.cpp
-	platforms/platform_impl_glut.cpp
-	platforms/timer_posix.cpp
+	platform/inputprocessor.cpp
+	platform/keyboardlistener.cpp
+	platform/mouselistener.cpp
+	platform/platform.cpp
+	platform/surface.cpp
+	platform/timer_posix.cpp
+	platform/glut/glut_state.cpp
+	platform/glut/inputprocessor_impl_glut.cpp
+	platform/glut/offscreen_impl_glut.cpp
+	platform/glut/platform_impl_glut.cpp
+	platform/glut/window_impl_glut.cpp
 )
-

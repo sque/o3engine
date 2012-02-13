@@ -1,4 +1,4 @@
-#include "./offscreen.hpp"
+#include "./../offscreen.hpp"
 #include "./glut_state.hpp"
 #include <stdexcept>
 

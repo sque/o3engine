@@ -16,8 +16,8 @@ namespace o3engine {
 	class RenderOutput {
 	private:
 		// Uncopiable
-		RenderOutput(const RenderOutput &) = delete;
-		RenderOutput & operator=(const RenderOutput &) = delete;
+		RenderOutput(const RenderOutput &);
+		RenderOutput & operator=(const RenderOutput &);
 
 	protected:
 		int m_width;			//!< Width of output

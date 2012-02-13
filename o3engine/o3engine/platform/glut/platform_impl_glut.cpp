@@ -1,5 +1,5 @@
-#include "./platform.hpp"
-#include "./window.hpp"
+#include "./../platform.hpp"
+#include "./../window.hpp"
 #include "./glut_state.hpp"
 #include <map>
 #include <GL/glx.h>
