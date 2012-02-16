@@ -1,9 +1,7 @@
 include(FindPkgConfig)
 
 pkg_search_module(exlibs REQUIRED freetype2 glew2)
-
-# There must be a better way for include directories
-SET(CMAKE_CXX_FLAGS "${exlibs_CFLAGS} ${CMAKE_CXX_FLAGS}")
+include_directories(${exlibs_INCLUDE_DIRS})
 
 add_library(o3engine STATIC 
 	animatedtexture.cpp

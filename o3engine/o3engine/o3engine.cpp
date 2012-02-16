@@ -97,9 +97,6 @@ namespace o3engine {
 		// Initialize platform (Window, Input, Timers)
 		Platform::getSingleton().init(argc, argv);
 
-		// Set us as the window events listeners
-		//Platform::getSingleton().setWindowEventsListener(this);
-
 		// Start glew
 		glewInit();
 
@@ -123,7 +120,7 @@ namespace o3engine {
 
 	void O3Engine::stopRendering() {
 		// Setup Callback functions
-		//glutLeaveMainLoop();
+		// TODO: glutLeaveMainLoop();
 	}
 
 	void O3Engine::onLoopIdle() {

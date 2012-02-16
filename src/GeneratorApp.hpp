@@ -12,6 +12,9 @@
 #include <o3engine/genericscene.hpp>
 #include <o3engine/renderline/textureoutput.hpp>
 #include <o3engine/renderline/viewportoutput.hpp>
+#include <o3engine/ogl/shaderprogram.hpp>
+#include <iostream>
+#include <fstream>
 #include <boost/format.hpp>
 #include "OrthoCamera.hpp"
 
@@ -106,6 +109,13 @@ public :
 		//pout->setInputCamera(pcam2);
 		//pout->enableRendering();
 		pout->attachNode(pcam);
+
+		std::ifstream fs_vs("test.vs");
+		ogl::Shader my_shader(ogl::Shader::shader_type::VERTEX, "test.vs");
+		ogl::ShaderProgram prog;
+		prog.attach_shader(my_shader);
+		//pout->attachNode(&ap);
+		//ap.attachNode(pcam);
 
 		FrameProcessor fp;
 		fp.enableFrameListening();
