@@ -2,7 +2,6 @@
 #include "./../window.hpp"
 #include "./glut_state.hpp"
 #include <map>
-#include <GL/glx.h>
 
 namespace o3engine {
 
@@ -15,13 +14,9 @@ namespace o3engine {
 		//! Pointer to loop idle listener
 		static LoopIdleListener * mp_idlelistener;
 
-		//! Pointer to function for controlling swap interval (Vsync)
-		void (*swapInterval)(int);
-
 		// Construct internal object
 		impl() {
 			mp_gstate = new GLUTState();
-			swapInterval = (void (*)(int))::glXGetProcAddress((const GLubyte*) "glXSwapIntervalMESA");
 		}
 
 		static void callbackIdleFunc() {
@@ -51,7 +46,7 @@ namespace o3engine {
 	}
 
 	// Initialization
-	bool Platform::init(int argc, char ** argv) {
+	bool Platform::initialize(int argc, char ** argv) {
 		// Start glut
 		glutInit(&argc, argv);
 
@@ -66,12 +61,12 @@ namespace o3engine {
 
 	// Enable vsync while rendering
 	void Platform::enableVSync() {
-		pimpl->swapInterval(1);
+		pimpl->mp_gstate->swapInterval(1);
 	}
 
 	//! Disable vsync while rendering
 	void Platform::disableVSync() {
-		pimpl->swapInterval(0);
+		pimpl->mp_gstate->swapInterval(0);
 	}
 
 	//! Start event loop (blocking)

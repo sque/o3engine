@@ -1,5 +1,6 @@
 #include <FreeImage.h>
 #include "./o3engine.hpp"
+#include <stdexcept>
 
 namespace o3engine {
 
@@ -95,10 +96,7 @@ namespace o3engine {
 	int O3Engine::init(int argc, char ** argv) {
 
 		// Initialize platform (Window, Input, Timers)
-		Platform::getSingleton().init(argc, argv);
-
-		// Start glew
-		glewInit();
+		Platform::getSingleton().initialize(argc, argv);
 
 		// Initialize opengl state
 		setupOpenGLState();

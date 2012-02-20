@@ -42,6 +42,7 @@ namespace o3engine {
 			::glutInitWindowSize(m_width, m_height);
 			::glutInitWindowPosition(x, y);
 			m_handle = ::glutCreateWindow("");
+			ms_gstate->initialize_glew();	// We can only initialize glew after a GL context
 
 			// Save in internal state
 			ms_gstate->push_window(p_wnd, this, m_handle, p_ip);

@@ -53,7 +53,7 @@ namespace o3engine {
 		}
 
 		//! Called by engine to initialize platform
-		bool init(int argc, char ** argv);
+		bool initialize(int argc, char ** argv);
 
 		//! Start event loop (blocking)
 		void startEventLoop(LoopIdleListener & listener);

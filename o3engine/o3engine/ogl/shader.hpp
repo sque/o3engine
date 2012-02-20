@@ -13,19 +13,12 @@ namespace ogl {
 	class Shader {
 	public:
 
-		enum class shader_type {
-			VERTEX = GL_VERTEX_SHADER,
-			FRAGMENT = GL_FRAGMENT_SHADER,
-			GEOMETRY = GL_GEOMETRY_SHADER
-		};
-
 		Shader(const Shader &) = delete;
 		Shader& operator=(const Shader &) = delete;
 
 		//! Construct from source
 		Shader(shader_type type, const string & source);
 
-		//! Permits inheritance
 		~Shader();
 
 		inline GLint name() const {

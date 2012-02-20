@@ -38,6 +38,22 @@ namespace o3engine {
 		//! A list of all off-screen surfaces
 		offscreens_type m_offscreens;
 
+		//! Check if glew is initialized
+		bool m_glew_initialized;
+
+		//! Pointer to function for controlling swap interval (Vsync)
+		void (*mf_swap_interval)(int);
+
+		GLUTState():
+			m_glew_initialized(false){
+		}
+
+		//! Ask to initialize glew (if not yet)
+		bool initialize_glew();
+
+		//! Set swap interval
+		bool swapInterval(int v);
+
 		//! Check if it has off-screens
 		inline bool has_offscreens() {
 			return (m_offscreens.size() != 0);

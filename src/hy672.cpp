@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include "GeneratorApp.hpp"
+#include "GeneratorApp2.hpp"
 
 
 int main(int argc, char ** argv) {

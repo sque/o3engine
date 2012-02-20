@@ -5,7 +5,7 @@ namespace o3engine {
 namespace ogl{
 
 	void Shader::initialize() {
-		m_gl_name = ::glCreateShaderObjectARB((GLenum) m_type);
+		m_gl_name = ::glCreateShader((GLenum) m_type);
 		if (m_gl_name == 0)
 			throw new gl_error("Cannot create shader.");
 	}
