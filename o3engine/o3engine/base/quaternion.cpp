@@ -118,4 +118,35 @@ namespace o3engine {
 				-vq.x * -z + vq.y * w + vq.z * -x + vq.w * -y,
 				vq.x * -y - vq.y * -x + vq.z * w + vq.w * -z);
 	}
+
+	void Quaternion::toMatrix(Matrix3 & dst) const{
+		Real fTx = x + x;
+		Real fTy = y + y;
+		Real fTz = z + z;
+		Real fTwx = fTx * w;
+		Real fTwy = fTy * w;
+		Real fTwz = fTz * w;
+		Real fTxx = fTx * x;
+		Real fTxy = fTy * x;
+		Real fTxz = fTz * x;
+		Real fTyy = fTy * y;
+		Real fTyz = fTz * y;
+		Real fTzz = fTz * z;
+
+		dst[0][0] = 1.0f - (fTyy + fTzz);
+		dst[0][1] = fTxy - fTwz;
+		dst[0][2] = fTxz + fTwy;
+		dst[1][0] = fTxy + fTwz;
+		dst[1][1] = 1.0f - (fTxx + fTzz);
+		dst[1][2] = fTyz - fTwx;
+		dst[2][0] = fTxz - fTwy;
+		dst[2][1] = fTyz + fTwx;
+		dst[2][2] = 1.0f - (fTxx + fTyy);
+	}
+	//! Convert Quaternion to rotation matrix
+	Matrix3 Quaternion::toMatrix() const {
+		Matrix3 m3;
+		toMatrix(m3);
+		return std::move(m3);
+	}
 }

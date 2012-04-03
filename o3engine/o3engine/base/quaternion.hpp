@@ -5,6 +5,7 @@
 #include "./vector3.hpp"
 #include "./vector4.hpp"
 #include "./angle.hpp"
+#include "./matrix3.hpp"
 
 namespace o3engine {
 	//!	[R5] Data storage representing a mathematical quaternion.
@@ -227,6 +228,12 @@ namespace o3engine {
 		 * */
 		void toAxisAngle(Vector3 & axis, Angle & angle) const;
 
+		//! Convert quaternion to rotation matrix
+		void toMatrix(Matrix3 & dst) const;
+
+		//! Convert Quaternion to rotation matrix
+		Matrix3 toMatrix() const;
+
 		//! The dot product of two quaternions
 		inline Real dotProduct(const Quaternion & r) {
 			return w * r.w + x * r.x + y * r.y + z * r.z;
@@ -246,5 +253,7 @@ namespace o3engine {
 
 		//! @}
 	};
+
+
 }
 #endif
