@@ -1,35 +1,31 @@
-#ifndef SHADER_HPP_
-#define SHADER_HPP_
-#include "./../prereqs.hpp"
+#ifndef OGL_SHADER_HPP_INCLUDED
+#define OGL_SHADER_HPP_INCLUDED
+#include "./base.hpp"
 #include "./exception.hpp"
-#include "./compiledshader.hpp"
 
-namespace o3engine {
 namespace ogl {
 
+	//! GPU Shader
 	/**
 	 * @remarks non-copiable, non-inheritable
 	 */
-	class Shader {
+	class shader:
+		public named_object<GLint> {
 	public:
 
-		Shader(const Shader &) = delete;
-		Shader& operator=(const Shader &) = delete;
+		shader(const shader &) = delete;
+		shader& operator=(const shader &) = delete;
 
 		//! Construct from source
-		Shader(shader_type type, const string & source);
+		shader(shader_type type, const std::string & source);
 
-		~Shader();
+		~shader();
 
-		inline GLint name() const {
-			return m_gl_name;
-		}
-
-		const string & source() const {
+		const std::string & source() const {
 			return m_source;
 		}
 
-		string & source() {
+		std::string & source() {
 			return m_source;
 		}
 
@@ -49,13 +45,11 @@ namespace ogl {
 
 		shader_type m_type;
 
-		//! Shader source
-		string m_source;
-
-		//! OpenGL name
-		GLint m_gl_name;
+		//! shader source
+		std::string m_source;
 	};
-}
+
+	shader * open_shader_file(shader_type type, std::initializer_list<const std::string> fnames);
 }
 
 #endif

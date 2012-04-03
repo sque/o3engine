@@ -1,42 +1,43 @@
 #include "./shader.hpp"
 #include "./exception.hpp"
-#include <boost/format.hpp>
-namespace o3engine {
+#include <iostream>
+#include <fstream>
+
 namespace ogl{
 
-	void Shader::initialize() {
+	void shader::initialize() {
 		m_gl_name = ::glCreateShader((GLenum) m_type);
 		if (m_gl_name == 0)
-			throw new gl_error("Cannot create shader.");
+			throw gl_error(glGetError(), "Cannot create shader.");
 	}
 
-	Shader::Shader(shader_type type, const string & source):
+	shader::shader(shader_type type, const std::string & source):
 		m_type(type),m_source(source) {
 		initialize();
 	}
 
-	Shader::~Shader() {
+	shader::~shader() {
 		if (::glIsShader(m_gl_name))
 			::glDeleteShader(m_gl_name);
 	}
 
-	std::string Shader::info_log() const{
+	std::string shader::info_log() const{
 		int info_lenght = 0;
 		::glGetShaderiv(m_gl_name, GL_INFO_LOG_LENGTH, &info_lenght);
 
 		// Read error
 		std::string info_log(info_lenght, '\0');
-		glGetShaderInfoLog(m_gl_name, info_lenght, &info_lenght, &info_log[0]);
+		::glGetShaderInfoLog(m_gl_name, info_lenght, &info_lenght, &info_log[0]);
 		return info_log;
 	}
 
-	bool Shader::is_compiled() const {
+	bool shader::is_compiled() const {
 		GLint is_compiled_flag = 0;
 		::glGetShaderiv(m_gl_name, GL_COMPILE_STATUS, &is_compiled_flag);
 		return (bool)is_compiled_flag;
 	}
 
-	void Shader::compile() throw(compile_error){
+	void shader::compile() throw(compile_error){
 		const GLchar * chunks[1] = { m_source.c_str() };
 		GLint chunk_sizes[1];
 		chunk_sizes[0]= m_source.length();
@@ -52,5 +53,29 @@ namespace ogl{
 			throw compile_error(info_log());
 		}
 	}
-}
+
+	shader * open_shader_file(shader_type type, std::initializer_list<const std::string> fnames) {
+		std::string source;
+
+		for(const std::string & fname: fnames) {
+			std::ifstream shader_file;
+			shader_file.open(fname, std::ifstream::in);
+			if (!shader_file.is_open())
+				throw std::invalid_argument(std::string("Cannot open shader file ") + fname);
+
+			// get length of file:
+			shader_file.seekg (0, std::ios::end);
+			size_t length = shader_file.tellg();
+			shader_file.seekg (0, std::ios::beg);
+
+			// Read all source
+			std::string file_source;
+			file_source.resize(length);
+			shader_file.read(&file_source[0], length);
+			source += file_source;
+		}
+
+		shader * pshader = new shader(type, source);
+		return pshader;
+	}
 }
