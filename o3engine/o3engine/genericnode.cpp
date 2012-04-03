@@ -2,97 +2,63 @@
 #include "./genericscene.hpp"
 #include <algorithm>
 
-// #define GENERICNODE_DEBUG_LINES    // Enable this to see debug lines of nodes
-
 namespace o3engine {
 	GenericNode::GenericNode(const string & name, GenericNode * parent,
 			const Vector3 & pos) :
-			SceneNode(parent->getMySceneManager()), v3_position(pos), v3_scale(
-					Vector3::IDENTITY), qu_orientation(Quaternion::IDENTITY), mName(
-					name), pParentNode(parent) {
+			SceneNode(parent->getMySceneManager()),
+			m_position(pos),
+			m_scale(Vector3::IDENTITY),
+			m_orientation(Quaternion::IDENTITY),
+			m_name(name),
+			mp_parent(parent) {
 		// Initialize variables
-		cCachedGlobalLoop = 0;
-		pGenericScene = (GenericScene *) pSceneManager;
+		m_cached_global_loop = 0;
+		mp_scene = dynamic_cast<GenericScene *>(mp_scene_manager);
 	}
 
 	// Constructor for root node
 	GenericNode::GenericNode(const string & name, SceneManager * pmanager) :
-			SceneNode(pmanager), v3_position(Vector3::ZERO), v3_scale(
-					Vector3::IDENTITY), qu_orientation(Quaternion::IDENTITY), mName(
-					name), pParentNode(NULL) {
+			SceneNode(pmanager),
+			m_position(Vector3::ZERO),
+			m_scale(Vector3::IDENTITY),
+			m_orientation(Quaternion::IDENTITY),
+			m_name(name),
+			mp_parent(nullptr) {
 		// Initialize variables
-		cCachedGlobalLoop = 0;
-		pGenericScene = (GenericScene *) pSceneManager;
+		m_cached_global_loop = 0;
+		mp_scene = dynamic_cast<GenericScene *>(mp_scene_manager);
 	}
 
 	GenericNode::~GenericNode() {
 		children_map_type::iterator it;
 
 		// Dettach cameras, lights
-		dettachCamera();
+		detachCamera();
 
 		// Remove our-selfs from active nodes list
-		if (v_attachedObjects.size() > 0)
-			pGenericScene->unregisterNodeWithObjects(ActiveNodes_myiterator);
+		if (m_attached_objects.size() > 0)
+			mp_scene->unregisterNodeWithObjects(ActiveNodes_myiterator);
 
 		// Remove our-selfs from light nodes list
 		if (m_light.isEnabled())
-			pGenericScene->mv_light_nodes.erase(LightNodes_myiterator);
+			mp_scene->m_light_nodes.erase(LightNodes_myiterator);
 
 		// Delete all children
-		while ((it = v_children.begin()) != v_children.end()) {
+		while ((it = m_children.begin()) != m_children.end()) {
 			delete it->second;
-			v_children.erase(it);
+			m_children.erase(it);
 		}
 
-	}
-
-	void GenericNode::useme_to_glPosition() {
-		if (pParentNode)
-			pParentNode->useme_to_glPosition();
-
-	#ifdef GENERICNODE_DEBUG_LINES
-		glDisable(GL_LIGHTING);
-		glColor3(Color::WHITE);
-		glBegin(GL_LINES);
-		glVertex3f(0,0,0);
-		glVertex(v3_position);
-		glEnd();
-		glTranslate(v3_position);
-		glRotate(qu_orientation);
-		glColor3(Color(1,0.9,0));
-		glBegin(GL_POLYGON);
-		glVertex3f(-0.5, 0, -0.5);
-		glVertex3f(-0.5, 0, 0.5);
-		glVertex3f(0.5, 0, 0.5);
-		glVertex3f(0.5, 0, -0.5);
-		glEnd();
-		glEnable(GL_LIGHTING);
-	#else
-		glTranslate(v3_position);
-		glRotate(qu_orientation);
-	#endif
-
-		if (f_scale)
-			glScale(v3_scale);
-	}
-
-	void GenericNode::useme_to_glInvertPosition() {
-		glRotate(qu_orientation.conjugate());
-		glTranslate(v3_position.opposite());
-
-		if (pParentNode)
-			pParentNode->useme_to_glInvertPosition();
 	}
 
 	bool GenericNode::deleteChild(const string & child_name) {
 		children_map_type::iterator it;
 
-		if ((it = v_children.find(child_name)) == v_children.end())
+		if ((it = m_children.find(child_name)) == m_children.end())
 			return false;
 
 		delete it->second;
-		v_children.erase(it);
+		m_children.erase(it);
 		return true;
 	}
 
@@ -100,22 +66,22 @@ namespace o3engine {
 		attached_objects_type::iterator it;
 
 		// Erase from main list
-		if (v_attachedObjects.end()
-				== (it = find(v_attachedObjects.begin(), v_attachedObjects.end(),
+		if (m_attached_objects.end()
+				== (it = find(m_attached_objects.begin(), m_attached_objects.end(),
 						p_object)))
 			return false; // Not found
 
-		v_attachedObjects.erase(it);
+		m_attached_objects.erase(it);
 
 		// Search in transparent list
-		if (v_attachedTransObjects.end()
-				!= (it = find(v_attachedTransObjects.begin(),
-						v_attachedTransObjects.end(), p_object)))
-			v_attachedTransObjects.erase(it);
+		if (m_attached_trans_objects.end()
+				!= (it = find(m_attached_trans_objects.begin(),
+						m_attached_trans_objects.end(), p_object)))
+			m_attached_trans_objects.erase(it);
 
 		// Remove this from active objects list
-		if (v_attachedObjects.size() == 0)
-			pGenericScene->unregisterNodeWithObjects(ActiveNodes_myiterator);
+		if (m_attached_objects.size() == 0)
+			mp_scene->unregisterNodeWithObjects(ActiveNodes_myiterator);
 		return true;
 	}
 
@@ -124,71 +90,79 @@ namespace o3engine {
 			return;
 
 		// Add to the list of attached objects
-		v_attachedObjects.push_back(p_object);
+		m_attached_objects.push_back(p_object);
 
 		if (p_object->hasTransperant())
-			v_attachedTransObjects.push_back(p_object);
+			m_attached_trans_objects.push_back(p_object);
 
 		// If it is the first attached object, then register as active
-		if (v_attachedObjects.size() == 1)
-			ActiveNodes_myiterator =
-					((GenericScene *) pSceneManager)->registerNodeWithObjects(this);
+		if (m_attached_objects.size() == 1)
+			ActiveNodes_myiterator = mp_scene->registerNodeWithObjects(this);
 	}
 
 	// Internal implementation of getting global position an orientation
 	void GenericNode::_updateCachedGPos_GOrient(unsigned long cur_renderloop) {
 		// Skip cached
-		if (cur_renderloop == cCachedGlobalLoop)
+		if (cur_renderloop == m_cached_global_loop)
 			return;
 		else
-			cCachedGlobalLoop = cur_renderloop;
+			m_cached_global_loop = cur_renderloop;
 
-		if (pParentNode) {
-			pParentNode->_updateCachedGPos_GOrient(cur_renderloop);
-			qu_gorientation = pParentNode->qu_gorientation * qu_orientation;
-			v3_gposition = pParentNode->v3_gposition
-					+ (pParentNode->qu_gorientation * v3_position);
+		if (mp_parent) {
+			mp_parent->_updateCachedGPos_GOrient(cur_renderloop);
+			m_gorientation = mp_parent->m_gorientation * m_orientation;
+			m_gposition = mp_parent->m_gposition
+					+ (mp_parent->m_gorientation * m_position);
 		} else {
-			qu_gorientation = qu_orientation;
-			v3_gposition = v3_position;
+			m_gorientation = m_orientation;
+			m_gposition = m_position;
 		}
+		m_gtransformation = Matrix4::IDENTITY;
+		m_gtransformation.setTranslation(m_gposition);
+		m_gtransformation = m_gorientation.toMatrix();
 	}
 
 	Quaternion & GenericNode::getGlobalOrientation() {
-		if (cCachedGlobalLoop != pGenericScene->m_loop_counter)
-			_updateCachedGPos_GOrient(pGenericScene->m_loop_counter);
-		return qu_gorientation;
+		if (m_cached_global_loop != mp_scene->m_loop_counter)
+			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		return m_gorientation;
 	}
 
 	Vector3 & GenericNode::getGlobalPosition() {
-		if (cCachedGlobalLoop != pGenericScene->m_loop_counter)
-			_updateCachedGPos_GOrient(pGenericScene->m_loop_counter);
-		return v3_gposition;
+		if (m_cached_global_loop != mp_scene->m_loop_counter)
+			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		return m_gposition;
+	}
+
+	Matrix4 & GenericNode::getGlobalTransformation() {
+		if (m_cached_global_loop != mp_scene->m_loop_counter)
+			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		return m_gtransformation;
 	}
 
 	void GenericNode::drawObjects(bool bSolid) {
 		attached_objects_type::iterator it;
 
 		if (bSolid) {
-			for (it = v_attachedObjects.begin(); it != v_attachedObjects.end();
+			for (it = m_attached_objects.begin(); it != m_attached_objects.end();
 					it++)
 				(*it)->drawSolidPart();
 		} else {
-			for (it = v_attachedTransObjects.begin();
-					it != v_attachedTransObjects.end(); it++)
+			for (it = m_attached_trans_objects.begin();
+					it != m_attached_trans_objects.end(); it++)
 				(*it)->drawTransperantPart();
 		}
 	}
 
 	void GenericNode::setLight(const Light & light) { // Remove the previous iterator
 		if (m_light.isEnabled())
-			pGenericScene->mv_light_nodes.erase(LightNodes_myiterator);
+			mp_scene->m_light_nodes.erase(LightNodes_myiterator);
 
 		m_light = light;
 		if (m_light.isEnabled()) {
 
-			LightNodes_myiterator = pGenericScene->mv_light_nodes.insert(
-					pGenericScene->mv_light_nodes.begin(), this);
+			LightNodes_myiterator = mp_scene->m_light_nodes.insert(
+					mp_scene->m_light_nodes.begin(), this);
 		}
 	}
 }

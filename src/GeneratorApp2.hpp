@@ -12,7 +12,6 @@
 #include <o3engine/genericscene.hpp>
 #include <o3engine/renderline/textureoutput.hpp>
 #include <o3engine/renderline/viewportoutput.hpp>
-#include <o3engine/ogl/shaderprogram.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -142,10 +141,10 @@ public :
 		pout->attachNode(&postproc);
 		postproc.attachNode(pcam);
 
-		std::ifstream fs_vs("test.vs");
+		/*std::ifstream fs_vs("test.vs");
 		ogl::Shader my_shader(ogl::Shader::shader_type::VERTEX, "test.vs");
 		ogl::ShaderProgram prog;
-		prog.attach_shader(my_shader);
+		prog.attach_shader(my_shader);*/
 
 		FrameProcessor fp;
 		fp.enableFrameListening();

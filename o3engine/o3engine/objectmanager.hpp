@@ -1,5 +1,5 @@
-#ifndef OBJECTMANAGER_H_INCLUDED
-#define OBJECTMANAGER_H_INCLUDED
+#ifndef OBJECTMANAGER_HPP_INCLUDED
+#define OBJECTMANAGER_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./drawableobject.hpp"

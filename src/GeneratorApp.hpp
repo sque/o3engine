@@ -10,13 +10,14 @@
 
 #include <o3engine/o3engine.hpp>
 #include <o3engine/genericscene.hpp>
+#include <o3engine/orthocamera.hpp>
+#include <o3engine/perspectivecamera.hpp>
+#include <o3engine/primitiveshapes.hpp>
 #include <o3engine/renderline/textureoutput.hpp>
 #include <o3engine/renderline/viewportoutput.hpp>
-#include <o3engine/ogl/shaderprogram.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
-#include "OrthoCamera.hpp"
 
 using namespace std;
 using namespace o3engine;
@@ -102,18 +103,15 @@ public :
 		//OffScreen off_scrn(320, 240);
 		//RenderLine::TextureOutput * pouttex = new RenderLine::TextureOutput(off_scrn, true);
 		RenderLine::ViewportOutput * pout = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
-		Camera * pcam = new Camera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y);
-		OrthoCamera * pcam2 = new OrthoCamera(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_Y, 4, 3);
+		Camera * pcam = new PerspectiveCamera(60, 4/3, 0, 1000);
+		OrthoCamera * pcam2 = new OrthoCamera(4, 3, 0, 1000);
 
 		//pouttex->attachNode(*pcam);
 		//pout->setInputCamera(pcam2);
 		//pout->enableRendering();
 		pout->attachNode(pcam);
 
-		std::ifstream fs_vs("test.vs");
-		ogl::Shader my_shader(ogl::Shader::shader_type::VERTEX, "test.vs");
-		ogl::ShaderProgram prog;
-		prog.attach_shader(my_shader);
+
 		//pout->attachNode(&ap);
 		//ap.attachNode(pcam);
 
@@ -131,6 +129,7 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
+
 		//Sphere *psphere = new Sphere("test_sphere");
 		//psphere->setSlices(20);
 		Material * pmat = new Material("mat black");
@@ -141,6 +140,7 @@ public :
 		sm.getRootNode().createChild("model")->attachObject(pcube);
 		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
+		sm.getRootNode().getChildPtr("camera")->setLight(*new Light());
 
 		m_engine.getPlatformManager().disableVSync();
 		m_engine.startRendering();

@@ -34,6 +34,7 @@
 
 // Base System
 #include "base/base.hpp"
+#include "ogl/ogl.hpp"
 
 // Fast macros
 #define DBGMSG(x) printf("%s", x)

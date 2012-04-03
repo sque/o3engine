@@ -25,7 +25,7 @@ namespace o3engine {
 		GenericNode * mp_root_node;
 
 		//! A list of nodes that have drawable objects
-		GenericNode::active_nodes_type mv_activenodes;
+		GenericNode::active_nodes_type m_activenodes;
 
 		//! A counter of render loops
 		size_t m_loop_counter;
@@ -46,22 +46,26 @@ namespace o3engine {
 		Color m_ambient_light;
 
 		//! A temporary per/render loop list of transparent objects
-		vector<GenericNode *> mv_trans_nodes;
+		vector<GenericNode *> m_trans_nodes;
 
 		//! A list of nodes that contain lights
-		vector<GenericNode *> mv_light_nodes;
+		vector<GenericNode *> m_light_nodes;
 
 		//! Register a node as an active node (a node that contains at least one object)
 		inline GenericNode::active_nodes_type::iterator registerNodeWithObjects(
 				GenericNode * pnode) {
-			return mv_activenodes.insert(mv_activenodes.begin(), pnode);
+			return m_activenodes.insert(m_activenodes.begin(), pnode);
 		}
 
 		//! Unregister a node from active nodes
 		inline void unregisterNodeWithObjects(
 				GenericNode::active_nodes_type::iterator pit) {
-			mv_activenodes.erase(pit);
+			m_activenodes.erase(pit);
 		}
+
+		ogl::program * mp_default_program;
+
+		void setSceneUniforms(ogl::program * pprogram, Camera * pRenderCamera);
 
 	public:
 		//! Constructor
