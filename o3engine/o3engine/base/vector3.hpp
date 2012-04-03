@@ -229,6 +229,16 @@ namespace o3engine {
 			return Vector3(-x, -y, -z);
 		}
 
+		//! Less comparison operator
+		inline bool operator <(const Vector3 & rhv) const {
+			return squaredLength() < rhv.squaredLength();
+		}
+
+		//! More comparison operator
+		inline bool operator >(const Vector3 & rhv) const {
+			return squaredLength() > rhv.squaredLength();
+		}
+
 		//! Get the opposite vector
 		/**
 		 * It will calculate and return the opposite vector.

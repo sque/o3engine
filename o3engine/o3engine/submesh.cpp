@@ -1,45 +1,37 @@
 #include "./submesh.hpp"
+#include <limits>
 
 namespace o3engine
 {
-	// Use this function to render submesh
-	void SubMesh::useme_to_glRender(bool b_WireFrame, bool b_WireFrameOwnMaterial)
-	{   std::vector<Face>::iterator it;
-
-	   if (b_WireFrame)
-		{
-
-			if ((b_WireFrameOwnMaterial) && (pMat)) pMat->useme_to_glPreDraw();   // Material
-
-			for(it = v_faces.begin();it != v_faces.end();it++)
-			{
-				glBegin(GL_LINE_LOOP);
-				(*it).myglVertex();
-				glEnd();
-			}
-
-			if ((b_WireFrameOwnMaterial) && (pMat)) pMat->useme_to_glPostDraw();
+	void SubMesh::calculateBoundarySphere(Real & radius) const {
+		radius = 0;
+		for(auto vertex : m_vertices) {
+			Real v_sq_pos = vertex.position.squaredLength();
+			if (v_sq_pos > radius)
+				radius = v_sq_pos;
 		}
-		else
-		{
-			if (pMat) pMat->useme_to_glPreDraw();   // Material
+		radius = sqrt(radius);
+	}
 
-			// Textured submesh
-			if (bTextCords)
-			{
-				glBegin(GL_TRIANGLES);
-					for(it = v_faces.begin();it != v_faces.end();it++)
-						(*it).glVertex_with_normal_n_textcoords();
-				glEnd();
-			}
-			else
-			{
-				glBegin(GL_TRIANGLES);
-					for(it = v_faces.begin();it != v_faces.end();it++)
-						(*it).glVertex_with_normal();
-				glEnd();
-			}
-			if (pMat) pMat->useme_to_glPostDraw();
+	//! Calculate boundary box
+	void SubMesh::calculateBoundaryBox(Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max) {
+		x_min = y_min = z_min = std::numeric_limits<Real>::max();
+		x_max = y_max = z_max = std::numeric_limits<Real>::min();
+
+		for(auto vertex : m_vertices) {
+			if (vertex.position.x < x_min)
+				x_min = vertex.position.x;
+			if (vertex.position.y < y_min)
+				y_min = vertex.position.y;
+			if (vertex.position.z < z_min)
+				z_min = vertex.position.z;
+
+			if (vertex.position.x > x_max)
+				x_max = vertex.position.x;
+			if (vertex.position.y > y_max)
+				y_max = vertex.position.y;
+			if (vertex.position.z > z_max)
+				z_max = vertex.position.z;
 		}
 	}
 }
