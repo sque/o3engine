@@ -28,11 +28,11 @@ namespace o3engine {
 			mp_offscreen(poffscreen){
 
 			ms_gstate = GLUTState::getSingletonPtr();
-			ms_gstate->push_offscreen(poffscreen);
+			ms_gstate->pushOffscreen(poffscreen);
 		}
 
 		~impl(){
-			ms_gstate->remove_offscreen(mp_offscreen);
+			ms_gstate->removeOffscreen(mp_offscreen);
 		}
 	};
 

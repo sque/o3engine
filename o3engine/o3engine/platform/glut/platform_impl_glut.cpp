@@ -22,8 +22,8 @@ namespace o3engine {
 		static void callbackIdleFunc() {
 			mp_idlelistener->onLoopIdle();
 			::glutPostRedisplay();
-			if (mp_gstate->has_offscreens()){
-				mp_gstate->redisplay_offscreens();
+			if (mp_gstate->hasOffscreens()){
+				mp_gstate->redisplayOffscreens();
 				glFinish();
 			}
 		}
@@ -73,11 +73,11 @@ namespace o3engine {
 	void Platform::startEventLoop(LoopIdleListener & listener){
 		Platform::impl::mp_idlelistener = & listener;
 
-		if (!pimpl->mp_gstate->has_windows()) {
+		if (!pimpl->mp_gstate->hasWindows()) {
 			// When no windows exist, create our own loop
 			while(1) {
-				if (impl::mp_gstate->has_offscreens()){
-					impl::mp_gstate->redisplay_offscreens();
+				if (impl::mp_gstate->hasOffscreens()){
+					impl::mp_gstate->redisplayOffscreens();
 					glFlush();
 					glFinish();
 				}

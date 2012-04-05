@@ -42,10 +42,10 @@ namespace o3engine {
 			::glutInitWindowSize(m_width, m_height);
 			::glutInitWindowPosition(x, y);
 			m_handle = ::glutCreateWindow("");
-			ms_gstate->initialize_glew();	// We can only initialize glew after a GL context
+			ms_gstate->initializeGlew();	// We can only initialize glew after a GL context
 
 			// Save in internal state
-			ms_gstate->push_window(p_wnd, this, m_handle, p_ip);
+			ms_gstate->pushWindow(p_wnd, this, m_handle, p_ip);
 
 			// Setup callback functions
 			::glutReshapeFunc(impl::callbackReshape);
@@ -54,7 +54,7 @@ namespace o3engine {
 
 		~impl() {
 			::glutDestroyWindow(m_handle);
-			ms_gstate->remove_window(p_wnd);
+			ms_gstate->removeWindow(p_wnd);
 		}
 
 		void setTitle(const string & title) {

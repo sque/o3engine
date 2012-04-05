@@ -7,7 +7,7 @@ namespace o3engine {
 	template<> GLUTState* Singleton<GLUTState>::ms_singleton = 0;
 
 
-	bool GLUTState::initialize_glew() {
+	bool GLUTState::initializeGlew() {
 		if (m_glew_initialized)
 			return false;
 
@@ -29,7 +29,8 @@ namespace o3engine {
 	}
 
 	bool GLUTState::swapInterval(int v) {
-		initialize_glew();
+		initializeGlew();
 		mf_swap_interval(v);
+		return true;
 	}
 }

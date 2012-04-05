@@ -49,37 +49,37 @@ namespace o3engine {
 		}
 
 		//! Ask to initialize glew (if not yet)
-		bool initialize_glew();
+		bool initializeGlew();
 
 		//! Set swap interval
 		bool swapInterval(int v);
 
 		//! Check if it has off-screens
-		inline bool has_offscreens() {
+		inline bool hasOffscreens() {
 			return (m_offscreens.size() != 0);
 		}
 
 		//! Check if there are windows
-		inline bool has_windows() {
+		inline bool hasWindows() {
 			return (m_wnd_to_wndstate.size() != 0);
 		}
 
 		//! Push and index a window
-		inline void push_window(Window * pwnd, void * pimpl, int glut_wnd_id, InputProcessor * pinproc) {
+		inline void pushWindow(Window * pwnd, void * pimpl, int glut_wnd_id, InputProcessor * pinproc) {
 			WindowState wstate = {pwnd, pimpl, glut_wnd_id, pinproc};
 			m_wnd_to_wndstate[pwnd] = wstate;
 			m_glut_to_wndstate[glut_wnd_id] = wstate;
 		}
 
 		//! Remove a window from indexess
-		inline void remove_window(Window * pwnd) {
+		inline void removeWindow(Window * pwnd) {
 
 			m_glut_to_wndstate.erase(m_wnd_to_wndstate[pwnd].m_glut_id);
 			m_wnd_to_wndstate.erase(pwnd);
 		}
 
 		//! Ask to repaint offscreen surfaces
-		void redisplay_offscreens() {
+		void redisplayOffscreens() {
 			for(offscreens_type::iterator it = m_offscreens.begin();
 					it != m_offscreens.end(); it++) {
 				(*it)->requestRepaint();
@@ -87,12 +87,12 @@ namespace o3engine {
 		}
 
 		//! Push and index an offscreen surface
-		void push_offscreen(OffScreen * poff) {
+		void pushOffscreen(OffScreen * poff) {
 			m_offscreens.insert(poff);
 		}
 
 		//! Remove an offscreen surface
-		void remove_offscreen(OffScreen * poff) {
+		void removeOffscreen(OffScreen * poff) {
 			m_offscreens.erase(poff);
 		}
 	};
