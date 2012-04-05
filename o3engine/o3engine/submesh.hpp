@@ -20,6 +20,12 @@ namespace o3engine {
 		void translate(const Vector3 & trans) {
 			position.translate(trans);
 		}
+
+		Vertex() = default;
+
+		Vertex(const Vector3 & pos) :
+			position(pos){
+		}
 	};
 
 	//! All available vertex attributes
@@ -137,7 +143,7 @@ namespace o3engine {
 			return m_vertices.size();
 		}
 
-		//! Total number of elemensts (triangles/lines/...)
+		//! Total number of elements (triangles/lines/...)
 		size_t totalElements() const {
 			if (hasIndices())
 				return indices().size() / 3;

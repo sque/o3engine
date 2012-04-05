@@ -19,6 +19,8 @@ namespace o3engine {
 			throw new std::runtime_error("Cannot initialize GLEW!");
 		}
 
+		ogl::context::create();
+
 		// Get swap interval function
 		mf_swap_interval = (void 	(*)(int)) glXGetProcAddress((const GLubyte*) "glXSwapIntervalSGI");
 		if (!mf_swap_interval)

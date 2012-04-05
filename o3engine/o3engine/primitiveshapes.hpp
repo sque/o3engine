@@ -3,6 +3,7 @@
 
 #include "./prereqs.hpp"
 #include "./skinnedobject.hpp"
+#include "submesh.hpp"
 
 namespace o3engine
 {
@@ -249,49 +250,71 @@ namespace o3engine
 	 *  |3  2|
 	 *  +----+
 	 */
-	class Quad : public SkinnedObject
-	{
-	protected:
-		Vector3 points[4];
-
-		inline virtual void drawObject(bool bSolid)
-		{
-			glBegin(GL_POLYGON);
-				glTexCoord2f(0,0);
-				glVertex(points[0]);
-				glTexCoord2f(1,0);
-				glVertex(points[1]);
-				glTexCoord2f(1,1);
-				glVertex(points[2]);
-				glTexCoord2f(0,1);
-				glVertex(points[3]);
-			glEnd();
-		}
-
+	class Quad :
+		public DrawableObject,
+		public SubMesh{
 	public:
 
 		//! Constructor with default values
-		inline Quad(const string & name)
-			: SkinnedObject(name)
-		{
-			points[0] = Vector3(-0.5, 0.5, 0);
-			points[1] = Vector3(0.5, 0.5, 0);
-			points[2] = Vector3(0.5, -0.5, 0);
-			points[3] = Vector3(-0.5, -0.5, 0);
+		inline Quad(const string & name):
+			DrawableObject(name),
+			SubMesh(VertexAttributes::position){
+
+			m_vertices.push_back(Vertex(Vector3(-0.5, 0.5, 0)));
+			m_vertices.push_back(Vertex(Vector3(0.5, 0.5, 0)));
+			m_vertices.push_back(Vertex(Vector3(0.5, -0.5, 0)));
+			m_vertices.push_back(Vertex(Vector3(-0.5, -0.5, 0)));
+
+			m_indices = {
+				0, 1, 2,
+				0, 3, 2
+			};
+
+			mp_renderer = new SubMeshRenderer(*this);
+			mp_renderer->uploadToGPU();
 		}
 
 		//! Constructor with parameters
-		inline Quad(const string & name, const Vector3 & _p0, const Vector3 & _p1, const Vector3 & _p2, const Vector3 & _p3)
-			: SkinnedObject(name)
-		{   points[0] = _p0; points[1] = _p1; points[2] = _p2; points[3] =_p3;  }
+		inline Quad(const string & name, const Vector3 & p0, const Vector3 & p1, const Vector3 & p2, const Vector3 & p3)
+			: DrawableObject(name),
+			SubMesh(VertexAttributes::position){
+
+			m_vertices.push_back(Vertex(p0));
+			m_vertices.push_back(Vertex(p1));
+			m_vertices.push_back(Vertex(p2));
+			m_vertices.push_back(Vertex(p3));
+
+			m_indices = {
+				0, 2, 1,
+				0, 3, 2
+			};
+
+			mp_renderer = new SubMeshRenderer(*this);
+			mp_renderer->uploadToGPU();
+		}
+
+		virtual ~Quad(){
+			delete mp_renderer;
+		}
 
 		//! Get coordinates of a point
-		inline const Vector3 & getPoint(int mem) const
-		{   return points[mem];   }
+		inline const Vector3 & getPoint(int mem) const{
+			return m_vertices[mem].position;
+		}
 
-		//! Set coordinates of a point
-		inline Vector3 & getPoint(int mem, const Vector3 & np)
-		{   return points[mem] = np;   }
+		//! Draw Object
+		inline virtual void drawSolidPart()	{
+			mp_renderer->draw();
+		}
+		inline virtual void drawTransparentPart()	{
+			return drawSolidPart();
+		}
+
+		virtual bool hasTransparent() {
+			return false;
+		}
+	protected:
+		SubMeshRenderer * mp_renderer;
 	};
 
 	//! Primitive object Quad
@@ -300,20 +323,20 @@ namespace o3engine
 	 * that it will always results an orthogonal quad. You can
 	 * parameterize OrthoQuad by setting its height and width.
 	 */
-	class OrthoQuad : public Quad
-	{
-
+/*	class OrthoQuad : public Quad {
 	public:
 
 		//! Constructor with default values
 		inline OrthoQuad(const string & name)
-			: Quad(name)
-		{    }
+			: Quad(name){
+
+		}
 
 		//! Constructor with parameters
-		inline OrthoQuad(const string & name, Real _height, Real _width)
-			: Quad(name)
-		{   setWidth(_width); setHeight(_height); }
+		inline OrthoQuad(const string & name, Real height, Real width)
+			: Quad(name){
+			setWidth(_width);
+			setHeight(_height); }
 
 		//! Set width
 		inline void setWidth(Real w)
@@ -322,6 +345,8 @@ namespace o3engine
 		//! Set Height
 		inline void setHeight(Real h)
 		{   Real hh = h/2; points[0].y = hh; points[1].y = hh; points[2].y = -hh; points[3].y = -hh;    }
-	};
+	protected:
+
+	};*/
 }
 #endif // PRIMATIVESHAPES_H_INCLUDED

@@ -81,6 +81,26 @@ public:
 
 };
 
+struct MyCube : public Mesh {
+
+	MyCube(const std::string & name) :
+		Mesh(name){
+
+		SubMesh sm(VertexAttributes::position);
+		Vertex vx;
+		memset(&vx, 0 , sizeof(Vertex));
+		vx.position = Vector3(0, 0, 0);
+		sm.vertices().push_back(vx);
+		vx.position = Vector3(1, 0, 0);
+		sm.vertices().push_back(vx);
+		vx.position = Vector3(1, 1, 0);
+		sm.vertices().push_back(vx);
+
+		sm.indices() = {0, 1, 2};
+		submeshes().push_back(sm);
+	}
+};
+
 class GeneratorApp {
 public :
 	O3Engine m_engine;
@@ -95,7 +115,7 @@ public :
 		// Set up window
 		o3engine::Window wnd_main(800, 600);
 		wnd_main.setTitle("hy672 Project");
-		wnd_main.setBackColor(Color::WHITE);
+		wnd_main.setBackColor(Color(0.7, 0.72, 0.80));
 
 		o3engine::Window wnd_bc(640, 480);
 		wnd_bc.setTitle("Ortho");
@@ -103,30 +123,25 @@ public :
 
 		//OffScreen off_scrn(320, 240);
 		//RenderLine::TextureOutput * pouttex = new RenderLine::TextureOutput(off_scrn, true);
-		RenderLine::ViewportOutput * pout1 = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
-		RenderLine::ViewportOutput * pout2 = new RenderLine::ViewportOutput(wnd_bc, 800, 600, 0, 0);
-		Camera * pcam = new PerspectiveCamera(60, 4/3, 0, 1000);
-		OrthoCamera * pcam2 = new OrthoCamera(4, 3, 0, 1000);
+		RenderLine::ViewportOutput * pmainout = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
+		RenderLine::ViewportOutput * pbcout = new RenderLine::ViewportOutput(wnd_bc, 800, 600, 0, 0);
+		Camera * perscam = new PerspectiveCamera(60, 4/3, 0, 1000);
+		OrthoCamera * orthcam = new OrthoCamera(4, 3, 0, 1000);
 
 		Mesh * spacecrap = new Mesh("spacecrap");
+		//spacecrap->uploadToGPU();
 		spacecrap->importFromFile("cube.blend");
 		std::cout << info(*spacecrap) << std::endl;
 
-		//pouttex->attachNode(*pcam);
-		pout2->attachNode(pcam2);
-		//pout->enableRendering();
-		pout1->attachNode(pcam);
-
-
-		//pout->attachNode(&ap);
-		//ap.attachNode(pcam);
+		pmainout->attachNode(perscam);
+		pbcout->attachNode(orthcam);
 
 		FrameProcessor fp;
 		fp.enableFrameListening();
-		/*wnd_bc.getInputProcessor().attachKeyboardListener(fp);
-		wnd_bc.getInputProcessor().startCapture();*/
-		/*wnd_main.getInputProcessor().attachMouseListener(fp);
-		wnd_main.getInputProcessor().startCapturing();*/
+		wnd_bc.getInputProcessor().attachKeyboardListener(fp);
+		wnd_bc.getInputProcessor().startCapturing();
+		wnd_main.getInputProcessor().attachKeyboardListener(fp);
+		wnd_main.getInputProcessor().startCapturing();
 
 		GenericScene sm;
 		fp.pscene =  &sm;
@@ -143,9 +158,9 @@ public :
 		//pmat->setAmbient(Color::BLACK);
 		Cube * pcube = new Cube("test_cube");
 		pcube->setMaterial(pmat);
-		sm.getRootNode().createChild("model")->attachObject(spacecrap);
-		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
-		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
+		sm.getRootNode().createChild("model")->attachObject(new Quad("test"));
+		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
+		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		sm.getRootNode().getChildPtr("camera")->setLight(*new Light());
 
 		m_engine.getPlatformManager().disableVSync();

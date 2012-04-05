@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stddef.h>
 #include <limits>
+#include <glm/glm.hpp>
 
 namespace o3engine
 {
@@ -24,25 +25,25 @@ namespace o3engine
 	}
 
 	void SubMeshRenderer::uploadToGPU() {
+		mp_vbo = new ogl::buffer(ogl::buffer_type::ARRAY);
+		std::vector<glm::vec3> positions;
+		for(auto vx: m_submesh.vertices()) {
+			glm::vec3  v(vx.position[0], vx.position[1], vx.position[2]);
+			positions.push_back(v);
+		}
+		mp_ebo = new ogl::buffer(ogl::buffer_type::ELEMENT_ARRAY);
+		mp_ebo->define_data(sizeof(SubMesh::index_type), &m_submesh.indices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
+		m_elements_type = ogl::elements_type::UNSIGNED_INT;
+
+		mp_vbo->define_data(sizeof(Vector3) * positions.size(), &positions[0], ogl::buffer_usage_pattern::STATIC_DRAW);
+		mp_vao = new ogl::vertex_array();
+		mp_vao->get_attrib(0).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::FLOAT);
+		mp_vao->get_attrib(0).enable();
+
+		return;
 		if (!mp_vbo) {
 			mp_vbo = new ogl::buffer(ogl::buffer_type::ARRAY);
 			mp_vbo->define_data(sizeof(Vertex) * m_submesh.vertices().size(), &m_submesh.vertices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
-		}
-		if (!mp_vao) {
-			mp_vao = new ogl::vertex_array();
-			mp_vao->get_attrib(0).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), 0);
-			mp_vao->get_attrib(0).enable();
-			if (m_submesh.attributes().has_flag(VertexAttributes::normal)) {
-				mp_vao->get_attrib(1).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, normal));
-				mp_vao->get_attrib(1).enable();
-			}
-			if (m_submesh.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
-				mp_vao->get_attrib(10).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tangent));
-				mp_vao->get_attrib(10).enable();
-
-				mp_vao->get_attrib(11).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, bitangent));
-				mp_vao->get_attrib(11).enable();
-			}
 		}
 
 		if (!mp_ebo) {
@@ -76,13 +77,30 @@ namespace o3engine
 			mp_ebo->define_data(total_indices * type_size, pindices, ogl::buffer_usage_pattern::STATIC_DRAW);
 			free(pindices);
 		}
+
+		if (!mp_vao) {
+			mp_vao = new ogl::vertex_array();
+			mp_vao->get_attrib(0).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), 0);
+			mp_vao->get_attrib(0).enable();
+			if (m_submesh.attributes().has_flag(VertexAttributes::normal)) {
+				mp_vao->get_attrib(1).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, normal));
+				mp_vao->get_attrib(1).enable();
+			}
+			if (m_submesh.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
+				mp_vao->get_attrib(10).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tangent));
+				mp_vao->get_attrib(10).enable();
+
+				mp_vao->get_attrib(11).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, bitangent));
+				mp_vao->get_attrib(11).enable();
+			}
+		}
 	}
 
 	//! Draw mesh
 	void SubMeshRenderer::draw() {
 		if (mp_ebo)
 			// Indexed based
-			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_submesh.totalElements(), *mp_ebo, m_elements_type);
+			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_submesh.indices().size(), *mp_ebo, m_elements_type);
 		else
 			// Raw rendering
 			mp_vao->draw(ogl::primitive_type::TRIANGLES, 0, m_submesh.totalElements());

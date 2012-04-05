@@ -61,6 +61,7 @@ namespace o3engine
 			mesh_renderer->uploadToGPU();
 			m_submeshes_renderers.push_back(mesh_renderer);
 		}
+		ogl::gl_error_checkpoint("Uploaded to gpu");
 	}
 
 	//! Import a mesh from file
@@ -130,7 +131,7 @@ namespace o3engine
 				}
 			}
 
-			// Load tangents bitangnets
+			// Load tangents bitangents
 			if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
 					sm.vertices()[i].tangent = *reinterpret_cast<Vector3*>(pMesh->mTangents + i);

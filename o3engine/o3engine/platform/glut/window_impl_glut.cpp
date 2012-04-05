@@ -43,6 +43,8 @@ namespace o3engine {
 			::glutInitWindowPosition(x, y);
 			m_handle = ::glutCreateWindow("");
 			ms_gstate->initializeGlew();	// We can only initialize glew after a GL context
+			ogl::current_ctx().depth_test().enable();
+			glEnable(GL_FRAMEBUFFER_SRGB);
 
 			// Save in internal state
 			ms_gstate->pushWindow(p_wnd, this, m_handle, p_ip);

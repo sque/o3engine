@@ -47,9 +47,6 @@ namespace o3engine {
 		//! An array with objects
 		attached_objects_type m_attached_objects;
 
-		//! A sub list with transparent objects
-		attached_objects_type m_attached_trans_objects;
-
 		//! Cached global position
 		Vector3 m_gposition;
 
@@ -74,12 +71,7 @@ namespace o3engine {
 		children_map_type m_children;	//!< Map with children nodes
 
 		// Draw all the objects of this node
-		void drawObjects(bool bSolid);
-
-		// Check if it has transparent objects
-		inline bool hasTransperantObjects() {
-			return (m_attached_trans_objects.size() > 0);
-		}
+		void drawObjects();
 
 		//! Constructor for child nodes
 		GenericNode(const string & name, GenericNode * parent, const Vector3 & pos);

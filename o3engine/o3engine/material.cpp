@@ -19,7 +19,9 @@ namespace o3engine
 
 	// Run opengl commands to setup material
 	void Material::useme_to_glPreDraw() const
-	{    // Color
+	{
+		return ;
+		// Color
 		if (f_lighting)
 		{
 			glEnable ( GL_COLOR_MATERIAL );
@@ -66,6 +68,7 @@ namespace o3engine
 	// Run opengl to post-set materials after object drawing
 	void Material::useme_to_glPostDraw() const
 	{
+		return;
 		// Enable lighting again
 		if (!f_lighting)
 			glEnable(GL_LIGHTING);

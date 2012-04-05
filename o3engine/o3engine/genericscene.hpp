@@ -122,6 +122,5 @@ namespace o3engine {
 
 		virtual void drawScene(Camera * pRenderCamera);
 	};
-
 }
 #endif

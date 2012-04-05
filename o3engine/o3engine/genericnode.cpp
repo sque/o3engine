@@ -73,12 +73,6 @@ namespace o3engine {
 
 		m_attached_objects.erase(it);
 
-		// Search in transparent list
-		if (m_attached_trans_objects.end()
-				!= (it = find(m_attached_trans_objects.begin(),
-						m_attached_trans_objects.end(), p_object)))
-			m_attached_trans_objects.erase(it);
-
 		// Remove this from active objects list
 		if (m_attached_objects.size() == 0)
 			mp_scene->unregisterNodeWithObjects(ActiveNodes_myiterator);
@@ -91,9 +85,6 @@ namespace o3engine {
 
 		// Add to the list of attached objects
 		m_attached_objects.push_back(p_object);
-
-		if (p_object->hasTransperant())
-			m_attached_trans_objects.push_back(p_object);
 
 		// If it is the first attached object, then register as active
 		if (m_attached_objects.size() == 1)
@@ -140,17 +131,11 @@ namespace o3engine {
 		return m_gtransformation;
 	}
 
-	void GenericNode::drawObjects(bool bSolid) {
+	void GenericNode::drawObjects() {
 		attached_objects_type::iterator it;
 
-		if (bSolid) {
-			for (it = m_attached_objects.begin(); it != m_attached_objects.end();
-					it++)
-				(*it)->drawSolidPart();
-		} else {
-			for (it = m_attached_trans_objects.begin();
-					it != m_attached_trans_objects.end(); it++)
-				(*it)->drawTransperantPart();
+		for (auto & obj : m_attached_objects) {
+			obj->drawSolidPart();
 		}
 	}
 

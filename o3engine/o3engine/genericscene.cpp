@@ -29,16 +29,23 @@ namespace o3engine
 				"uniform mat4 ModelMatrix;"
 				""
 				"void main() {"
-				"	gl_Position = ProjectionMatrix * ViewMatrix * aPosition;"
-				//"	gl_Position = aPosition;"
+				//"	gl_Position = ProjectionMatrix * ViewMatrix * aPosition;"
+				"	gl_Position = aPosition;"
+				"}");
+		ogl::shader * pdef_frag = new ogl::shader(ogl::shader_type::FRAGMENT,
+				"#version 330\n"
+				""
+				"out vec4 outColor;"
+				"void main() {"
+				"	outColor = vec4(0,0,0,1);"
 				"}");
 		mp_default_program->attach_shader(*pdef_vert);
+		mp_default_program->attach_shader(*pdef_frag);
 		mp_default_program->build();
 	}
 
 	// Destructor
 	GenericScene::~GenericScene() {
-		// Delete root node
 		delete mp_root_node;
 	}
 
@@ -61,77 +68,15 @@ namespace o3engine
 	void GenericScene::drawScene(Camera * pRenderCamera) {
 		m_loop_counter++;	// Increase counter
 
-		//Real rad90Deg = math::degreeToRadian(90);
-
-		// Iterators
-		GenericNode::active_nodes_type::iterator it;
-		vector<GenericNode*>::iterator transIt;
-		vector<GenericNode*>::iterator lightIt;
-
-		// Camera's global position
-		Quaternion camera_gorientation_ops = pRenderCamera->getSceneNode()->getGlobalOrientation().conjugate();
-		Vector3 camera_gposition = pRenderCamera->getSceneNode()->getGlobalPosition();
-		GenericNode * pnode;
-		Vector3 camera_relpos;
-
-		// Render Lighting
-		//! @todo Write a better implementation of lighting
-		/*glEnable(GL_LIGHTING);
-		glLightModel(GL_LIGHT_MODEL_AMBIENT, m_ambient_light);
-		GLint el = 0;
-		for(lightIt = mv_light_nodes.begin();lightIt != mv_light_nodes.end(); lightIt++) {
-			pnode = (*lightIt);
-			// Update global positions/orientation
-			pnode->_updateCachedGPos_GOrient(m_loop_counter);
-
-			glPushMatrix();
-				glTranslate(pnode->v3_gposition);
-				glRotate(pnode->qu_gorientation);
-				glLight((*lightIt)->getLight(), GL_LIGHT0 + el);
-			glPopMatrix();
-			el++;
-		}*/
-
 		// Render 1st Pass (Solid Objects)
-		//setSceneUniforms(mp_default_program, pRenderCamera);
 		setSceneUniforms(mp_default_program, pRenderCamera);
-		m_trans_nodes.clear();
-		for(it = m_activenodes.begin();it != m_activenodes.end(); it++) {
-			pnode = *it;
-
+		for(auto & pnode : m_activenodes) {
 			// Update global positions/orientation
 			pnode->_updateCachedGPos_GOrient(m_loop_counter);
-
-			camera_relpos = camera_gorientation_ops * (pnode->m_gposition - camera_gposition);
-
-			// Scene angle clipping
-			if (m_enabled_clipping)  {
-				/*Real camFovRad = math::degreeToRadian(pRenderCamera->getFovY());
-
-				if ((camera_relpos.z >= 0) || 	// Fast reject behind XY plane
-					((rad90Deg - math::arcSin(-camera_relpos.normal().z)) > camFovRad) )	// Reject by camera's angle
-				continue;*/
-			}
-			// Limit distance clipping
-			if ((m_enabled_far_cutoff) && (camera_relpos.squaredLength() > m_farcutoff_sqdistance))
-				continue;
 
 			mp_default_program->use();
 			mp_default_program->get_uniform("ModelMatrix").setmat4d(&pRenderCamera->getSceneNode()->getGlobalTransformation()[0][0]);
-			pnode->drawObjects(true);
-
-			// Add node if needed at 2n pass rendering
-			if (pnode->hasTransperantObjects())
-				m_trans_nodes.push_back(pnode);
+			pnode->drawObjects();
 		}
-
-		// Render 2nd Pass (Transparent objects)
-		for(transIt = m_trans_nodes.begin();transIt != m_trans_nodes.end();transIt++) {
-			pnode = *transIt;
-
-
-			pnode->drawObjects(false);
-		}
-
 	}
 }

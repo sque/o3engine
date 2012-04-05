@@ -5,10 +5,9 @@
 #include "./material.hpp"
 #include "./drawableobject.hpp"
 
-namespace o3engine
-{
-	class SkinnedObject : public DrawableObject
-	{
+namespace o3engine {
+
+	class SkinnedObject: public DrawableObject {
 	protected:
 
 		//! Material of object
@@ -27,31 +26,27 @@ namespace o3engine
 		// Destructor
 		virtual ~SkinnedObject();
 
-		inline virtual void drawSolidPart()
-		{   if (bTransperant)
+		inline virtual void drawSolidPart() {
+			if (bTransperant)
 				return;
 
-			if (pMaterial)
-			{
+			if (pMaterial) {
 				pMaterial->useme_to_glPreDraw();
 				drawObject(true);
 				pMaterial->useme_to_glPostDraw();
-			}
-			else
+			} else
 				drawObject(true);
 		}
 
-		inline virtual void drawTransperantPart()
-		{	if (!bTransperant)
+		inline virtual void drawTransparentPart() {
+			if (!bTransperant)
 				return;
 
-			if (pMaterial)
-			{
+			if (pMaterial) {
 				pMaterial->useme_to_glPreDraw();
 				drawObject(false);
 				pMaterial->useme_to_glPostDraw();
-			}
-			else
+			} else
 				drawObject(false);
 		}
 
@@ -65,8 +60,8 @@ namespace o3engine
 		 * @brief Set the material of object
 		 * @param pmat The pointer to the material we want to apply
 		 */
-		inline void setMaterial(const Material * _pmat)
-		{   pMaterial = _pmat;
+		inline void setMaterial(const Material * _pmat) {
+			pMaterial = _pmat;
 			if (pMaterial)
 				bTransperant = !pMaterial->getDepthWrite();
 			else
@@ -76,10 +71,14 @@ namespace o3engine
 		/**
 		 * @brief Unset the material of object
 		 */
-		inline void unsetMaterial() { pMaterial = NULL; bTransperant = false; }
+		inline void unsetMaterial() {
+			pMaterial = NULL;
+			bTransperant = false;
+		}
 
-		inline virtual bool hasTransperant()
-		{	return bTransperant;	}
+		inline virtual bool hasTransparent() {
+			return bTransperant;
+		}
 	};
 }
-#endif // SKINNEDOBJECT_H_INCLUDED
+#endif

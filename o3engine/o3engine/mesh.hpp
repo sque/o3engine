@@ -29,7 +29,7 @@ namespace o3engine {
 		//! Translate object's parts
 		void translate(const Vector3 & trans);
 
-		//! Imprort a mesh from file and upload to gpu
+		//! Import a mesh from file and upload to GPU
 		bool importFromFile(const string & fname);
 
 		//! Get submeshes
@@ -72,14 +72,15 @@ namespace o3engine {
 			}
 		}
 
-		//! Render the transperant part of object
-		virtual void drawTransperantPart() {}
+		virtual void drawTransparentPart() {
+			drawSolidPart();
+		}
 
-		//! Check if it is transperant object
-		virtual bool hasTransperant() { return true; }
+		virtual bool hasTransparent() { return false; }
 
-		//! Upload this mesh to gpu (so it is rendable)
+		//! Upload this mesh to GPU (so it is rendable)
 		void uploadToGPU();
+
 	protected:
 
 		//! Container of submeshes
