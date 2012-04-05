@@ -15,6 +15,7 @@
 #include <o3engine/primitiveshapes.hpp>
 #include <o3engine/renderline/textureoutput.hpp>
 #include <o3engine/renderline/viewportoutput.hpp>
+#include <o3engine/mesh.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -96,20 +97,25 @@ public :
 		wnd_main.setTitle("hy672 Project");
 		wnd_main.setBackColor(Color::WHITE);
 
-		/*o3engine::Window wnd_bc("bc", 640, 480);
-		wnd_bc.setTitle("Backup window");
-		wnd_bc.setBackColor(Color::YELLOW);*/
+		o3engine::Window wnd_bc(640, 480);
+		wnd_bc.setTitle("Ortho");
+		wnd_bc.setBackColor(Color(0.8, 0.8, 0.8, 1));
 
 		//OffScreen off_scrn(320, 240);
 		//RenderLine::TextureOutput * pouttex = new RenderLine::TextureOutput(off_scrn, true);
-		RenderLine::ViewportOutput * pout = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
+		RenderLine::ViewportOutput * pout1 = new RenderLine::ViewportOutput(wnd_main, 800, 600, 0, 0);
+		RenderLine::ViewportOutput * pout2 = new RenderLine::ViewportOutput(wnd_bc, 800, 600, 0, 0);
 		Camera * pcam = new PerspectiveCamera(60, 4/3, 0, 1000);
 		OrthoCamera * pcam2 = new OrthoCamera(4, 3, 0, 1000);
 
+		Mesh * spacecrap = new Mesh("spacecrap");
+		spacecrap->importFromFile("cube.blend");
+		std::cout << info(*spacecrap) << std::endl;
+
 		//pouttex->attachNode(*pcam);
-		//pout->setInputCamera(pcam2);
+		pout2->attachNode(pcam2);
 		//pout->enableRendering();
-		pout->attachNode(pcam);
+		pout1->attachNode(pcam);
 
 
 		//pout->attachNode(&ap);
@@ -137,7 +143,7 @@ public :
 		//pmat->setAmbient(Color::BLACK);
 		Cube * pcube = new Cube("test_cube");
 		pcube->setMaterial(pmat);
-		sm.getRootNode().createChild("model")->attachObject(pcube);
+		sm.getRootNode().createChild("model")->attachObject(spacecrap);
 		sm.getRootNode().createChild("camera", Vector3(0, 0, 10))->attachCamera(pcam);
 		sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(pcam2);
 		sm.getRootNode().getChildPtr("camera")->setLight(*new Light());

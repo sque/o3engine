@@ -1,21 +1,19 @@
-#ifndef DRAWABLE_H_INCLUDED
-#define DRAWABLE_H_INCLUDED
+#ifndef O3ENGINE_DRAWABLE_H_INCLUDED
+#define O3ENGINE_DRAWABLE_H_INCLUDED
 
 // Internal
 #include "./prereqs.hpp"
 #include "./material.hpp"
 #include "./singletonmanager.hpp"
 
-namespace o3engine
-{
+namespace o3engine {
 	/**
-		@brief Antikeimeno pou mporei na topothetithei se komvo
+	 @brief Antikeimeno pou mporei na topothetithei se komvo
 	 */
-	class DrawableObject : ManagedObject<ObjectManager, string, DrawableObject>
-	{
+	class DrawableObject: ManagedObject<ObjectManager, string, DrawableObject> {
 	protected:
 		//! Name of this object
-		string Name;
+		string m_name;
 
 	public:
 		//! Constructor
@@ -34,10 +32,13 @@ namespace o3engine
 		virtual bool hasTransperant() = 0;
 
 		//! Get name of object
-		inline const string & getName() const	{	return Name;	}
+		inline const string & getName() const {
+			return m_name;
+		}
 	};
 }
+
 // Include object manager
 #include "./objectmanager.hpp"
 
-#endif // DRAWABLE_H_INCLUDED
+#endif

@@ -1,5 +1,7 @@
 #include "./genericscene.hpp"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 namespace o3engine
 {
 	// Constructor
@@ -18,14 +20,17 @@ namespace o3engine
 		// Create default program
 		mp_default_program = new ogl::program();
 		ogl::shader * pdef_vert = new ogl::shader(ogl::shader_type::VERTEX,
-				"attribute in vec4 aPosition;"
+				"#version 330\n"
+				"layout(location=0) in vec4 aPosition;"
 				""
-				"uniform in mat4 ProjectionMatrix;"
-				"uniform in mat4 ViewMatrix;"
-				"uniform in mat4 ProjectionViewMatrix;"
+				"uniform mat4 ProjectionMatrix;"
+				"uniform mat4 ViewMatrix;"
+				"uniform mat4 ProjectionViewMatrix;"
+				"uniform mat4 ModelMatrix;"
 				""
 				"void main() {"
-				"	gl_Position = ProjectionViewMatrix * aPosition;"
+				"	gl_Position = ProjectionMatrix * ViewMatrix * aPosition;"
+				//"	gl_Position = aPosition;"
 				"}");
 		mp_default_program->attach_shader(*pdef_vert);
 		mp_default_program->build();
@@ -38,18 +43,25 @@ namespace o3engine
 	}
 
 	void GenericScene::setSceneUniforms(ogl::program * pprogram, Camera * pRenderCamera) {
-		pprogram->get_uniform("ProjectionMatrix").setmat4d(&pRenderCamera->getProjectionMatrix()[0][0]);
+		/*pprogram->get_uniform("ProjectionMatrix").setmat4d(&pRenderCamera->getProjectionMatrix()[0][0], true);
 		Matrix4 view_matrix = pRenderCamera->getSceneNode()->getGlobalTransformation();
 		view_matrix.transpose();
 		Matrix4 proj_view_matrix = pRenderCamera->getProjectionMatrix() * view_matrix;
 		pprogram->get_uniform("ViewMatrix").setmat4d(&view_matrix[0][0]);
-		pprogram->get_uniform("ProjectionViewMatrix").setmat4d(&proj_view_matrix[0][0]);
+		pprogram->get_uniform("ProjectionViewMatrix").setmat4d(&proj_view_matrix[0][0]);*/
+
+		glm::mat4 proj_matrix =  glm::perspective(45.0f, 1.0f, 0.0f, 1000.0f);
+		glm::mat4 ViewTranslate = glm::translate(
+				glm::mat4(1.0f),
+				glm::vec3(0,0,-10));
+		pprogram->get_uniform("ProjectionMatrix").setmat4f(glm::value_ptr(proj_matrix), false);
+		pprogram->get_uniform("ViewMatrix").setmat4f(glm::value_ptr(ViewTranslate), false);
 	}
 
 	void GenericScene::drawScene(Camera * pRenderCamera) {
 		m_loop_counter++;	// Increase counter
 
-		Real rad90Deg = math::degreeToRadian(90);
+		//Real rad90Deg = math::degreeToRadian(90);
 
 		// Iterators
 		GenericNode::active_nodes_type::iterator it;
@@ -81,6 +93,8 @@ namespace o3engine
 		}*/
 
 		// Render 1st Pass (Solid Objects)
+		//setSceneUniforms(mp_default_program, pRenderCamera);
+		setSceneUniforms(mp_default_program, pRenderCamera);
 		m_trans_nodes.clear();
 		for(it = m_activenodes.begin();it != m_activenodes.end(); it++) {
 			pnode = *it;
@@ -102,11 +116,9 @@ namespace o3engine
 			if ((m_enabled_far_cutoff) && (camera_relpos.squaredLength() > m_farcutoff_sqdistance))
 				continue;
 
-			//glPushMatrix();
-				//glTranslate(pnode->v3_gposition);
-				//glRotate(pnode->qu_gorientation);
-				pnode->drawObjects(true);
-			//glPopMatrix();
+			mp_default_program->use();
+			mp_default_program->get_uniform("ModelMatrix").setmat4d(&pRenderCamera->getSceneNode()->getGlobalTransformation()[0][0]);
+			pnode->drawObjects(true);
 
 			// Add node if needed at 2n pass rendering
 			if (pnode->hasTransperantObjects())
@@ -117,12 +129,9 @@ namespace o3engine
 		for(transIt = m_trans_nodes.begin();transIt != m_trans_nodes.end();transIt++) {
 			pnode = *transIt;
 
-			mp_default_program->use();
-			//glPushMatrix();
-				//glTranslate(pnode->v3_gposition);
-				//glRotate(pnode->qu_gorientation);
+
 			pnode->drawObjects(false);
-			//glPopMatrix();
 		}
+
 	}
 }

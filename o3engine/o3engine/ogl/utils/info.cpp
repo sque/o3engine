@@ -94,7 +94,6 @@ std::vector<limit_entry> limit_names() {
 }
 
 std::string info(context & ctx, bitflags<info_filter> filter) {
-	std::string out_txt;
 	std::ostringstream ss;
 
 	ss << "OpenGL Version: " << ctx.capabilities().version_major() << "." << ctx.capabilities().version_minor() << std::endl;

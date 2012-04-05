@@ -22,10 +22,6 @@ namespace o3engine {
 
 		//! Timer object
 		const Timer * mp_timer;
-
-		// Uncopiable
-		TimeSensitive(const TimeSensitive &);
-		TimeSensitive& operator=(const TimeSensitive &);
 	public:
 		//! Default constructor
 		TimeSensitive();
@@ -40,6 +36,10 @@ namespace o3engine {
 		 * @return The time passed in seconds.
 		 */
 		Real timePassed();
+
+		// Uncopiable
+		TimeSensitive(const TimeSensitive &) = delete;
+		TimeSensitive& operator=(const TimeSensitive &) = delete;
 	};
 
 }

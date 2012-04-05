@@ -6,121 +6,99 @@
 #include "./drawableobject.hpp"
 #include "./face.hpp"
 #include <vector>
+#include <memory>
 
 namespace o3engine {
-//! Handles a mesh and renders it.
-/**
- * A mesh is a batch of triangles faces, with materials
- * and textures. This class is responsible for rendering
- * that kind of objects. Mesh can be designed by code
- * or can be loaded from mesh file.
- */
-class Mesh: public DrawableObject {
-protected:
-	typedef std::vector<SubMesh>::iterator SubMeshIterator;
-	std::vector<SubMesh> v_submeshes; //! Vector of submeshes
-	Material * pmat_WireFrame; //! Wireframe material
-	bool bHasTransperant; //! A flag if mesh has transperant parts
 
-public:
+	//! General mesh holder
+	class Mesh: public DrawableObject {
+	public:
 
-	//! Default constructor creates an empty mesh
-	inline Mesh(const string & name) :
+		//! Type to hold submeshes
+		typedef std::vector<SubMesh> submesh_container_type;
+
+		//! Default constructor creates an empty mesh
+		Mesh(const string & name) :
 			DrawableObject(name) {
-		pmat_WireFrame = NULL;
-	}
-
-	//! Constructor that loads a mesh from file
-	inline Mesh(const string & name, const string & model_file) :
-			DrawableObject(name) {
-		pmat_WireFrame = NULL;
-		loadModel(model_file);
-	}
-
-	//! Destructor
-	inline virtual ~Mesh() {
-
-	}
-
-	void recacheWireObject();
-
-	void recacheObject();
-
-	//! Translate object's parts
-	inline void translate(const Vector3 & _trans) {
-		std::vector<SubMesh>::iterator it;
-		for (it = v_submeshes.begin(); it != v_submeshes.end(); it++) {
-			(*it).translate(_trans);
 		}
-		recacheObject();
-	}
 
-	//! Load a model from file
-	bool loadModel(const string & fname);
-
-	//! Add a submesh inside mesh
-	inline void addSubMesh(const SubMesh & _sm) {
-		v_submeshes.push_back(_sm);
-		recacheObject();
-	}
-
-	//! Count triangles in model
-	unsigned long countTriangles() {
-		unsigned long count = 0;
-		std::vector<SubMesh>::iterator it;
-		for (it = v_submeshes.begin(); it != v_submeshes.end(); it++) {
-			count += (*it).countFaces();
+		//! Destructor
+		virtual ~Mesh() {
 		}
-		return count;
-	}
 
-	//! Set wireframe mode
+		//! Translate object's parts
+		void translate(const Vector3 & trans);
+
+		//! Imprort a mesh from file and upload to gpu
+		bool importFromFile(const string & fname);
+
+		//! Get submeshes
+		submesh_container_type & submeshes() {
+			return m_submeshes;
+		}
+
+		//! Get submeshes
+		const submesh_container_type & submeshes() const {
+			return m_submeshes;
+		}
+
+		//! Total vertices in model
+		size_t totalVertices() const {
+			size_t total = 0;
+			for(auto & sm :m_submeshes) {
+				total += sm.totalVertices();
+			}
+			return total;
+		}
+
+		//! Total number of elemensts (triangles/lines/...)
+		size_t totalElements() const {
+			size_t total = 0;
+			for(auto & sm :m_submeshes) {
+				total += sm.totalElements();
+			}
+			return total;
+		}
+
+		//! Total submeshes
+		size_t totalSubmeshes() const {
+			return m_submeshes.size();
+		}
+
+		//! Render the solid part of object
+		virtual void drawSolidPart(){
+			for(auto & r : m_submeshes_renderers) {
+				r->draw();
+			}
+		}
+
+		//! Render the transperant part of object
+		virtual void drawTransperantPart() {}
+
+		//! Check if it is transperant object
+		virtual bool hasTransperant() { return true; }
+
+		//! Upload this mesh to gpu (so it is rendable)
+		void uploadToGPU();
+	protected:
+
+		//! Container of submeshes
+		submesh_container_type m_submeshes;
+
+		std::vector<std::shared_ptr<SubMeshRenderer> > m_submeshes_renderers;
+	};
+
+	//! Calculate boundary sphere
 	/**
-	 If this is setted true, the mesh will be rendered in wireframe mode.
-	 @param _enabled true means that will be rendered in wireframe mode
-	 @param mat_name The name of the material to be used while drawing wireframe. If mat_name is NULL
-	 then it will use the material of each submesh.
+	 * @param radius [out] The minimum radius of a sphere that can hold this mesh
 	 */
-	inline void setWireFrame(bool _enabled, const char * mat_name) {
-		b_WireFrame = _enabled;
-		if (mat_name)
-			pmat_WireFrame = MaterialManager::getObjectPtr(mat_name);
-		else
-			pmat_WireFrame = NULL;
+	void boundary_sphere(const Mesh & m, Real & radius);
 
-		if (b_WireFrame)
-			recacheWireObject();
-		else
-			recacheObject();
-	}
+	//! Calculate boundary box
+	void boundary_box(const Mesh & m, Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max);
 
-	//! Check if we are rendering wireframe
-	inline bool isWireFrame() const {
-		return b_WireFrame;
-	}
-
-	//! Get spherical size of object
-	/**
-	 It calculates the smallest sphere <i>with the same center
-	 as mesh's pivot point</i> that can fit all parts of Mesh.
-	 @return The <b>radius</b> of the sphere
-	 */
-	inline Real getSphericalSize() const {
-		std::vector<SubMesh>::const_iterator it;
-		Real spherical_size = 0;
-
-		for (it = v_submeshes.begin(); it != v_submeshes.end(); it++) {
-			if (spherical_size < (*it).calcSphericalSize())
-				spherical_size = (*it).calcSphericalSize();
-		}
-
-		return spherical_size;
-	}
-
-	inline virtual bool hasTransperant() {
-		return bHasTransperant;
-	}
-};
+	//! Get an info string about a mesh
+	std::string info (const Mesh & m);
 }
 
 #endif // MESH_H_INCLUDED

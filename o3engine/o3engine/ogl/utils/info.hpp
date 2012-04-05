@@ -43,10 +43,10 @@ namespace utils {
 		}
 
 		bitflags operator|(const bitflags & r) const {
-			return bitflags(E(get_base() & r.get_base()));
+			return bitflags(E(get_base() | r.get_base()));
 		}
 
-		bool has_flag(E val) {
+		bool has_flag(E val) const {
 			return (base_type(m_val) & base_type(val)) != 0;
 		}
 
