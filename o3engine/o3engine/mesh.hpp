@@ -66,17 +66,11 @@ namespace o3engine {
 		}
 
 		//! Render the solid part of object
-		virtual void drawSolidPart(){
+		virtual void draw(){
 			for(auto & r : m_submeshes_renderers) {
 				r->draw();
 			}
 		}
-
-		virtual void drawTransparentPart() {
-			drawSolidPart();
-		}
-
-		virtual bool hasTransparent() { return false; }
 
 		//! Upload this mesh to GPU (so it is rendable)
 		void uploadToGPU();

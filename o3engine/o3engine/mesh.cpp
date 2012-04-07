@@ -14,10 +14,6 @@ namespace o3engine
 		}
 	}
 
-	//! Calculate boundary sphere
-	/**
-	 * @param radius [out] The minimum radius of a sphere that can hold this mesh
-	 */
 	void boundary_sphere(const Mesh & m, Real & radius) {
 		radius = 0;
 		for(auto & sm: m.submeshes()) {
@@ -114,28 +110,28 @@ namespace o3engine
 
 			// Load positions
 			for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-				sm.vertices()[i].position = *reinterpret_cast<Vector3*>(pMesh->mVertices + i);
+				sm.vertices()[i].position = Vector3(pMesh->mVertices[i].x, pMesh->mVertices[i].y, pMesh->mVertices[i].z);
 			}
 
 			// Load normals
 			if (sm.attributes().has_flag(VertexAttributes::normal)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].normal = *reinterpret_cast<Vector3*>(pMesh->mNormals + i);
+					sm.vertices()[i].normal = Vector3(pMesh->mNormals[i].x, pMesh->mNormals[i].y, pMesh->mNormals[i].z);
 				}
 			}
 
 			// Load texcoords (0)
 			if (sm.attributes().has_flag(VertexAttributes::tex_coords_0)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].tex_coords[0] = *reinterpret_cast<Vector3*>(pMesh->mTextureCoords[0] + i);
+					sm.vertices()[i].tex_coords[0] = Vector3(pMesh->mTextureCoords[0][i].x, pMesh->mTextureCoords[0][i].y, pMesh->mTextureCoords[0][i].z);
 				}
 			}
 
 			// Load tangents bitangents
 			if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].tangent = *reinterpret_cast<Vector3*>(pMesh->mTangents + i);
-					sm.vertices()[i].bitangent = *reinterpret_cast<Vector3*>(pMesh->mBitangents + i);
+					sm.vertices()[i].tangent =  Vector3(pMesh->mTangents[i].x, pMesh->mTangents[i].y, pMesh->mTangents[i].z);
+					sm.vertices()[i].bitangent = Vector3(pMesh->mBitangents[i].x, pMesh->mBitangents[i].y, pMesh->mBitangents[i].z);
 				}
 			}
 

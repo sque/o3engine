@@ -25,22 +25,6 @@ namespace o3engine
 	}
 
 	void SubMeshRenderer::uploadToGPU() {
-		mp_vbo = new ogl::buffer(ogl::buffer_type::ARRAY);
-		std::vector<glm::vec3> positions;
-		for(auto vx: m_submesh.vertices()) {
-			glm::vec3  v(vx.position[0], vx.position[1], vx.position[2]);
-			positions.push_back(v);
-		}
-		mp_ebo = new ogl::buffer(ogl::buffer_type::ELEMENT_ARRAY);
-		mp_ebo->define_data(sizeof(SubMesh::index_type), &m_submesh.indices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
-		m_elements_type = ogl::elements_type::UNSIGNED_INT;
-
-		mp_vbo->define_data(sizeof(Vector3) * positions.size(), &positions[0], ogl::buffer_usage_pattern::STATIC_DRAW);
-		mp_vao = new ogl::vertex_array();
-		mp_vao->get_attrib(0).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::FLOAT);
-		mp_vao->get_attrib(0).enable();
-
-		return;
 		if (!mp_vbo) {
 			mp_vbo = new ogl::buffer(ogl::buffer_type::ARRAY);
 			mp_vbo->define_data(sizeof(Vertex) * m_submesh.vertices().size(), &m_submesh.vertices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
@@ -151,6 +135,38 @@ namespace o3engine
 		if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent))
 			ss << "tangent_bitangent,";
 		ss << " Vertices:" << sm.totalVertices() << ", Elements:" << sm.totalElements() << " }";
+		return ss.str();
+	}
+
+	std::string info(const Vector3 & sm) {
+		std::ostringstream ss;
+		ss << "V3{" << sm.x << ", " << sm.y << ", " << sm.z << "}";
+		return ss.str();
+	}
+
+	//! Dump object to output
+	std::string dump_object(const SubMesh & sm) {
+		std::ostringstream ss;
+		ss << "Vertices :" << std::endl;
+		size_t i = 0;
+		for(auto & v : sm.vertices()) {
+			ss << " [" << i << "]: ";
+			if (sm.attributes().has_flag(VertexAttributes::position))
+				ss << "P: " << info(v.position) << ", ";
+			if (sm.attributes().has_flag(VertexAttributes::normal))
+				ss << "N: " << info(v.normal) << ", ";
+			if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
+				ss << "T: " << info(v.tangent) << ", ";
+				ss << "BT: " << info(v.bitangent)  << ", ";
+			}
+			ss << endl;
+			i++;
+		}
+
+		ss << "Indices : ";
+		for(auto & ind : sm.indices()) {
+			ss << ind << ", ";
+		}
 		return ss.str();
 	}
 }

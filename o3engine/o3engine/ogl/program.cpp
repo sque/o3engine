@@ -33,7 +33,7 @@ namespace ogl{
 	uniform & program::get_uniform(const std::string & uname) throw (uniform_not_found){
 		GLint uid = ::glGetUniformLocation(name(), uname.c_str());
 		if (uid == -1)
-			;//throw uniform_not_found(uname);
+			throw uniform_not_found(uname);
 
 		uniforms_type::iterator it;
 		if ((it = m_uniforms.find(uid)) == m_uniforms.end()) {

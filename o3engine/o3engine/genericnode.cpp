@@ -109,25 +109,22 @@ namespace o3engine {
 			m_gposition = m_position;
 		}
 		m_gtransformation = Matrix4::IDENTITY;
-		m_gtransformation.setTranslation(m_gposition);
 		m_gtransformation = m_gorientation.toMatrix();
+		m_gtransformation.setTranslation(m_gposition);
 	}
 
 	Quaternion & GenericNode::getGlobalOrientation() {
-		if (m_cached_global_loop != mp_scene->m_loop_counter)
-			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
 		return m_gorientation;
 	}
 
 	Vector3 & GenericNode::getGlobalPosition() {
-		if (m_cached_global_loop != mp_scene->m_loop_counter)
-			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
 		return m_gposition;
 	}
 
 	Matrix4 & GenericNode::getGlobalTransformation() {
-		if (m_cached_global_loop != mp_scene->m_loop_counter)
-			_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
+		_updateCachedGPos_GOrient(mp_scene->m_loop_counter);
 		return m_gtransformation;
 	}
 
@@ -135,7 +132,7 @@ namespace o3engine {
 		attached_objects_type::iterator it;
 
 		for (auto & obj : m_attached_objects) {
-			obj->drawSolidPart();
+			obj->draw();
 		}
 	}
 

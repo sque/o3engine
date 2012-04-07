@@ -4,12 +4,13 @@
 #include "./base_prereqs.hpp"
 #include "./vector4.hpp"
 #include "./matrix3.hpp"
+#include "./angle.hpp"
 
 namespace o3engine {
 	//! [R3] Class for handling orthogonal matrices 4x4
 	/**
 	 * @par Class Characteristics
-	 * Matrix3 is @ref copyable_page, @ref noninherit_page and follows the @ref sfn_page
+	 * Matrix4 is @ref copyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 *
 	 * @ingroup base_group
 	 */
@@ -225,7 +226,7 @@ namespace o3engine {
 		}
 
 		//! Get the inverse matrix
-		bool inverse(Matrix4 & inverted, Real fTolerance = 1e-06);
+		Matrix4 inverse() const;
 
 		//! Set the translation transformation
 		void setTranslation(Vector3 & v) {
@@ -237,11 +238,10 @@ namespace o3engine {
 	};
 
 	//! Create a prespective projection matrix
-	Matrix4 perspective(Real fovy, Real aspect, Real znear, Real zfar);
+	Matrix4 perspective(Angle fovy, Real aspect, Real znear, Real zfar);
 
 	//! Create an orthographic projection matrix
 	Matrix4 ortho(Real left, Real right, Real bottom, Real top, Real near, Real far);
-
 }
 
 #endif

@@ -199,5 +199,8 @@ namespace o3engine {
 
 	//! Get info about this object
 	std::string info(const SubMesh & sm);
+
+	//! Dump object to output
+	std::string dump_object(const SubMesh & sm);
 }
 #endif

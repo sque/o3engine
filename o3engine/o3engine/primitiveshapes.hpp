@@ -83,7 +83,9 @@ namespace o3engine
 	protected:
 		Real size;
 
-		inline virtual void drawObject(bool bSolid) {  glutSolidCube(size);    }
+		inline virtual void drawObject(bool bSolid) {
+			glutSolidCube(size);
+		}
 
 	public:
 
@@ -323,30 +325,24 @@ namespace o3engine
 	 * that it will always results an orthogonal quad. You can
 	 * parameterize OrthoQuad by setting its height and width.
 	 */
-/*	class OrthoQuad : public Quad {
+	class OrthoQuad : public Quad {
 	public:
 
 		//! Constructor with default values
 		inline OrthoQuad(const string & name)
 			: Quad(name){
-
 		}
 
 		//! Constructor with parameters
 		inline OrthoQuad(const string & name, Real height, Real width)
-			: Quad(name){
-			setWidth(_width);
-			setHeight(_height); }
-
-		//! Set width
-		inline void setWidth(Real w)
-		{   Real hw = w/2; points[0].x = -hw; points[3].x = -hw; points[1].x = -hw; points[2].x = hw;    }
-
-		//! Set Height
-		inline void setHeight(Real h)
-		{   Real hh = h/2; points[0].y = hh; points[1].y = hh; points[2].y = -hh; points[3].y = -hh;    }
+			: Quad(name,
+					Vector3(-width/2, height/2, 0),
+					Vector3(width/2, height/2, 0),
+					Vector3(width/2, -height/2, 0),
+					Vector3(-width/2, -height/2, 0)){
+		}
 	protected:
 
-	};*/
+	};
 }
 #endif // PRIMATIVESHAPES_H_INCLUDED

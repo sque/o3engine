@@ -15,7 +15,7 @@ namespace o3engine {
 	protected:
 
 		//! The theta of the perspective
-		Real m_fovy;
+		Angle m_fovy;
 
 		//! Aspect ratio of camera
 		Real m_aspect_ratio;
@@ -32,7 +32,7 @@ namespace o3engine {
 
 		//! Default constructor
 		PerspectiveCamera() :
-			m_fovy(60),
+			m_fovy(Degree(60)),
 			m_aspect_ratio(1),
 			m_znear(1),
 			m_zfar(20){
@@ -40,7 +40,7 @@ namespace o3engine {
 		}
 
 		//! Constructor with extended parameters
-		PerspectiveCamera(Real fovy, Real aspect, Real znear, Real zfar) :
+		PerspectiveCamera(Angle fovy, Real aspect, Real znear, Real zfar) :
 			m_fovy(fovy),
 			m_aspect_ratio(aspect),
 			m_znear(znear),
@@ -93,12 +93,12 @@ namespace o3engine {
 		}
 
 		//! Get the camera's viewing angle (FOV)
-		inline Real getFovY() const {
+		inline const Angle & getFovY() const {
 			return m_fovy;
 		}
 
 		//! Set the Camera's viewing angle (FOV)
-		inline void setFovY(Real fovy) {
+		inline void setFovY(Angle fovy) {
 			m_fovy = fovy;
 			calcProjMatrix();
 		}

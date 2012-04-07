@@ -23,13 +23,7 @@ namespace o3engine {
 		virtual ~DrawableObject();
 
 		//! Render the solid part of object
-		virtual void drawSolidPart() = 0;
-
-		//! Render the transparent part of object
-		virtual void drawTransparentPart() = 0;
-
-		//! Check if it is transparent object
-		virtual bool hasTransparent() = 0;
+		virtual void draw() = 0;
 
 		//! Get name of object
 		inline const string & getName() const {
