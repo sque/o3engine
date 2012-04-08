@@ -7,7 +7,7 @@ namespace o3engine {
 	}
 
 	void PerspectiveCamera::onStateAltered(){
-		setAspectRatio((double)mp_state->width / (double)mp_state->height);
+		//setAspectRatio((double)mp_state->width / (double)mp_state->height);
 	}
 
 }

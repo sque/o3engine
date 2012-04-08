@@ -45,9 +45,6 @@ namespace o3engine {
 		//! Ambient light of the scene
 		Color m_ambient_light;
 
-		//! A temporary per/render loop list of transparent objects
-		vector<GenericNode *> m_trans_nodes;
-
 		//! A list of nodes that contain lights
 		vector<GenericNode *> m_light_nodes;
 
@@ -63,16 +60,16 @@ namespace o3engine {
 			m_activenodes.erase(pit);
 		}
 
-		ogl::program * mp_default_program;
-
-		void setSceneUniforms(ogl::program * pprogram, Camera * pRenderCamera);
-
 	public:
 		//! Constructor
 		GenericScene();
 
 		//! Destructor
 		virtual ~GenericScene();
+
+		GenericNode::active_nodes_type & getActiveNodes() {
+			return m_activenodes;
+		}
 
 		//! Get root node of scene by reference
 		inline GenericNode & getRootNode() {
@@ -121,6 +118,18 @@ namespace o3engine {
 		}
 
 		virtual void drawScene(Camera * pRenderCamera);
+
+		size_t nextLoopCounterToBeChangedUglyFunction();
+
+		template<class Visitor>
+		void navigateActiveObjects(Visitor & visitor) {
+			for(auto & n: m_activenodes) {
+				visitor.visitNode(n);
+				for(auto & o : n->getObjects()) {
+					visitor.visitObject(n, o);
+				}
+			}
+		}
 	};
 }
 #endif

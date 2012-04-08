@@ -9,18 +9,18 @@
 namespace o3engine
 {
 	void Mesh::translate(const Vector3 & trans) {
-		for (auto & submesh : m_submeshes) {
+		for (auto & submesh : m_geometries) {
 			submesh.translate(trans);
 		}
 	}
 
 	void boundary_sphere(const Mesh & m, Real & radius) {
 		radius = 0;
-		for(auto & sm: m.submeshes()) {
-			Real sm_radius;
-			boundary_sphere(sm, sm_radius);
-			if (radius > sm_radius)
-				radius = sm_radius;
+		for(auto & gm: m.geometries()) {
+			Real gm_radius;
+			boundary_sphere(gm, gm_radius);
+			if (radius > gm_radius)
+				radius = gm_radius;
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace o3engine
 		x_min = y_min = z_min = std::numeric_limits<Real>::max();
 		x_max = y_max = z_max = std::numeric_limits<Real>::min();
 
-		for(auto & sm : m.submeshes()) {
-			for(auto vertex : sm.vertices()) {
+		for(auto & gm : m.geometries()) {
+			for(auto vertex : gm.vertices()) {
 				if (vertex.position.x < x_min)
 					x_min = vertex.position.x;
 				if (vertex.position.y < y_min)
@@ -50,14 +50,14 @@ namespace o3engine
 
 	//! Upload file to GPU
 	void Mesh::uploadToGPU() {
-		m_submeshes_renderers.clear();
+		m_geometries_renderers.clear();
 
-		for(auto & sm: m_submeshes) {
-			std::shared_ptr<SubMeshRenderer> mesh_renderer(new SubMeshRenderer(sm));
-			mesh_renderer->uploadToGPU();
-			m_submeshes_renderers.push_back(mesh_renderer);
+		for(auto & gm: m_geometries) {
+			geometry_renderer_container_type::value_type geo_renderer(new GeometryRenderer(gm));
+			geo_renderer->uploadToGPU();
+			m_geometries_renderers.push_back(geo_renderer);
 		}
-		ogl::gl_error_checkpoint("Uploaded to gpu");
+		ogl::gl_error_checkpoint("Error uploading Mesh geometry to GPU");
 	}
 
 	//! Import a mesh from file
@@ -88,62 +88,62 @@ namespace o3engine
 		for(size_t mesh_index = 0; mesh_index < scene->mNumMeshes; mesh_index++ ) {
 			aiMesh * pMesh = scene->mMeshes[mesh_index];
 			// Prepare submesh
-			SubMesh::attributesflags_type aflags = {VertexAttributes::position};
+			Geometry::attributesflags_type aflags = {VertexAttributes::position};
 			if (pMesh->HasNormals())
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::normal});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::normal});
 			if (pMesh->HasTextureCoords(0))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_0});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_0});
 			if (pMesh->HasTextureCoords(1))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_1});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_1});
 			if (pMesh->HasTextureCoords(2))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_2});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_2});
 			if (pMesh->HasTextureCoords(3))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_3});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_3});
 			if (pMesh->HasTextureCoords(4))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_4});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_4});
 			if (pMesh->HasTextureCoords(5))
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tex_coords_5});
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tex_coords_5});
 			if (pMesh->HasTangentsAndBitangents())
-				aflags = aflags | SubMesh::attributesflags_type({VertexAttributes::tangent_bitangent});
-			SubMesh sm(aflags);
-			sm.vertices().resize(pMesh->mNumVertices);
+				aflags = aflags | Geometry::attributesflags_type({VertexAttributes::tangent_bitangent});
+			Geometry gm(aflags);
+			gm.vertices().resize(pMesh->mNumVertices);
 
 			// Load positions
 			for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-				sm.vertices()[i].position = Vector3(pMesh->mVertices[i].x, pMesh->mVertices[i].y, pMesh->mVertices[i].z);
+				gm.vertices()[i].position = Vector3(pMesh->mVertices[i].x, pMesh->mVertices[i].y, pMesh->mVertices[i].z);
 			}
 
 			// Load normals
-			if (sm.attributes().has_flag(VertexAttributes::normal)) {
+			if (gm.attributes().has_flag(VertexAttributes::normal)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].normal = Vector3(pMesh->mNormals[i].x, pMesh->mNormals[i].y, pMesh->mNormals[i].z);
+					gm.vertices()[i].normal = Vector3(pMesh->mNormals[i].x, pMesh->mNormals[i].y, pMesh->mNormals[i].z);
 				}
 			}
 
 			// Load texcoords (0)
-			if (sm.attributes().has_flag(VertexAttributes::tex_coords_0)) {
+			if (gm.attributes().has_flag(VertexAttributes::tex_coords_0)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].tex_coords[0] = Vector3(pMesh->mTextureCoords[0][i].x, pMesh->mTextureCoords[0][i].y, pMesh->mTextureCoords[0][i].z);
+					gm.vertices()[i].tex_coords[0] = Vector3(pMesh->mTextureCoords[0][i].x, pMesh->mTextureCoords[0][i].y, pMesh->mTextureCoords[0][i].z);
 				}
 			}
 
 			// Load tangents bitangents
-			if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
+			if (gm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
-					sm.vertices()[i].tangent =  Vector3(pMesh->mTangents[i].x, pMesh->mTangents[i].y, pMesh->mTangents[i].z);
-					sm.vertices()[i].bitangent = Vector3(pMesh->mBitangents[i].x, pMesh->mBitangents[i].y, pMesh->mBitangents[i].z);
+					gm.vertices()[i].tangent =  Vector3(pMesh->mTangents[i].x, pMesh->mTangents[i].y, pMesh->mTangents[i].z);
+					gm.vertices()[i].bitangent = Vector3(pMesh->mBitangents[i].x, pMesh->mBitangents[i].y, pMesh->mBitangents[i].z);
 				}
 			}
 
 			// Load faces indices (triangles)
-			sm.indices().resize(pMesh->mNumFaces * 3);
+			gm.indices().resize(pMesh->mNumFaces * 3);
 			for(size_t i =0;i < pMesh->mNumFaces;i++) {
-				sm.indices()[i * 3] = pMesh->mFaces[i].mIndices[0];
-				sm.indices()[i * 3 + 1] = pMesh->mFaces[i].mIndices[1];
-				sm.indices()[i * 3 + 2] = pMesh->mFaces[i].mIndices[2];
+				gm.indices()[i * 3] = pMesh->mFaces[i].mIndices[0];
+				gm.indices()[i * 3 + 1] = pMesh->mFaces[i].mIndices[1];
+				gm.indices()[i * 3 + 2] = pMesh->mFaces[i].mIndices[2];
 			}
 
-			m_submeshes.push_back(sm);
+			m_geometries.push_back(gm);
 		}
 
 		uploadToGPU();
@@ -153,10 +153,10 @@ namespace o3engine
 	//! Get an info string about a mesh
 	std::string info(const Mesh & m) {
 		std::ostringstream ss;
-		ss << "Mesh(" << m.getName() << "){ Submeshes: " << m.totalSubmeshes() <<
+		ss << "Mesh(" << m.getName() << "){ Geometries: " << m.totalGeometries() <<
 				", Vertices: " << m.totalVertices() << ", Elements: " <<  m.totalElements() <<" }" << std::endl;
-		for(auto & sm : m.submeshes()) {
-			ss << "  " << info(sm) << std::endl;
+		for(auto & gm : m.geometries()) {
+			ss << "  " << info(gm) << std::endl;
 		}
 		return ss.str();
 	}

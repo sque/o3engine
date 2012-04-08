@@ -1,21 +1,20 @@
-#include "./submesh.hpp"
+#include "./geometry.hpp"
 #include <limits>
 #include <sstream>
 #include <stddef.h>
 #include <limits>
-#include <glm/glm.hpp>
 
 namespace o3engine
 {
-	SubMeshRenderer::SubMeshRenderer(SubMesh & sm) :
-		m_submesh(sm),
+	GeometryRenderer::GeometryRenderer(Geometry & gm) :
+		m_geometry(gm),
 		mp_vao(nullptr),
 		mp_vbo(nullptr),
 		mp_ebo(nullptr){
 	}
 
 	//! Destroy the render
-	SubMeshRenderer::~SubMeshRenderer() {
+	GeometryRenderer::~GeometryRenderer() {
 		if (mp_ebo)
 			delete mp_ebo;
 		if (mp_vbo)
@@ -24,15 +23,15 @@ namespace o3engine
 			delete mp_vao;
 	}
 
-	void SubMeshRenderer::uploadToGPU() {
+	void GeometryRenderer::uploadToGPU() {
 		if (!mp_vbo) {
 			mp_vbo = new ogl::buffer(ogl::buffer_type::ARRAY);
-			mp_vbo->define_data(sizeof(Vertex) * m_submesh.vertices().size(), &m_submesh.vertices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
+			mp_vbo->define_data(sizeof(Vertex) * m_geometry.vertices().size(), &m_geometry.vertices()[0], ogl::buffer_usage_pattern::STATIC_DRAW);
 		}
 
 		if (!mp_ebo) {
 			mp_ebo = new ogl::buffer(ogl::buffer_type::ELEMENT_ARRAY);
-			size_t total_indices = m_submesh.indices().size();
+			size_t total_indices = m_geometry.indices().size();
 			size_t type_size;
 			void * pindices = nullptr;
 			if (total_indices <= numeric_limits<std::uint8_t>::max()) {
@@ -40,21 +39,21 @@ namespace o3engine
 				type_size = sizeof(GLubyte);
 				pindices = malloc(type_size * total_indices);
 				for(size_t i = 0; i < total_indices; i++) {
-					reinterpret_cast<GLubyte *>(pindices)[i] = m_submesh.indices()[i];
+					reinterpret_cast<GLubyte *>(pindices)[i] = m_geometry.indices()[i];
 				}
 			} else if (total_indices <= numeric_limits<std::uint16_t>::max()) {
 				m_elements_type = ogl::elements_type::UNSIGNED_SHORT;
 				type_size = sizeof(GLushort);
 				pindices = malloc(type_size * total_indices);
 				for(size_t i = 0; i < total_indices; i++) {
-					reinterpret_cast<GLushort *>(pindices)[i] = m_submesh.indices()[i];
+					reinterpret_cast<GLushort *>(pindices)[i] = m_geometry.indices()[i];
 				}
 			} else if (total_indices <= numeric_limits<std::uint32_t>::max()) {
 				m_elements_type = ogl::elements_type::UNSIGNED_INT;
 				type_size = sizeof(GLuint);
 				pindices = malloc(type_size * total_indices);
 				for(size_t i = 0; i < total_indices; i++) {
-					reinterpret_cast<GLuint *>(pindices)[i] = m_submesh.indices()[i];
+					reinterpret_cast<GLuint *>(pindices)[i] = m_geometry.indices()[i];
 				}
 			}
 
@@ -66,11 +65,11 @@ namespace o3engine
 			mp_vao = new ogl::vertex_array();
 			mp_vao->get_attrib(0).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), 0);
 			mp_vao->get_attrib(0).enable();
-			if (m_submesh.attributes().has_flag(VertexAttributes::normal)) {
+			if (m_geometry.attributes().has_flag(VertexAttributes::normal)) {
 				mp_vao->get_attrib(1).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, normal));
 				mp_vao->get_attrib(1).enable();
 			}
-			if (m_submesh.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
+			if (m_geometry.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
 				mp_vao->get_attrib(10).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tangent));
 				mp_vao->get_attrib(10).enable();
 
@@ -80,19 +79,35 @@ namespace o3engine
 		}
 	}
 
-	//! Draw mesh
-	void SubMeshRenderer::draw() {
-		if (mp_ebo)
-			// Indexed based
-			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_submesh.indices().size(), *mp_ebo, m_elements_type);
-		else
-			// Raw rendering
-			mp_vao->draw(ogl::primitive_type::TRIANGLES, 0, m_submesh.totalElements());
+	//! Set material by name
+	bool Geometry::setMaterial(const string & mat) {
+		return setMaterial(MaterialManager::getObjectPtr(mat));
 	}
 
-	void boundary_sphere(const SubMesh & sm, Real & radius) {
+	//! Set material
+	bool Geometry::setMaterial(const Material * pmaterial) {
+		if (!pmaterial) {
+			mp_material = MaterialManager::getSingletonPtr()->getDefaultMaterialPtr();
+			return false;
+		}
+		mp_material = pmaterial;
+		return true;
+	}
+
+	//! Draw mesh
+	void GeometryRenderer::draw() {
+		//m_submesh.getMaterialPtr()->getProgram().use();
+		if (mp_ebo)
+			// Indexed based
+			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_geometry.indices().size(), *mp_ebo, m_elements_type);
+		else
+			// Raw rendering
+			mp_vao->draw(ogl::primitive_type::TRIANGLES, 0, m_geometry.totalElements());
+	}
+
+	void boundary_sphere(const Geometry & gm, Real & radius) {
 		radius = 0;
-		for(auto vertex : sm.vertices()) {
+		for(auto vertex : gm.vertices()) {
 			Real v_sq_pos = vertex.position.squaredLength();
 			if (v_sq_pos > radius)
 				radius = v_sq_pos;
@@ -101,11 +116,11 @@ namespace o3engine
 	}
 
 	//! Calculate boundary box
-	void boundary_box(const SubMesh & sm, Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max) {
+	void boundary_box(const Geometry & gm, Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max) {
 		x_min = y_min = z_min = std::numeric_limits<Real>::max();
 		x_max = y_max = z_max = std::numeric_limits<Real>::min();
 
-		for(auto vertex : sm.vertices()) {
+		for(auto vertex : gm.vertices()) {
 			if (vertex.position.x < x_min)
 				x_min = vertex.position.x;
 			if (vertex.position.y < y_min)
@@ -122,19 +137,19 @@ namespace o3engine
 		}
 	}
 
-	std::string info(const SubMesh & sm) {
+	std::string info(const Geometry & gm) {
 		std::ostringstream ss;
 
-		ss << "SubMesh{ Attributes:";
-		if (sm.attributes().has_flag(VertexAttributes::position))
+		ss << "Geometry{ Attributes:";
+		if (gm.attributes().has_flag(VertexAttributes::position))
 			ss << "position,";
-		if (sm.attributes().has_flag(VertexAttributes::normal))
+		if (gm.attributes().has_flag(VertexAttributes::normal))
 			ss << "normal,";
-		if (sm.attributes().has_flag(VertexAttributes::tex_coords_0))
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_0))
 			ss << "tex_coords[1],";
-		if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent))
+		if (gm.attributes().has_flag(VertexAttributes::tangent_bitangent))
 			ss << "tangent_bitangent,";
-		ss << " Vertices:" << sm.totalVertices() << ", Elements:" << sm.totalElements() << " }";
+		ss << " Vertices:" << gm.totalVertices() << ", Elements:" << gm.totalElements() << " }";
 		return ss.str();
 	}
 
@@ -145,17 +160,17 @@ namespace o3engine
 	}
 
 	//! Dump object to output
-	std::string dump_object(const SubMesh & sm) {
+	std::string dump_object(const Geometry & gm) {
 		std::ostringstream ss;
 		ss << "Vertices :" << std::endl;
 		size_t i = 0;
-		for(auto & v : sm.vertices()) {
+		for(auto & v : gm.vertices()) {
 			ss << " [" << i << "]: ";
-			if (sm.attributes().has_flag(VertexAttributes::position))
+			if (gm.attributes().has_flag(VertexAttributes::position))
 				ss << "P: " << info(v.position) << ", ";
-			if (sm.attributes().has_flag(VertexAttributes::normal))
+			if (gm.attributes().has_flag(VertexAttributes::normal))
 				ss << "N: " << info(v.normal) << ", ";
-			if (sm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
+			if (gm.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
 				ss << "T: " << info(v.tangent) << ", ";
 				ss << "BT: " << info(v.bitangent)  << ", ";
 			}
@@ -164,7 +179,7 @@ namespace o3engine
 		}
 
 		ss << "Indices : ";
-		for(auto & ind : sm.indices()) {
+		for(auto & ind : gm.indices()) {
 			ss << ind << ", ";
 		}
 		return ss.str();

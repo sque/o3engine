@@ -44,9 +44,9 @@ namespace o3engine {
 
 
 	//! GPU Renderer
-	struct SubMeshRenderer {
+	struct GeometryRenderer {
 		//! Reference to sub mesh
-		SubMesh & m_submesh;
+		Geometry & m_geometry;
 
 		//! Vertex array object
 		ogl::vertex_array * mp_vao;
@@ -67,18 +67,18 @@ namespace o3engine {
 		void draw();
 
 		//! Construct a new renderer
-		SubMeshRenderer(SubMesh & sm);
+		GeometryRenderer(Geometry & sm);
 
 		//! Destroy the render
-		~SubMeshRenderer();
+		~GeometryRenderer();
 
 		// Uncopiable
-		SubMeshRenderer(SubMeshRenderer &) = delete;
-		SubMeshRenderer & operator=(SubMeshRenderer &) = delete;
+		GeometryRenderer(GeometryRenderer &) = delete;
+		GeometryRenderer & operator=(GeometryRenderer &) = delete;
 	};
 
-	//! Base class for defining a rendable geometry
-	class SubMesh {
+	//! Base class for defining geometry and material
+	class Geometry {
 	public:
 
 		//! Type of vertex
@@ -89,6 +89,7 @@ namespace o3engine {
 
 		//! Type of index
 		typedef std::uint32_t index_type;
+
 		//! Type of indices container
 		typedef std::vector<index_type> indices_container_type;
 
@@ -96,14 +97,14 @@ namespace o3engine {
 		typedef ogl::utils::bitflags<VertexAttributes> attributesflags_type;
 
 		//! Constructor
-		SubMesh(attributesflags_type attributes) :
-			mp_material(nullptr),
+		Geometry(attributesflags_type attributes) :
+			mp_material(MaterialManager::getSingleton().getDefaultMaterialPtr()),
 			m_enabled_attributes(attributes){
 		}
 
 		// Copiable
-		SubMesh(const SubMesh &) = default;
-		SubMesh & operator=(const SubMesh &) = default;
+		Geometry(const Geometry &) = default;
+		Geometry & operator=(const Geometry &) = default;
 
 		//! Get all vertices
 		const vertices_container_type & vertices() const {
@@ -116,14 +117,10 @@ namespace o3engine {
 		}
 
 		//! Set material by name
-		Material * setMaterial(const string & mat) {
-			return mp_material = MaterialManager::getObjectPtr(mat);
-		}
+		bool setMaterial(const string & mat);
 
 		//! Set material
-		Material * setMaterial(Material * pmaterial) {
-			return mp_material = pmaterial;
-		}
+		bool setMaterial(const Material * pmaterial);
 
 		//! Get current material
 		const Material * getMaterialPtr() const {
@@ -173,7 +170,7 @@ namespace o3engine {
 	protected:
 
 		//! Pointer to material
-		Material * mp_material;
+		const Material * mp_material;
 
 		//! Vertices container
 		vertices_container_type m_vertices;
@@ -192,15 +189,15 @@ namespace o3engine {
 	/**
 	 * @param radius [out] The minimum radius of a sphere that can hold this mesh
 	 */
-	void boundary_sphere(const SubMesh & sm, Real & radius);
+	void boundary_sphere(const Geometry & sm, Real & radius);
 
 	//! Calculate boundary box
-	void boundary_box(const SubMesh & sm, Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max);
+	void boundary_box(const Geometry & sm, Real & x_min, Real & x_max, Real & y_min, Real & y_max, Real & z_min, Real & z_max);
 
 	//! Get info about this object
-	std::string info(const SubMesh & sm);
+	std::string info(const Geometry & sm);
 
 	//! Dump object to output
-	std::string dump_object(const SubMesh & sm);
+	std::string dump_object(const Geometry & sm);
 }
 #endif

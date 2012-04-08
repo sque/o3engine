@@ -2,7 +2,6 @@
 #define O3ENGINE_CAMERA_HPP_INCLUDED
 
 #include "./prereqs.hpp"
-#include "./renderline/node.hpp"
 
 namespace o3engine {
 
@@ -11,16 +10,8 @@ namespace o3engine {
 	 * To create a new camera, create an object from this class,
 	 * and attach it on node.
 	 */
-	class Camera:
-		public RenderLine::Node{
+	class Camera {
 		friend class SceneNode;
-	protected:
-		//! Pointer to attached scene node;
-		SceneNode * mp_scene_node;
-
-		//! Projection Matrix
-		Matrix4 m_proj_matrix;
-
 	public:
 
 		//! Default constructor
@@ -38,8 +29,12 @@ namespace o3engine {
 			return m_proj_matrix;
 		}
 
-		virtual void render();
+	protected:
+		//! Pointer to attached scene node;
+		SceneNode * mp_scene_node;
 
+		//! Projection Matrix
+		Matrix4 m_proj_matrix;
 	};
 }
 

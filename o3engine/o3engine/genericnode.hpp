@@ -10,6 +10,14 @@
 #include <vector>
 
 namespace o3engine {
+
+	//! Placeholder for SceneRenderState concept
+	struct SceneObjectRendererConcept {
+		void populateGlobalStateUniforms(ogl::program * program);
+
+		ogl::buffer & getGlobalUniformBuffer();
+	};
+
 	//! A node representation on the GenericSceneManager
 	class GenericNode: public SceneNode {
 		friend class GenericScene;
@@ -70,9 +78,6 @@ namespace o3engine {
 		GenericNode * mp_parent; 		//!< Pointer to parent node
 		children_map_type m_children;	//!< Map with children nodes
 
-		// Draw all the objects of this node
-		void drawObjects();
-
 		//! Constructor for child nodes
 		GenericNode(const string & name, GenericNode * parent, const Vector3 & pos);
 
@@ -82,15 +87,19 @@ namespace o3engine {
 		//! Hide destructor so that it is not destructable from the public scope
 		~GenericNode();
 
-		//! Internal implementation of calculate global position and orientation
-		void _updateCachedGPos_GOrient(unsigned long cur_renderloop);
-
 	public:
+		//! Internal implementation of calculate global position and orientation
+				void _updateCachedGPos_GOrient(unsigned long cur_renderloop);
+
 		using SceneNode::attachObject;
 
 		virtual bool removeObject(DrawableObject * p_object);
 
 		virtual void attachObject(DrawableObject * p_object);
+
+		attached_objects_type & getObjects() {
+			return m_attached_objects;
+		}
 
 		virtual Quaternion & getGlobalOrientation();
 
@@ -178,6 +187,9 @@ namespace o3engine {
 		inline Quaternion & setOrientation(const Quaternion & orient) {
 			return m_orientation = orient;
 		}
+
+		//! Draw all the objects of this node
+		void drawObjects();
 
 		//! Set a light on this node
 		/**

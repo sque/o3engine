@@ -2,9 +2,8 @@
 #define MESH_H_INCLUDED
 
 #include "./prereqs.hpp"
-#include "./submesh.hpp"
+#include "./geometry.hpp"
 #include "./drawableobject.hpp"
-#include "./face.hpp"
 #include <vector>
 #include <memory>
 
@@ -14,8 +13,8 @@ namespace o3engine {
 	class Mesh: public DrawableObject {
 	public:
 
-		//! Type to hold submeshes
-		typedef std::vector<SubMesh> submesh_container_type;
+		//! Type to hold geometries
+		typedef std::vector<Geometry> geometry_container_type;
 
 		//! Default constructor creates an empty mesh
 		Mesh(const string & name) :
@@ -32,20 +31,20 @@ namespace o3engine {
 		//! Import a mesh from file and upload to GPU
 		bool importFromFile(const string & fname);
 
-		//! Get submeshes
-		submesh_container_type & submeshes() {
-			return m_submeshes;
+		//! Get sub geometries
+		geometry_container_type & geometries() {
+			return m_geometries;
 		}
 
-		//! Get submeshes
-		const submesh_container_type & submeshes() const {
-			return m_submeshes;
+		//! Get sub geometries
+		const geometry_container_type & geometries() const {
+			return m_geometries;
 		}
 
 		//! Total vertices in model
 		size_t totalVertices() const {
 			size_t total = 0;
-			for(auto & sm :m_submeshes) {
+			for(auto & sm :m_geometries) {
 				total += sm.totalVertices();
 			}
 			return total;
@@ -54,20 +53,20 @@ namespace o3engine {
 		//! Total number of elemensts (triangles/lines/...)
 		size_t totalElements() const {
 			size_t total = 0;
-			for(auto & sm :m_submeshes) {
+			for(auto & sm :m_geometries) {
 				total += sm.totalElements();
 			}
 			return total;
 		}
 
-		//! Total submeshes
-		size_t totalSubmeshes() const {
-			return m_submeshes.size();
+		//! Total independent geometries
+		size_t totalGeometries() const {
+			return m_geometries.size();
 		}
 
 		//! Render the solid part of object
 		virtual void draw(){
-			for(auto & r : m_submeshes_renderers) {
+			for(auto & r : m_geometries_renderers) {
 				r->draw();
 			}
 		}
@@ -78,9 +77,12 @@ namespace o3engine {
 	protected:
 
 		//! Container of submeshes
-		submesh_container_type m_submeshes;
+		geometry_container_type m_geometries;
 
-		std::vector<std::shared_ptr<SubMeshRenderer> > m_submeshes_renderers;
+		typedef std::vector<std::shared_ptr<GeometryRenderer>> geometry_renderer_container_type;
+
+		//! Container of geometry renderers
+		geometry_renderer_container_type m_geometries_renderers;
 	};
 
 	//! Calculate boundary sphere

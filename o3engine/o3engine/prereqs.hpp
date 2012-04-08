@@ -72,8 +72,7 @@ namespace o3engine
 	class MouseListener;
 	class KeyboardListener;
 	class Mesh;
-	class Face;
-	class SubMesh;
+	class Geometry;
 
 	class SceneManager;
 	class SceneNode;

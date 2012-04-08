@@ -8,15 +8,4 @@ namespace o3engine {
 		if (mp_scene_node)
 			mp_scene_node->detachCamera();
 	}
-
-	void Camera::render() {
-
-		if (mp_scene_node) {
-			mp_scene_node->getMySceneManager()->drawScene(this);
-		}
-		renderNext();
-	}
-
-
-
 }
