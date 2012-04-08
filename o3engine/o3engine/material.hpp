@@ -1,5 +1,5 @@
-#ifndef MATERIAL_H_INCLUDED
-#define MATERIAL_H_INCLUDED
+#ifndef O3ENGINE_MATERIAL_HPP_INCLUDED
+#define O3ENGINE_MATERIAL_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./texture.hpp"
@@ -14,26 +14,38 @@ namespace o3engine
 	class Material : ManagedObject<MaterialManager, string, Material>
 	{
 	protected:
-		Color c_basic;      // Basic color
-		Color c_diffuse;    // Diffuse color
-		Color c_ambient;    // Ambient color
-		Color c_specular;   // Specular color
-		Color c_emission;   // Emission color
-		Real m_shininess;  // Shininess exponement
-		Texture * p_Texture;    // Pointer to texture;
 
-		bool f_lighting;    // Flag for lighting usage
-		bool b_depthwrite;  // Flag showing if depth write should be enabled
+		//! Emissive color
+		Color m_emis_color;
+
+		//! Diffuse color
+		Color m_col_diffuse;
+
+		//! Ambient color
+		Color m_col_ambient;
+
+		//! Specular color
+		Color m_spec_color;
+
+		//! Shininess exponement
+		Real m_shininess;
+
+		// Flag for lighting usage
+		bool f_lighting;
+
+		// Flag showing if depth write should be enabled
+		bool b_depthwrite;
 
 		unsigned long seq;  // Sequence number
 
+		ogl::program * mp_program;
 	public:
 		// Default constructor
 		Material(const string & name);
 
 		// Virtual destructor
 		virtual ~Material(){};
-
+/*
 		// Set colors
 		inline Color setBasicColor(const Color & b) { seq ++; return c_basic = b; }
 		inline Color setDiffuse(Color d) { seq++; return c_diffuse = d; }
@@ -88,18 +100,21 @@ namespace o3engine
 		inline bool setDepthWrite(bool f) { seq ++; return b_depthwrite = f; }
 		inline void enableDepthWrite() {   b_depthwrite = true; seq++; }
 		inline void disableDepthWrite() {   b_depthwrite = false; seq++; }
-
+*/
 		// Run opengl commands to setup material pre object drawing
-		void useme_to_glPreDraw() const;
+		void onPreDraw() const;
 
 		// Run opengl to post-set materials after object drawing
-		void useme_to_glPostDraw() const;
+		void onPostDraw() const;
 
 		inline unsigned long getSequenceNum() const {   return seq; }
+
+		//! Get shader program
+		const ogl::program & getProgram() const;
 	};
 }
 
 // Include Material manager
 #include "./materialmanager.hpp"
 
-#endif // MATERIAL_H_INCLUDED
+#endif

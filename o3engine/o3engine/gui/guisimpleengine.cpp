@@ -12,13 +12,13 @@ namespace o3engine
 		v_bgrenderer[BG_FRAME_NORMAL].split_right = 20;
 		v_bgrenderer[BG_FRAME_NORMAL].split_top = 23;
 		v_bgrenderer[BG_FRAME_NORMAL].split_bottom = 13;
-		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_TOP_LEFT].modeTexture(new Texture("simple_theme_1", "themes/darkmac/wnd_top_left.png"));
+		/*v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_TOP_LEFT].modeTexture(new Texture("simple_theme_1", "themes/darkmac/wnd_top_left.png"));
 		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_TOP].modeTexture(new Texture("simple_theme_2", "themes/darkmac/wnd_top.png"));
 		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_TOP_RIGHT].modeTexture(new Texture("simple_theme_3", "themes/darkmac/wnd_top_right.png"));
 		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_BOTTOM_LEFT].modeTexture(new Texture("simple_theme_4", "themes/darkmac/wnd_bottom_left.png"));
 		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_BOTTOM].modeColor(Color(0.21, 0.21, 0.21, 1));
 		v_bgrenderer[BG_FRAME_NORMAL].v_regions[BackgroundRenderer::REGION_BOTTOM_RIGHT].modeTexture(new Texture("simple_theme_6", "themes/darkmac/wnd_bottom_right.png"));
-
+*/
 	}
 
 	void GuiSimpleEngine::drawWnd(GuiWindow * p_wnd)
@@ -68,7 +68,7 @@ namespace o3engine
 		else
 		{	glColor4(Color::WHITE);
 			glEnable(GL_TEXTURE_2D);
-			pTexture->glBind2d();
+			//pTexture->glBind2d();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0); glVertex2f(left,	bottom);
 				glTexCoord2f(0,1); glVertex2f(left,	top);

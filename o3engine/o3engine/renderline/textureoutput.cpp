@@ -4,13 +4,13 @@
 namespace o3engine {
 namespace RenderLine {
 
-	TextureOutput::TextureOutput(OffScreen & offscreen, bool use_fbo) :
-			Texture("TO BE CHANGED"), RenderLine::Output(offscreen.getWidth(),
-					offscreen.getHeight()), m_use_fbo(use_fbo), m_offscreen(
-					offscreen) {
+	TextureOutput::TextureOutput(OffScreen & offscreen) :
+			Texture("TO BE CHANGED", ogl::texture_type::TEX_2D),
+			RenderLine::Output(offscreen.getWidth(), offscreen.getHeight()),
+			m_offscreen(offscreen) {
 
 		offscreen.attachSurfaceListener(*this);
-
+/*
 		m_use_fbo = GLEW_EXT_framebuffer_object && m_use_fbo;
 
 		if (m_use_fbo) {
@@ -50,7 +50,7 @@ namespace RenderLine {
 		} else {
 			// Allocate space and disable mipmaps
 			setImage(Image(getWidth(), getHeight(), Color::MAGENTA), false);
-		}
+		}*/
 	}
 
 	TextureOutput::~TextureOutput() {
@@ -59,7 +59,7 @@ namespace RenderLine {
 	}
 
 	void TextureOutput::render() {
-		//std::cout << "Texture rendering\n";
+		/*//std::cout << "Texture rendering\n";
 		if (m_use_fbo) {
 			// Bind to back fbo
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_gli_fbo);
@@ -96,7 +96,7 @@ namespace RenderLine {
 
 			// Disable texturing
 			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+		}*/
 	}
 
 	void TextureOutput::onSurfaceResized(int old_width, int old_height,

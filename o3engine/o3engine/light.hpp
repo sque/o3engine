@@ -16,21 +16,33 @@ namespace o3engine {
 	class Light {
 	public:
 		//! The types of lights
-		enum E_LIGHT_TYPES {
-			LIGHT_POSITIONAL, 	//!< Positional light
-			LIGHT_DIRECTIONAL, 	//!< Directional light
-			LIGHT_SPOT
-		//!< Spot light
+		enum class TYPE {
+			POSITIONAL,		//!< Positional light
+			DIRECTIONAL, 	//!< Directional light
+			SPOT			//!< Spot light
 		};
 
 	private:
-		E_LIGHT_TYPES m_type; 	//!< The current type of light
-		Degree m_spot_cutoff; 	//!< Spotlight cutoff
-		Vector3 m_direction; 	//!< Direction of light (directional, and spot)
-		Color m_ambient; 		//!< Ambient color
-		Color m_diffuse; 		//!< Diffuse color
-		Color m_specular; 		//!< Specular color
-		bool m_enabled; 		//!< If light is enabled
+		//!< The current type of light
+		TYPE m_type;
+
+		//!< Spotlight cutoff
+		Degree m_spot_cutoff;
+
+		//!< Direction of light (directional, and spot)
+		Vector3 m_direction;
+
+		//!< Ambient color
+		Color m_ambient;
+
+		//!< Diffuse color
+		Color m_diffuse;
+
+		//!< Specular color
+		Color m_specular;
+
+		//!< If light is enabled
+		bool m_enabled;
 
 	public:
 		//! Constructor a new light with default values
@@ -44,6 +56,16 @@ namespace o3engine {
 		//! Set enabled light
 		inline void setEnabled(bool enabled) {
 			m_enabled = enabled;
+		}
+
+		//! Enable light
+		inline void enable() {
+			return setEnabled(true);
+		}
+
+		//! Disable light
+		inline void disable() {
+			return setEnabled(false);
 		}
 
 		//! Set diffuse color
@@ -68,14 +90,14 @@ namespace o3engine {
 
 		//! Set direction of light
 		/**
-		 @remarks You must give a normalized vector!
+		 * @remarks You must give a normalized vector!
 		 */
 		inline void setDirection(const Vector3 & direction) {
 			m_direction = direction;
 		}
 
 		//! Set type of light
-		inline void setType(E_LIGHT_TYPES type) {
+		inline void setType(const TYPE & type) {
 			m_type = type;
 		}
 
@@ -105,7 +127,7 @@ namespace o3engine {
 		}
 
 		//! Get type of light
-		inline const E_LIGHT_TYPES & getTypeOfLight() const {
+		inline const TYPE & getTypeOfLight() const {
 			return m_type;
 		}
 
@@ -113,16 +135,7 @@ namespace o3engine {
 		inline const Degree & getSpotCutOffAngle() const {
 			return m_spot_cutoff;
 		}
-
-		friend void glLight(const Light & light, GLint gl_light_enum);
 	};
-
-	//! Draw light in opengl contex
-	/**
-	 * @ingroup gl_supprt
-	 */
-	void glLight(const Light & light, GLint gl_light_enum);
-
 }
 
 #endif

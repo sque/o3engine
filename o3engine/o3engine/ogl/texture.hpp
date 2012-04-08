@@ -88,7 +88,7 @@ namespace ogl {
 		void define_data_2d(tex2d_update_target target,
 				GLuint lvl,
 				image_format internal_format, size_t width, size_t height, int border,
-				pixel_format pix_form, tex_pixel_type pix_type, void * pdata);
+				pixel_format pix_form, tex_pixel_type pix_type, const void * pdata);
 
 		//! glBufferSubData
 		void update_subdata(size_t offset, size_t size, void * pdata);

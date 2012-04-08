@@ -156,7 +156,7 @@ namespace o3engine
 		// And here we create the texture with font map
 		char tex_name[256];
 		sprintf(tex_name, "FontMap_%s_%d_", font_file.c_str(), FontHeight);
-		pTexture_FontMap = new Texture(tex_name, imgFontMap);
+		// TODO: pTexture_FontMap = new Texture(tex_name, imgFontMap);
 
 		//We don't need the face information now that the display
 		//lists have been created, so we free the assosiated resources.
@@ -176,7 +176,7 @@ namespace o3engine
 	void Font::debug(int w, int h)
 	{
 		glEnable(GL_TEXTURE_2D);
-		pTexture_FontMap->glBind2d();
+		//pTexture_FontMap->glBind2d();
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,0);	glVertex2d(0,0);
 			glTexCoord2f(0,1);	glVertex2d(0,h);
@@ -243,7 +243,7 @@ namespace o3engine
 		int jump_lets;
 
 		glEnable(GL_TEXTURE_2D);
-		pTexture_FontMap->glBind2d();
+		//pTexture_FontMap->glBind2d();
 		glColor4(text_color);
 
 			// Initialize position

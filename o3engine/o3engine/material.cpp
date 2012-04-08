@@ -5,7 +5,7 @@ namespace o3engine
 	Material::Material(const string & name)
 		:ManagedObject<MaterialManager, string, Material>(name)
 	{
-		// Set default values
+		/*// Set default values
 		c_basic = Color::WHITE;
 		c_diffuse = Color(0.8, 0.8, 0.8, 1.0);
 		c_ambient = Color(0.2, 0.2, 0.2, 0.2);
@@ -14,13 +14,40 @@ namespace o3engine
 		m_shininess = 50;
 		f_lighting = b_depthwrite = true;
 		seq = 1;
-		p_Texture = NULL;
+		p_Texture = NULL;*/
+		// Default
+		// Create default program
+		mp_program = new ogl::program();
+		ogl::shader * pdef_vert = new ogl::shader(ogl::shader_type::VERTEX,
+				"#version 330\n"
+				"layout(location=0) in vec4 aPosition;"
+				""
+				"uniform mat4 ProjectionMatrix;"
+				"uniform mat4 ViewMatrix;"
+				"uniform mat4 ProjectionViewMatrix;"
+				"uniform mat4 ModelMatrix;"
+				""
+				"void main() {"
+				"	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * aPosition;"
+				//"	gl_Position = ViewMatrix * aPosition;"
+				"}");
+		ogl::shader * pdef_frag = new ogl::shader(ogl::shader_type::FRAGMENT,
+				"#version 330\n"
+				""
+				"out vec4 outColor;"
+				"void main() {"
+				"	outColor = vec4(1, 1, 0, 1);"
+				"	outColor = vec4(gl_FragDepth, gl_FragDepth, gl_FragDepth, 1);"
+				"}");
+		mp_program->attach_shader(*pdef_vert);
+		mp_program->attach_shader(*pdef_frag);
+		mp_program->build();
 	}
 
 	// Run opengl commands to setup material
-	void Material::useme_to_glPreDraw() const
+	void Material::onPreDraw() const
 	{
-		return ;
+		/*return ;
 		// Color
 		if (f_lighting)
 		{
@@ -60,15 +87,15 @@ namespace o3engine
 		// Enable texturing
 		if (p_Texture)
 		{
-			p_Texture->glBind2d();
-			glEnable( GL_TEXTURE_2D );
-		}
+			//p_Texture->glBind2d();
+			//glEnable( GL_TEXTURE_2D );
+		}*/
 	}
 
 	// Run opengl to post-set materials after object drawing
-	void Material::useme_to_glPostDraw() const
+	void Material::onPostDraw() const
 	{
-		return;
+		/*return;
 		// Enable lighting again
 		if (!f_lighting)
 			glEnable(GL_LIGHTING);
@@ -80,5 +107,12 @@ namespace o3engine
 		// Disable texturing
 		if (p_Texture)
 		{   glDisable( GL_TEXTURE_2D );    }
+
+		*/
+	}
+
+	//! Get shader program
+	const ogl::program & Material::getProgram() const {
+		return * mp_program;
 	}
 }

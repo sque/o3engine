@@ -8,6 +8,7 @@
 
 namespace o3engine {
 namespace RenderLine {
+
 	//! [R4] Render lile  output to texture (RTT)
 	/**
 	 * @par Class Characteristics
@@ -34,7 +35,7 @@ namespace RenderLine {
 
 	public:
 		//! Default constructor
-		TextureOutput(OffScreen & offscreen, bool use_fbo = true);
+		TextureOutput(OffScreen & offscreen);
 
 		//! Destructor
 		virtual ~TextureOutput();

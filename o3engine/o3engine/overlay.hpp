@@ -67,7 +67,7 @@ namespace o3engine {
 				Real top, Texture * p_texture, const Color & tex_color) {
 			glColor4(tex_color);
 			glEnable(GL_TEXTURE_2D);
-			p_texture->glBind2d();
+			//p_texture->glBind2d();
 			glBegin(GL_POLYGON);
 
 			glTexCoord2f(0.0, 0.0);

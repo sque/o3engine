@@ -11,6 +11,11 @@ namespace ogl{
 		gl_error_checkpoint("glGenTextures failed. ");
 	}
 
+	texture::~texture() {
+		if (glIsTexture(name()))
+			glDeleteTextures(1, &m_gl_name);
+	}
+
 
 	void texture::set_base_level(GLint lvl) {
 		set_parami(param_type::MIN_FILTER, lvl);
@@ -96,7 +101,7 @@ namespace ogl{
 			int border,
 			pixel_format pix_form,
 			tex_pixel_type pix_type,
-			void * pdata) {
+			const void * pdata) {
 
 		::glBindTexture((GLenum)type(), name());
 		::glTexImage2D((GLenum)target, lvl, (GLint)internal_format, width, height, border, (GLenum)pix_form, (GLenum)pix_type, pdata);

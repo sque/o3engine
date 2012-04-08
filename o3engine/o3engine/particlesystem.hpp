@@ -7,112 +7,101 @@
 // STL libraries
 #include <vector>
 
-namespace o3engine
-{
+namespace o3engine {
 	// Class for particle inheritance
-	class Particle
-	{
-	protected:
-
+	class Particle {
 	public:
-		inline Particle(){}
-		inline virtual ~Particle(){}
+		inline Particle() {
+		}
+		inline virtual ~Particle() {
+		}
 
 		inline virtual void onRender() = 0;
 		inline virtual void onInit() = 0;
 		inline virtual void onTimePass(Real secs) = 0;
-		inline virtual void onSetParameter(int par_name, const void * par_value){};
-
+		inline virtual void onSetParameter(int par_name, const void * par_value) {
+		}
 	};
 
-	template<class TP>
-	class ParticleSystem : public DrawableObject
-	{
-	protected:
-		vector<TP *> v_particles;
-
-		// Event functions to be triggered before and after render of particles
-		// usefull for changing state of the machine
-		virtual void OnPreRender(){};
-		virtual void OnPostRender(){};
-
+	template<class ParticleType>
+	class ParticleSystem: public DrawableObject {
 	public:
-		ParticleSystem(const string & name, int pSize)
-			: DrawableObject(name)
-		{   TP * pT;
-			for(int i = 0;i < pSize; i ++)
-			{
-				pT = new TP;
-				v_particles.push_back(pT);
-				pT->onInit();
+
+		//! Type of this particle
+		typedef ParticleType particle_type;
+
+		//! Type of particles container
+		typedef std::vector<particle_type *> particles_container_type;
+
+		//! Constructor
+		ParticleSystem(const string & name, size_t total) :
+				DrawableObject(name) {
+			particle_type * ppart;
+			for (size_t i = 0; i < total; i++) {
+				ppart = new particle_type();
+				m_particles.push_back(pT);
+				ppart->onInit();
 
 			}
 		}
 
-		virtual ~ParticleSystem()
-		{   TP * pT;
-			typename vector<TP *>::iterator it;
-
+		virtual ~ParticleSystem() {
 			// Delete all objects
-			for(it = v_particles.begin();it != v_particles.end();it++)
-			{
-				pT = *it;
-				delete pT;
+			for (auto & ppart : m_particles) {
+				delete ppart;
 			}
-			v_particles.clear();
-
 		}
 
-		virtual void drawSolidPart(){}
+		virtual void drawSolidPart() {
+		}
 
 		// draw all particles
-		virtual void drawTransperantPart()
-		{   typename vector<TP *>::iterator it;
-
+		virtual void drawTransperantPart() {
 			// Call pre render
-			OnPreRender();
+			onPreRender();
 
 			// Render particles
-			for(it = v_particles.begin();it != v_particles.end();it++)
-			{
-				(*it)->onRender();
+			for (auto & ppart : m_particles) {
+				ppart->onRender();
 			}
 
 			// Call post render
-			OnPostRender();
+			onPostRender();
 		}
 
 		// Feed with time
-		inline void timePulse(Real secs)
-		{   typename vector<TP *>::iterator it;
-
+		inline void timePulse(Real secs) {
 			// Render particles
-			for(it = v_particles.begin();it != v_particles.end();it++)
-			{   (*it)->onTimePass(secs);   }
+			for (auto & ppart : m_particles) {
+				ppart->onTimePass(secs);
 		}
 
 		// Reset particle system (reinitalize all particles)
-		inline void reset()
-		{   typename vector<TP *>::iterator it;
-
-			for(it = v_particles.begin();it != v_particles.end();it++)
-			{
-				(*it)->onInit();
+		inline void reset() {
+			for (auto & ppart : m_particles) {
+				ppart->onInit();
 			}
 		}
 
 		// Set particle parameters
-		inline void setParameter(int par_name, const void * par_value)
-		{   typename vector<TP *>::iterator it;
-
-			for(it = v_particles.begin();it != v_particles.end();it++)
-			{
-				(*it)->onSetParameter(par_name, par_value);
+		inline void setParameter(int par_name, const void * par_value) {
+			// TODO: This can be improved by using a common storage for parameters
+			for (auto & ppart : m_particles) {
+				ppart->onSetParameter(par_name, par_value);
 			}
 		}
 
-		inline bool hasTransperant()
-		{	return true;	}
+	protected:
+		//! Particles list
+		particles_container_type m_particles;
+
+		// Event functions to be triggered before and after render of particles
+		// usefull for changing state of the machine
+		virtual void onPreRender() {
+		}
+
+		virtual void onPostRender() {
+		}
 	};
 }
 #endif // PARTICLESYSTEM_H_INCLUDED

@@ -5,12 +5,14 @@
 #include "./primitiveshapes.hpp"
 
 namespace o3engine {
+
+	/*//! Implementation of a skybox using cube texture
 	class Skybox {
 	protected:
 
-		Real half_size; 		//! Half-Size of skybox
-		Texture * ptextures[6]; //! Pointer to 6 textures
-		bool bHasTextures; 		//! A Flag showing if skybox has textures
+		Real m_half_size; 			//! Half-Size of skybox
+		Texture * mp_cube_texture; 	//! Pointer to 6 textures
+		bool bHasTextures; 			//! A Flag showing if skybox has textures
 
 		//! Update cache of skybox
 		void updateCache() {
@@ -69,6 +71,6 @@ namespace o3engine {
 				ptextures[i] = NULL;
 			updateCache();
 		}
-	};
+	};*/
 }
 #endif // SKYBOX_H_INCLUDED

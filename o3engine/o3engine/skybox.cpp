@@ -1,4 +1,4 @@
-#include "./skybox.hpp"
+/*#include "./skybox.hpp"
 #include "./camera.hpp"
 #include "./scenenode.hpp"
 
@@ -21,7 +21,7 @@ namespace o3engine {
 
 		// Draw front face
 		if (ptextures[FACE_FRONT]) {
-			ptextures[FACE_FRONT]->glBind2d();
+			//ptextures[FACE_FRONT]->glBind2d();
 			glBegin(GL_QUADS);
 			glTexCoord2d(0, 1);
 			glVertex3f(-(GLfloat) half_size, (GLfloat) half_size,
@@ -140,3 +140,4 @@ namespace o3engine {
 		glEnable(GL_BLEND);
 	}
 }
+*/

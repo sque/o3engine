@@ -8,22 +8,19 @@
 // STL
 #include <map>
 
-namespace o3engine
-{
-	class MaterialManager : public SingletonManager<MaterialManager, string, Material>
-	{
+namespace o3engine {
+	//! Material manager
+	class MaterialManager: public SingletonManager<MaterialManager, string, Material> {
 	protected:
 
-		// Map of materials
-		int next_hashname;                                          // An increment number used to autohash materials
-
 		//! Default material of engine
-		Material * pDefaultMaterial;
+		Material * mp_default_material;
 
 		// Routines for parsing values from .material file
 		Real _parse_value(const string & var);
 		Color _parse_color3(const string & r, const string & g, const string & b);
-		Color _parse_color4(const string & r, const string & g, const string & b, const string & a);
+		Color _parse_color4(const string & r, const string & g, const string & b,
+				const string & a);
 	public:
 		// Constructor
 		MaterialManager();
@@ -32,10 +29,17 @@ namespace o3engine
 		~MaterialManager();
 
 		// Get default material
-		inline const Material * getDefaultMaterialPtr() const { return pDefaultMaterial; }
+		inline const Material * getDefaultMaterialPtr() const {
+			return mp_default_material;
+		}
 
 		// Get default material
-		inline const Material & getDefaultMaterial() const { return *pDefaultMaterial; }
+		inline const Material & getDefaultMaterial() const {
+			return *mp_default_material;
+		}
+
+		//! Initialize manager
+		void initialize();
 
 		// Load materials file
 		bool loadMaterials(const string & fname);
