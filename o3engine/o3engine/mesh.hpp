@@ -65,9 +65,9 @@ namespace o3engine {
 		}
 
 		//! Render the solid part of object
-		virtual void draw(){
+		virtual void draw(SceneRendererVisitor * pvisitor){
 			for(auto & r : m_geometries_renderers) {
-				r->draw();
+				r->draw(pvisitor);
 			}
 		}
 

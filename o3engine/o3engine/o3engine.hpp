@@ -21,7 +21,7 @@ namespace o3engine {
 	/**
 	 * To use the o3engine library you must create one O3Engine object. This is the
 	 * root object of your framework and the main organizer. After allocating O3Engine
-	 * you must initialize using init() before using any component of the library.
+	 * you must initialize using initialize() before using any component of the library.
 	 * @par Class Characteristics
 	 * O3Engine is @ref noncopyable_page, @ref noninherit_page and follows the @ref sfn_page
 	 */
@@ -72,7 +72,7 @@ namespace o3engine {
 		 This function must be called @b BEFORE using
 		 any component of the library.
 		 */
-		int init(int argc, char ** argv);
+		int initialize(int argc, char ** argv);
 
 		//! Start rendering
 		/**

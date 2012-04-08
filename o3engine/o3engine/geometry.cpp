@@ -95,8 +95,9 @@ namespace o3engine
 	}
 
 	//! Draw mesh
-	void GeometryRenderer::draw() {
-		//m_submesh.getMaterialPtr()->getProgram().use();
+	void GeometryRenderer::draw(SceneRendererVisitor * pvisitor) {
+		pvisitor->populateSceneParameters(&const_cast<ogl::program &>(m_geometry.getMaterialPtr()->getProgram()));
+		m_geometry.getMaterialPtr()->getProgram().use();
 		if (mp_ebo)
 			// Indexed based
 			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_geometry.indices().size(), *mp_ebo, m_elements_type);

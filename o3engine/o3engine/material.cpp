@@ -19,7 +19,7 @@ namespace o3engine
 		// Create default program
 		mp_program = new ogl::program();
 		ogl::shader * pdef_vert = new ogl::shader(ogl::shader_type::VERTEX,
-				"#version 330\n"
+				"#version 400\n"
 				"layout(location=0) in vec4 aPosition;"
 				""
 				"uniform mat4 ProjectionMatrix;"

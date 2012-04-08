@@ -7,6 +7,17 @@
 #include "./singletonmanager.hpp"
 
 namespace o3engine {
+
+	//! Object that will hold scenerender parameters
+	struct SceneRendererVisitor {
+
+		//! Helper to populate a gpu program with scene parameters
+		virtual void populateSceneParameters(ogl::program * target) = 0;
+
+		//! Inheritable
+		virtual ~SceneRendererVisitor(){}
+	};
+
 	/**
 	 @brief Antikeimeno pou mporei na topothetithei se komvo
 	 */
@@ -23,7 +34,7 @@ namespace o3engine {
 		virtual ~DrawableObject();
 
 		//! Render the solid part of object
-		virtual void draw() = 0;
+		virtual void draw(SceneRendererVisitor * pvisitor) = 0;
 
 		//! Get name of object
 		inline const string & getName() const {

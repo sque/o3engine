@@ -21,8 +21,8 @@ namespace o3engine {
 			delete mp_renderer;
 		}
 
-		inline virtual void draw() {
-			mp_renderer->draw();
+		inline virtual void draw(SceneRendererVisitor * pvisitor) {
+			mp_renderer->draw(pvisitor);
 		}
 
 	protected:

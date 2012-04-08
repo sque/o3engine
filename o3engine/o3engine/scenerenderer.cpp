@@ -69,23 +69,41 @@ void SceneRenderer::setSceneUniforms(ogl::program * pprogram) {
 	view_matrix = view_matrix.transpose();
 	set_dmat4_to_mat4(pprogram->get_uniform("ViewMatrix"), view_matrix);
 }
+GenericNode * pLastNode = nullptr;
+
+struct SceneRendererObjectVisitor:
+	public SceneRendererVisitor {
+	SceneRenderer * mp_renderer;
+
+	SceneRendererObjectVisitor(SceneRenderer * prenderer){
+		mp_renderer = prenderer;
+		mp_renderer->setSceneUniforms(mp_renderer->mp_default_program);
+	}
+
+	virtual void populateSceneParameters(ogl::program * target){
+		mp_renderer->setSceneUniforms(target);
+		set_dmat4_to_mat4(target->get_uniform("ModelMatrix"), pLastNode->getGlobalTransformation());
+	}
+};
 
 struct SceneRendererNodeVisitor {
 	SceneRenderer * mp_renderer;
+	SceneRendererObjectVisitor  m_object_visitor;
 
-	SceneRendererNodeVisitor(SceneRenderer * prenderer){
+	SceneRendererNodeVisitor(SceneRenderer * prenderer):
+		m_object_visitor(prenderer){
 		mp_renderer = prenderer;
 		mp_renderer->setSceneUniforms(mp_renderer->mp_default_program);
 	}
 
 	void visitNode(GenericNode * pnode) {
-		set_dmat4_to_mat4(mp_renderer->mp_default_program->get_uniform("ModelMatrix"), pnode->getGlobalTransformation());
+		pLastNode = pnode;
 	}
 
 	void visitObject(GenericNode * pnode, DrawableObject * pobject) {
 		mp_renderer->mp_default_program->use();
 		//std::cout << "Visiting object " << pobject->getName() << std::endl;
-		pobject->draw();
+		pobject->draw(&m_object_visitor);
 	}
 };
 

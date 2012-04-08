@@ -128,11 +128,11 @@ namespace o3engine {
 		return m_gtransformation;
 	}
 
-	void GenericNode::drawObjects() {
+	void GenericNode::drawObjects(SceneRendererVisitor * pvisitor) {
 		attached_objects_type::iterator it;
 
 		for (auto & obj : m_attached_objects) {
-			obj->draw();
+			obj->draw(pvisitor);
 		}
 	}
 

@@ -93,7 +93,7 @@ namespace o3engine {
 		return current_fps;
 	}
 
-	int O3Engine::init(int argc, char ** argv) {
+	int O3Engine::initialize(int argc, char ** argv) {
 
 		// Initialize platform (Window, Input, Timers)
 		Platform::getSingleton().initialize(argc, argv);

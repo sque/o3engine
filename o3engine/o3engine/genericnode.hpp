@@ -189,7 +189,7 @@ namespace o3engine {
 		}
 
 		//! Draw all the objects of this node
-		void drawObjects();
+		void drawObjects(SceneRendererVisitor * pvisitor);
 
 		//! Set a light on this node
 		/**

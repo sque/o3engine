@@ -3,6 +3,7 @@
 
 #include "./prereqs.hpp"
 #include "./materialmanager.hpp"
+#include "./drawableobject.hpp"
 #include "ogl/utils/info.hpp"
 #include <vector>
 #include <cstdint>
@@ -64,7 +65,7 @@ namespace o3engine {
 		void uploadToGPU();
 
 		//! Draw mesh
-		void draw();
+		void draw(SceneRendererVisitor * pvisitor);
 
 		//! Construct a new renderer
 		GeometryRenderer(Geometry & sm);

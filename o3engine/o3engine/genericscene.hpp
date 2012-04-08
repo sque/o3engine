@@ -16,7 +16,6 @@ namespace o3engine {
 	 * designed as a general purpose scene manager that uses hierarchical
 	 * tree to organize nodes and supports some basic optimization like
 	 * position caching, scene clipping and far distance cut off.
-	 * It has support of lighting using basic openGL lighting features.
 	 */
 	class GenericScene: public SceneManager {
 		friend class GenericNode;

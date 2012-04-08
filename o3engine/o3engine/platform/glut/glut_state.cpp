@@ -1,4 +1,5 @@
 #include "./glut_state.hpp"
+#include "../../materialmanager.hpp"
 #include <stdexcept>
 #include <GL/glx.h>
 
@@ -14,11 +15,13 @@ namespace o3engine {
 		// Start glew
 		GLenum err = glewInit();
 		if (err != GLEW_OK) {
-			/* Problem: glewInit failed, something is seriously wrong. */
+						/* Problem: glewInit failed, something is seriously wrong. */
 			fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 			throw new std::runtime_error("Cannot initialize GLEW!");
 		}
 
+		//TODO :Very ugly hack. Some stuff need to be initialized as soon as there is an GL contenxt
+		MaterialManager::getSingletonPtr()->initialize();
 		ogl::context::create();
 
 		// Get swap interval function

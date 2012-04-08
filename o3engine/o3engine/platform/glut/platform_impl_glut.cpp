@@ -54,7 +54,6 @@ namespace o3engine {
 		mp_timer = new Timer();
 		mp_timer->reset();
 
-
 		// Setup callback functions
 		::glutIdleFunc(impl::callbackIdleFunc);
 		return true;

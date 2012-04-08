@@ -35,8 +35,6 @@ protected:
 	GenericScene * mp_scene;
 
 	Camera * mp_camera;
-
-
 };
 
 }

@@ -12,7 +12,6 @@ namespace o3engine {
 	// Constructor
 	MaterialManager::MaterialManager() :
 		mp_default_material(nullptr){
-
 	}
 
 	 // Destructor
@@ -23,7 +22,7 @@ namespace o3engine {
 		mp_default_material = new Material("default");
 	}
 
-	// Parse a materials file and load everythin
+	// Parse a materials file and load everything
 	bool MaterialManager::loadMaterials(const string & fname) {
 		/*FILE * fin;
 		std::string line_str;
