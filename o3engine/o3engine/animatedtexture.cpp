@@ -2,7 +2,7 @@
 
 namespace o3engine {
 	AnimatedTexture::AnimatedTexture(const string & name) :
-			Texture(name) {
+		Texture(name, ogl::texture_type::TEX_2D) {
 		current = playlist.end();
 		total_time = 0;
 		current_time = 0;
@@ -46,7 +46,7 @@ namespace o3engine {
 
 				// Check if it is already loaded
 				if (current != it) {
-					setImage(*it->second);
+					uploadImage(*it->second);
 					current = it;
 				}
 				break;

@@ -3,100 +3,52 @@
 namespace o3engine
 {
 	// Constructor
-	Texture::Texture(const string & name)
-		:ManagedObject<TextureManager, string, Texture>(name)
-	{
-		// Create opengl texture
-		glGenTextures(1, &m_gli_texture);
-		// Set default parameters
-		m_wrap_onS = false;
-		m_wrap_onT = false;
-		m_use_mipmaps = false;
+	Texture::Texture(const string & name, ogl::texture_type type)
+		:ManagedObject<TextureManager, string, Texture>(name),
+		 mp_gl_texture(new ogl::texture(type)) {
 	}
 
-	// Construct and load an image
-	Texture::Texture(const string & name, const string & fname, bool use_mipmaps)
-		:ManagedObject<TextureManager, string, Texture>(name)
-	{
-		// Create opengl texture
-		glGenTextures(1, &m_gli_texture);
-
-		// Set default parameters
-		m_wrap_onS = false;
-		m_wrap_onT = false;
-		m_use_mipmaps = false;
-
-		// Load Image
-		setImage(Image(fname), m_use_mipmaps);
+	//! Work on existing opengl texture
+	Texture::Texture(const string & name, ogl::texture * ptexture)
+		:ManagedObject<TextureManager, string, Texture>(name),
+		mp_gl_texture(ptexture) {
 	}
 
-	// Construct and load an image from memmory
-	Texture::Texture(const string & name, const Image & tex_img, bool use_mipmaps)
-		:ManagedObject<TextureManager, string, Texture>(name)
-	{
-		// Create opengl texture
-		glGenTextures(1, &m_gli_texture);
-
-		// Set default parameters
-		m_wrap_onS = false;
-		m_wrap_onT = false;
-		m_use_mipmaps = false;
-
-		// Load Image
-		setImage(tex_img, m_use_mipmaps);
-	}
-
-	// Call opengl to update parameters
-	void Texture::_update_texture_parameters()
-	{   glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-			m_wrap_onS? (GLfloat)GL_REPEAT : (GLfloat)GL_CLAMP );
-		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-			m_wrap_onT? (GLfloat)GL_REPEAT : (GLfloat)GL_CLAMP );
+	Texture::~Texture(){
+		delete mp_gl_texture;
 	}
 
 	// Load a picture from file
-	bool Texture::setImage(const Image & img, bool use_mipmaps)
-	{
-		// Save parameter
-		m_use_mipmaps = use_mipmaps;
+	bool Texture::uploadImage(const Image & img, bool build_mipmap)	{
 
-		// select our current texture
-		glBindTexture( GL_TEXTURE_2D, m_gli_texture);
+		// This is only for 2d loading
+		assert(mp_gl_texture->type() == ogl::texture_type::TEX_2D);
+		mp_gl_texture->define_data_2d(
+				ogl::tex2d_update_target::TEX_2D,
+				0,
+				ogl::image_format::RGBA,
+				img.getWidth(),
+				img.getHeight(),
+				0,
+				ogl::pixel_format::RGBA,
+				ogl::tex_pixel_type::UNSIGNED_BYTE,
+				img.getDataPtr());
 
-		// Clamp / repeat parameters
-		_update_texture_parameters();
+		mp_gl_texture->set_mag_filter(ogl::mag_filter_type::LINEAR);
 
-		// select modulate to mix texture with color for shading
-		glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-
-		// when texture area is large, bilinear filter the first mipmap
-		glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-		if (m_use_mipmaps)
-		{
-			// when texture area is small, bilinear filter the closest mipmap
-			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-			if (0 != gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, img.getWidth(), img.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, img.getDataPtr()))
-			{
-				printf(">> ERROR texture: unknown failure on building mipmaps!\n");
-				return false;
-			}
-		}
-		else
-		{
-			// when texture area is small, bilinear filter the texture
-			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-			// Copy only 1st level and no border
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getWidth(), img.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getDataPtr());
+		if (build_mipmap) {
+			mp_gl_texture->generate_mipmaps();
+			mp_gl_texture->set_min_filter(ogl::min_filter_type::LINEAR_MIPMAP_NEAREST);
+		} else {
+			mp_gl_texture->set_min_filter(ogl::min_filter_type::LINEAR);
 		}
 		return true;
 	}
 
 	Image Texture::downloadImage() {
-		GLint width = 0, height = 0;
+		/*GLint width = 0, height = 0;
 
+		mp_gl_texture->
 		glBindTexture(GL_TEXTURE_2D, m_gli_texture);
 		glGetTexLevelParameteriv(GL_TEXTURE_2D,	0, GL_TEXTURE_WIDTH, &width);
 		glGetTexLevelParameteriv(GL_TEXTURE_2D,	0, GL_TEXTURE_HEIGHT, &height);
@@ -111,6 +63,7 @@ namespace o3engine
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		return img;
+		return img;*/
+		//TODO
 	}
 }
