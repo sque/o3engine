@@ -37,7 +37,7 @@ namespace o3engine
 				"out vec4 outColor;"
 				"void main() {"
 				"	outColor = vec4(1, 1, 0, 1);"
-				"	outColor = vec4(gl_FragDepth, gl_FragDepth, gl_FragDepth, 1);"
+				//"	outColor = vec4(gl_FragDepth, gl_FragDepth, gl_FragDepth, 1);"
 				"}");
 		mp_program->attach_shader(*pdef_vert);
 		mp_program->attach_shader(*pdef_frag);
