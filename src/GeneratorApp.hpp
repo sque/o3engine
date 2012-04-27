@@ -12,10 +12,11 @@
 #include <o3engine/genericscene.hpp>
 #include <o3engine/orthocamera.hpp>
 #include <o3engine/perspectivecamera.hpp>
-#include <o3engine/primitiveshapes.hpp>
+#include <o3engine/primitives.hpp>
 #include <o3engine/renderline/textureoutput.hpp>
 #include <o3engine/renderline/viewportoutput.hpp>
 #include <o3engine/mesh.hpp>
+#include <o3engine/scenerenderer.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -104,7 +105,7 @@ struct MyCube : public Mesh {
 	MyCube(const std::string & name) :
 		Mesh(name){
 
-		SubMesh sm(VertexAttributes::position);
+		Geometry sm(VertexAttributes::position);
 		Vertex vx;
 		memset(&vx, 0 , sizeof(Vertex));
 		vx.position = Vector3(0, 0, 0);
@@ -115,7 +116,7 @@ struct MyCube : public Mesh {
 		sm.vertices().push_back(vx);
 
 		sm.indices() = {0, 1, 2};
-		submeshes().push_back(sm);
+		geometries().push_back(sm);
 	}
 };
 
@@ -124,7 +125,7 @@ public :
 	O3Engine m_engine;
 	GeneratorApp() {
 		// Start engine
-		m_engine.init(0, NULL);
+		m_engine.initialize(0, NULL);
 	}
 
 	void start() {
@@ -151,7 +152,6 @@ public :
 		spacecrap->importFromFile("house.dae");
 		std::cout << info(*spacecrap) << std::endl;
 
-		pmainout->attachNode(perscam);
 		//pbcout->attachNode(orthcam);
 
 		FrameProcessor fp;
@@ -169,13 +169,15 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
-		sm.getRootNode().createChild("model")->attachObject(spacecrap);
+		sm.getRootNode().createChild("model")->attachObject(new OrthoQuad("test"));
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(*new Light());
 
-		//m_engine.getPlatformManager().disableVSync();
-		m_engine.getPlatformManager().enableVSync();
+		pmainout->attachNode(new SceneRenderer(perscam));
+
+		m_engine.getPlatformManager().disableVSync();
+		//m_engine.getPlatformManager().enableVSync();
 		m_engine.startRendering();
 //		while(1) {
 //			sm.getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Degree(30)));
