@@ -183,7 +183,7 @@ namespace ogl {
 			GLenum type;
 
 			::glGetActiveUniform(mp_program->name(), name(), 0, 0, &size, &type, NULL);
-
+			// TODO: use glGetActiveUniformsiv to get more info
 			m_size = size;
 			m_type = (variable_type)type;
 			m_info_fetched = true;

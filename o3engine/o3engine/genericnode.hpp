@@ -12,7 +12,7 @@
 namespace o3engine {
 
 	//! Placeholder for SceneRenderState concept
-	struct SceneObjectRendererConcept {
+	struct SceneRendererConcept {
 		void populateGlobalStateUniforms(ogl::program * program);
 
 		ogl::buffer & getGlobalUniformBuffer();

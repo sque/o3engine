@@ -1,5 +1,5 @@
-#ifndef SCENEMANAGER_H_INCLUDED
-#define SCENEMANAGER_H_INCLUDED
+#ifndef O3ENGINE_SCENEMANAGER_HPP_INCLUDED
+#define O3ENGINE_SCENEMANAGER_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 
@@ -10,8 +10,6 @@ namespace o3engine
 	{
 	public:
 		virtual ~SceneManager(){}
-
-		virtual void drawScene(Camera * pRenderCamera) = 0;
 	};
 }
-#endif // SCENEMANAGER_H_INCLUDED
+#endif

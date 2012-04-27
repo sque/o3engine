@@ -96,7 +96,7 @@ namespace o3engine
 
 	//! Draw mesh
 	void GeometryRenderer::draw(SceneRendererVisitor * pvisitor) {
-		pvisitor->populateSceneParameters(&const_cast<ogl::program &>(m_geometry.getMaterialPtr()->getProgram()));
+		pvisitor->setUniforms(&const_cast<ogl::program &>(m_geometry.getMaterialPtr()->getProgram()));
 		m_geometry.getMaterialPtr()->getProgram().use();
 		if (mp_ebo)
 			// Indexed based

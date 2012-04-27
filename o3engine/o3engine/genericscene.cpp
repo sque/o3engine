@@ -26,9 +26,6 @@ namespace o3engine
 		delete mp_root_node;
 	}
 
-	void GenericScene::drawScene(Camera * pRenderCamera) {
-		//m_loop_counter++;	// Increase counter
-	}
 
 	size_t GenericScene::nextLoopCounterToBeChangedUglyFunction() {
 		return m_loop_counter++;	// Increase counter

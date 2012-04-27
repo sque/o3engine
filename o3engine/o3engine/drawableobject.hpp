@@ -1,5 +1,5 @@
-#ifndef O3ENGINE_DRAWABLE_H_INCLUDED
-#define O3ENGINE_DRAWABLE_H_INCLUDED
+#ifndef O3ENGINE_DRAWABLE_HPP_INCLUDED
+#define O3ENGINE_DRAWABLE_HPP_INCLUDED
 
 // Internal
 #include "./prereqs.hpp"
@@ -8,21 +8,22 @@
 
 namespace o3engine {
 
-	//! Object that will hold scenerender parameters
+	//! Interface of SceneRender visitor object
 	struct SceneRendererVisitor {
 
-		//! Helper to populate a gpu program with scene parameters
-		virtual void populateSceneParameters(ogl::program * target) = 0;
+		//! Helper to populate a GPU program with all state uniforms
+		virtual void setUniforms(ogl::program * target) = 0;
 
 		//! Inheritable
 		virtual ~SceneRendererVisitor(){}
 	};
 
 	/**
-	 @brief Antikeimeno pou mporei na topothetithei se komvo
+	 @brief Object that can be attached to a Node and provide draw API.
 	 */
 	class DrawableObject: ManagedObject<ObjectManager, string, DrawableObject> {
 	protected:
+
 		//! Name of this object
 		string m_name;
 
@@ -30,7 +31,7 @@ namespace o3engine {
 		//! Constructor
 		DrawableObject(const string & name);
 
-		//! Destrcutor
+		//! Destructor
 		virtual ~DrawableObject();
 
 		//! Render the solid part of object

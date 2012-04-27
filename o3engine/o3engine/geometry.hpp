@@ -1,5 +1,5 @@
-#ifndef O3ENGINE_SUBMESH_H_INCLUDED
-#define O3ENGINE_SUBMESH_H_INCLUDED
+#ifndef O3ENGINE_GEOMETRY_HPP_INCLUDED
+#define O3ENGINE_GEOMETRY_HPP_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./materialmanager.hpp"
@@ -148,7 +148,7 @@ namespace o3engine {
 			return m_vertices.size() /3;
 		}
 
-		//! Enabled attributes of this submesh
+		//! Enabled attributes of this geometry
 		const attributesflags_type & attributes() const {
 			return m_enabled_attributes;
 		}

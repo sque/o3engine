@@ -11,6 +11,7 @@ namespace o3engine {
 			m_orientation(Quaternion::IDENTITY),
 			m_name(name),
 			mp_parent(parent) {
+
 		// Initialize variables
 		m_cached_global_loop = 0;
 		mp_scene = dynamic_cast<GenericScene *>(mp_scene_manager);
@@ -24,6 +25,7 @@ namespace o3engine {
 			m_orientation(Quaternion::IDENTITY),
 			m_name(name),
 			mp_parent(nullptr) {
+
 		// Initialize variables
 		m_cached_global_loop = 0;
 		mp_scene = dynamic_cast<GenericScene *>(mp_scene_manager);
@@ -32,7 +34,7 @@ namespace o3engine {
 	GenericNode::~GenericNode() {
 		children_map_type::iterator it;
 
-		// Dettach cameras, lights
+		// Detach cameras, lights
 		detachCamera();
 
 		// Remove our-selfs from active nodes list
@@ -136,7 +138,9 @@ namespace o3engine {
 		}
 	}
 
-	void GenericNode::setLight(const Light & light) { // Remove the previous iterator
+	void GenericNode::setLight(const Light & light) {
+
+		// Remove the previous iterator
 		if (m_light.isEnabled())
 			mp_scene->m_light_nodes.erase(LightNodes_myiterator);
 

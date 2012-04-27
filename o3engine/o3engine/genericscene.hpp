@@ -116,8 +116,6 @@ namespace o3engine {
 			return m_ambient_light;
 		}
 
-		virtual void drawScene(Camera * pRenderCamera);
-
 		size_t nextLoopCounterToBeChangedUglyFunction();
 
 		template<class Visitor>

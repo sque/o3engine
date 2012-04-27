@@ -9,8 +9,7 @@ namespace o3engine
 		m_name(name) {
 	}
 
-	DrawableObject::~DrawableObject()
-	{
+	DrawableObject::~DrawableObject() {
 	}
 
 }

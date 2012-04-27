@@ -16,7 +16,7 @@ namespace ogl {
 		//! Activate this texture unit (deactivate previous one)
 		void activate();
 
-		//! Check if this texture unit is active
+		//! Check if this texture unit is the active
 		bool is_active() const;
 
 		//! Bind a texture on this unit

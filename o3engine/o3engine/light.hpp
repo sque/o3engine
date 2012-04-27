@@ -16,7 +16,7 @@ namespace o3engine {
 	class Light {
 	public:
 		//! The types of lights
-		enum class TYPE {
+		enum class ETYPE {
 			POSITIONAL,		//!< Positional light
 			DIRECTIONAL, 	//!< Directional light
 			SPOT			//!< Spot light
@@ -24,7 +24,7 @@ namespace o3engine {
 
 	private:
 		//!< The current type of light
-		TYPE m_type;
+		ETYPE m_type;
 
 		//!< Spotlight cutoff
 		Degree m_spot_cutoff;
@@ -45,7 +45,8 @@ namespace o3engine {
 		bool m_enabled;
 
 	public:
-		//! Constructor a new light with default values
+
+		//! Construct a new light with default values
 		Light();
 
 		//! Switch light on or off
@@ -68,6 +69,11 @@ namespace o3engine {
 			return setEnabled(false);
 		}
 
+		//! Check if light is enabled
+		inline bool isEnabled() const {
+			return m_enabled;
+		}
+
 		//! Set diffuse color
 		inline void setDiffuse(const Color & diffuse) {
 			m_diffuse = diffuse;
@@ -83,11 +89,6 @@ namespace o3engine {
 			m_specular = specular;
 		}
 
-		//! Check if light is enabled
-		inline bool isEnabled() const {
-			return m_enabled;
-		}
-
 		//! Set direction of light
 		/**
 		 * @remarks You must give a normalized vector!
@@ -97,7 +98,7 @@ namespace o3engine {
 		}
 
 		//! Set type of light
-		inline void setType(const TYPE & type) {
+		inline void setType(const ETYPE & type) {
 			m_type = type;
 		}
 
@@ -127,7 +128,7 @@ namespace o3engine {
 		}
 
 		//! Get type of light
-		inline const TYPE & getTypeOfLight() const {
+		inline const ETYPE & getType() const {
 			return m_type;
 		}
 
