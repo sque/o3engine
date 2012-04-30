@@ -12,7 +12,7 @@ namespace o3engine {
 	struct SceneRendererVisitor {
 
 		//! Helper to populate a GPU program with all state uniforms
-		virtual void setUniforms(ogl::program * target) = 0;
+		virtual void preDraw(ogl::program * target) = 0;
 
 		//! Inheritable
 		virtual ~SceneRendererVisitor(){}

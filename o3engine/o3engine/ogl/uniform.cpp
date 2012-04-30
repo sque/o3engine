@@ -8,6 +8,8 @@ namespace ogl {
 		mp_program(&prog),
 		m_info_fetched(false){
 
+		// TODO: uniform object should be created with explicit name defined by ogl::program. No need
+		// for double querying Location. The same for uniform block index.
 		m_gl_name = ::glGetUniformLocation(mp_program->name(), m_var_name.c_str());
 		if (m_gl_name == -1) {
 			gl_error(glGetError(), std::string("Cannot get ") + m_var_name + " uniform variable.");

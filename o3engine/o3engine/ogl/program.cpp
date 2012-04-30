@@ -44,14 +44,27 @@ namespace ogl{
 		return m_uniforms[uid];
 	}
 
-	//! Handle a uniform by uid name
-	uniform & program::get_uniform(GLuint name_id) throw (uniform_not_found) {
+	uniform & program::get_uniform(uniform::name_type name_id) throw (uniform_not_found) {
 		uniforms_type::iterator it;
 		if ((it = m_uniforms.find(name_id)) == m_uniforms.end()) {
 			throw uniform_not_found("Cannot find uniform by id.");
 		}
 
 		return m_uniforms[name_id];
+	}
+
+	uniform_block & program::get_uniform_block(const std::string & bname) throw (uniform_not_found){
+		uniform_block::name_type bid = ::glGetUniformBlockIndex(name(), bname.c_str());
+		if (bid == GL_INVALID_INDEX)
+			throw uniform_not_found(bname);
+
+		uniform_blocks_type::iterator it;
+		if ((it = m_uniform_blocks.find(bid)) == m_uniform_blocks.end()) {
+			// Create uniform state object
+			m_uniform_blocks[bid] = uniform_block(*this, bname); // TODO: use C++11 emplace()
+		}
+
+		return m_uniform_blocks[bid];
 	}
 
 	bool program::is_linked() const{

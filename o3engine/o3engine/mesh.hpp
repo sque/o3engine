@@ -29,6 +29,9 @@ namespace o3engine {
 		void translate(const Vector3 & trans);
 
 		//! Import a mesh from file and upload to GPU
+		/**
+		 * TODO: Mesh::importFromFile() and MaterialManager::loadFromFiles() two different approaches for same thing.
+		 */
 		bool importFromFile(const string & fname);
 
 		//! Get sub geometries
@@ -50,7 +53,7 @@ namespace o3engine {
 			return total;
 		}
 
-		//! Total number of elemensts (triangles/lines/...)
+		//! Total number of elements (triangles/lines/...)
 		size_t totalElements() const {
 			size_t total = 0;
 			for(auto & sm :m_geometries) {

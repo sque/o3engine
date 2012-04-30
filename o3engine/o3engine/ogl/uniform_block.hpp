@@ -18,9 +18,6 @@ class program;
 			return m_block_name;
 		}
 
-		//! Variable size
-		size_t size();
-
 		//! Variable type
 		variable_type type();
 

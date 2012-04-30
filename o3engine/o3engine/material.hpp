@@ -13,32 +13,6 @@ namespace o3engine
 	 */
 	class Material : ManagedObject<MaterialManager, string, Material>
 	{
-	protected:
-
-		//! Emissive color
-		Color m_emis_color;
-
-		//! Diffuse color
-		Color m_col_diffuse;
-
-		//! Ambient color
-		Color m_col_ambient;
-
-		//! Specular color
-		Color m_spec_color;
-
-		//! Shininess exponement
-		Real m_shininess;
-
-		// Flag for lighting usage
-		bool f_lighting;
-
-		// Flag showing if depth write should be enabled
-		bool b_depthwrite;
-
-		unsigned long seq;  // Sequence number
-
-		ogl::program * mp_program;
 	public:
 		// Default constructor
 		Material(const string & name);
@@ -101,16 +75,35 @@ namespace o3engine
 		inline void enableDepthWrite() {   b_depthwrite = true; seq++; }
 		inline void disableDepthWrite() {   b_depthwrite = false; seq++; }
 */
-		// Run opengl commands to setup material pre object drawing
-		void onPreDraw() const;
-
-		// Run opengl to post-set materials after object drawing
-		void onPostDraw() const;
-
-		inline unsigned long getSequenceNum() const {   return seq; }
-
 		//! Get shader program
 		const ogl::program & getProgram() const;
+	protected:
+
+		//! Emissive color
+		Color m_emis_color;
+
+		//! Diffuse color
+		Color m_col_diffuse;
+
+		//! Ambient color
+		Color m_col_ambient;
+
+		//! Specular color
+		Color m_spec_color;
+
+		//! Shininess exponement
+		Real m_shininess;
+
+		// Flag for lighting usage
+		bool f_lighting;
+
+		// Flag showing if depth write should be enabled
+		bool b_depthwrite;
+
+		unsigned long seq;  // Sequence number
+
+		//! Pointer to GPU program
+		ogl::program * mp_program;
 	};
 }
 

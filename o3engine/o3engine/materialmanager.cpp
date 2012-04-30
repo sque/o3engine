@@ -5,16 +5,42 @@
 using namespace std;
 
 namespace o3engine {
+	Real _parse_value(const string & var) {
+		float tm;
+		sscanf(var.c_str(), " %f ", &tm);
+		return tm;
+	}
+
+	Color _parse_color3(const string & r, const string & g,
+			const string & b) {
+		Real cr, cg, cb;
+		cr = _parse_value(r);
+		cg = _parse_value(g);
+		cb = _parse_value(b);
+		//printf("Parsing color \"%s %s %s\" to %f, %f, %f\n", r.c_str(), g.c_str(), b.c_str(), cr, cg, cb);
+		return Color(cr, cg, cb);
+	}
+
+	Color _parse_color4(const string & r, const string & g,
+			const string & b, const string & a) {
+		Real cr, cg, cb, ca;
+		cr = _parse_value(r);
+		cg = _parse_value(g);
+		cb = _parse_value(b);
+		ca = _parse_value(a);
+		//printf("Parsing color \"%s %s %s %s\" to %f, %f, %f, %f\n", r.c_str(), g.c_str(), b.c_str(), a.c_str(), cr, cg, cb, ca);
+		return Color(cr, cg, cb, ca);
+	}
+
 	//- SingletonManager Initialization
-	template<> MaterialManager* SingletonManager<MaterialManager, string, Material>::ms_singleton =
-			0;
+	template<> MaterialManager* SingletonManager<MaterialManager, string, Material>::ms_singleton = nullptr;
 
 	// Constructor
 	MaterialManager::MaterialManager() :
 		mp_default_material(nullptr){
 	}
 
-	 // Destructor
+	// Destructor
 	MaterialManager::~MaterialManager() {
 	}
 
@@ -100,31 +126,5 @@ namespace o3engine {
 		// Close file and exit
 		fclose(fin);
 		return true;*/
-	}
-
-	Real MaterialManager::_parse_value(const string & var) {
-		float tm;
-		sscanf(var.c_str(), " %f ", &tm);
-		return tm;
-	}
-
-	Color MaterialManager::_parse_color3(const string & r, const string & g,
-			const string & b) {
-		Real cr, cg, cb;
-		cr = _parse_value(r);
-		cg = _parse_value(g);
-		cb = _parse_value(b);
-		//printf("Parsing color \"%s %s %s\" to %f, %f, %f\n", r.c_str(), g.c_str(), b.c_str(), cr, cg, cb);
-		return Color(cr, cg, cb);
-	}
-	Color MaterialManager::_parse_color4(const string & r, const string & g,
-			const string & b, const string & a) {
-		Real cr, cg, cb, ca;
-		cr = _parse_value(r);
-		cg = _parse_value(g);
-		cb = _parse_value(b);
-		ca = _parse_value(a);
-		//printf("Parsing color \"%s %s %s %s\" to %f, %f, %f, %f\n", r.c_str(), g.c_str(), b.c_str(), a.c_str(), cr, cg, cb, ca);
-		return Color(cr, cg, cb, ca);
 	}
 }

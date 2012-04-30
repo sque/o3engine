@@ -60,15 +60,52 @@ namespace o3engine
 		ogl::gl_error_checkpoint("Error uploading Mesh geometry to GPU");
 	}
 
+	//! Import a material from a scene
+	Material * importMaterial(const string & name, size_t index, const aiScene * pscene) {
+		// Check if already previously loaded
+		Material * pmat = MaterialManager::getSingleton().getObjectPtr(name);
+		if (pmat)
+			return pmat;
+
+
+		assert(index < pscene->mNumMaterials);
+		aiMaterial * aimat = pscene->mMaterials[index];
+		pmat = new Material(name);
+
+		std::cout << "Material Properties: " << aimat->mNumProperties << std::endl;
+		for(size_t i = 0;i < aimat->mNumProperties;i++) {
+			auto prop = aimat->mProperties[i];
+			std::cout << "   Prop[" << prop->mKey.data << "] type:" <<  prop->mType << ", value:" <<std::endl;
+			switch (prop->mType) {
+				case aiPropertyTypeInfo::aiPTI_String:
+					char str[1024];
+					//aimat->Get(prop->mKey.data, *str);
+					//std::cout << str << std::endl;
+					break;
+				case aiPropertyTypeInfo::aiPTI_Float:
+					float fr;
+					aimat->Get(prop->mKey.data, prop->mType, 0, fr);
+					std::cout << fr << std::endl;
+					break;
+				default:
+					std::cout << "?" << std::endl;
+					break;
+			}
+		}
+		std::cout << "Material Properties: " << aimat->mNumProperties << std::endl;
+
+		return pmat;
+	}
+
 	//! Import a mesh from file
 	bool Mesh::importFromFile(const string & fname) {
 
 		// Create an instance of the Importer class
 		Assimp::Importer importer;
 
-		// And have it read the given file with some example postprocessing
+		// And have it read the given file with some example post-processing
 		// Usually - if speed is not the most important aspect for you - you'll
-		// propably to request more postprocessing than we do in this example.
+		// probably to request more post-processing than we do in this example.
 		const aiScene* scene = importer.ReadFile(fname,
 			aiProcess_CalcTangentSpace       |
 			aiProcess_Triangulate            |
@@ -143,6 +180,7 @@ namespace o3engine
 				gm.indices()[i * 3 + 2] = pMesh->mFaces[i].mIndices[2];
 			}
 
+			//gm.setMaterial(importMaterial(getName() + "_importedMaterial_", pMesh->mMaterialIndex, scene));
 			m_geometries.push_back(gm);
 		}
 

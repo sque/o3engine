@@ -3,6 +3,7 @@
 
 #include "./shader.hpp"
 #include "./uniform.hpp"
+#include "./uniform_block.hpp"
 #include <map>
 
 namespace ogl {
@@ -80,19 +81,26 @@ namespace ogl {
 			::glUseProgram(name());
 		}
 
-		//! Handle a uniform
+		//! Handle a uniform variable
 		/**
-		 * Returned variable will be deleted when program is deleted
+		 * Returned object will be deleted when program is deleted
 		 */
 		uniform & get_uniform(const std::string & name) throw (uniform_not_found);
 
-		//! Handle a uniform by uid name
+		//! Handle a uniform variable by uid name
 		/**
-		 * Returned variable will be deleted when program is deleted
+		 * Returned object will be deleted when program is deleted
 		 */
-		uniform & get_uniform(GLuint name_id) throw (uniform_not_found);
+		uniform & get_uniform(uniform::name_type name_id) throw (uniform_not_found);
 
-		//! Define the related fbo color attachement of frag color varying out
+		//! Handle a uniform block
+		/**
+		 * Returned object will be deleted when program is deleted
+		 */
+		uniform_block & get_uniform_block(const std::string & bname) throw (uniform_not_found);
+
+
+		//! Define the related fbo color attachment of frag color varying out
 		void define_frag_color_color_attachment(GLuint color_attachment, const std::string & name);
 
 		//! Get total attached shaders
@@ -136,10 +144,16 @@ namespace ogl {
 
 	protected:
 		//! Type of uniforms container
-		typedef std::map<GLint, uniform> uniforms_type;
+		typedef std::map<uniform::name_type, uniform> uniforms_type;
+
+		//! Type of uniform blocks container
+		typedef std::map<uniform_block::name_type, uniform_block> uniform_blocks_type;
 
 		//! Uniforms container
 		uniforms_type m_uniforms;
+
+		//! Uniform block container
+		uniform_blocks_type m_uniform_blocks;
 
 		//! Shaders container
 		shaders_type m_shaders;

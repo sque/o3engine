@@ -169,7 +169,7 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
-		sm.getRootNode().createChild("model")->attachObject(new OrthoQuad("test"));
+		sm.getRootNode().createChild("model")->attachObject(spacecrap);
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(*new Light());

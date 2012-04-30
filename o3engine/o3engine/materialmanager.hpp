@@ -12,15 +12,9 @@ namespace o3engine {
 	//! Material manager
 	class MaterialManager: public SingletonManager<MaterialManager, string, Material> {
 	protected:
-
 		//! Default material of engine
 		Material * mp_default_material;
 
-		// Routines for parsing values from .material file
-		Real _parse_value(const string & var);
-		Color _parse_color3(const string & r, const string & g, const string & b);
-		Color _parse_color4(const string & r, const string & g, const string & b,
-				const string & a);
 	public:
 		// Constructor
 		MaterialManager();

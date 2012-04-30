@@ -24,8 +24,13 @@ namespace ogl {
 			::glBindBuffer((GLenum) type(), name());
 		}
 
+		//! Bind base at specific index of arrayed targets (valid for some types)
+		void bind_at_point(GLuint point) const {
+			::glBindBufferBase((GLenum) type(), point, name());
+		}
+
 		//! Bind a range to specific index of arrayed targets (valid for some types)
-		void bind_range(GLuint point, size_t offset, size_t size) const {
+		void bind_at_point(GLuint point, size_t offset, size_t size) const {
 			::glBindBufferRange((GLenum) type(), point, name(), offset, size);
 		}
 
