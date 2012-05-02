@@ -31,6 +31,7 @@ namespace o3engine {
 
 		// Allocate managers
 		mp_texture_manager = new TextureManager();
+		mp_program_manager = new ProgramManager();
 		mp_material_manager = new MaterialManager();
 		mp_object_manager = new ObjectManager();
 		mp_platform = new Platform();
@@ -94,7 +95,6 @@ namespace o3engine {
 	}
 
 	int O3Engine::initialize(int argc, char ** argv) {
-
 		// Initialize platform (Window, Input, Timers)
 		Platform::getSingleton().initialize(argc, argv);
 

@@ -1,4 +1,5 @@
 #include "./materialmanager.hpp"
+#include "./programmanager.hpp"
 
 namespace o3engine
 {
@@ -15,38 +16,7 @@ namespace o3engine
 		f_lighting = b_depthwrite = true;
 		seq = 1;
 		p_Texture = NULL;*/
-		// Default
-		// Create default program
-		mp_program = new ogl::program();
-		ogl::shader * pdef_vert = new ogl::shader(ogl::shader_type::VERTEX,
-				"#version 420\n"
-				"layout(location=0) in vec4 aPosition;"
-				""
-				"layout(std140, binding=0) uniform SceneMatrices {"
-				"	mat4 ProjectionMatrix;"
-				"	mat4 ViewMatrix;"
-				"	mat4 ProjectionViewMatrix;"
-				"};"
-
-				"uniform mat4 ModelMatrix;"
-				""
-				"out float depth;"
-				""
-				"void main() {"
-				"	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * aPosition;"
-				"	depth = clamp((gl_Position.z - 5)/15, 0.0, 1.0);"
-				"}");
-		ogl::shader * pdef_frag = new ogl::shader(ogl::shader_type::FRAGMENT,
-				"#version 330\n"
-				""
-				"in float depth;"
-				"out vec4 outColor;"
-				"void main() {"
-				"	outColor = vec4(1, 1, 1, 1)*depth;"
-				"}");
-		mp_program->attach_shader(*pdef_vert);
-		mp_program->attach_shader(*pdef_frag);
-		mp_program->build();
+		mp_program = ProgramManager::getSingleton().getProgramPtr("default");
 	}
 
 	//! Get shader program

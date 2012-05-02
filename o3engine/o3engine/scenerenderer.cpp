@@ -78,11 +78,11 @@ void convert_mat4(To & dst, From & src) {
 struct SceneRendererDrawVisitor:
 	public SceneRendererVisitor {
 
-	struct UniformGlobalMatrices {
+	struct UniformSceneParameters {
 		glm::mat4 ProjectionMatrix;
 		glm::mat4 ViewMatrix;
 		glm::mat4 ProjectionViewMatrix;
-	} m_ugm;
+	} m_ubo_sceneparams;
 
 	//! Pointer to owner scene renderer
 	SceneRenderer * mp_renderer;
@@ -97,15 +97,17 @@ struct SceneRendererDrawVisitor:
 		mp_renderer(prenderer),
 		mp_ubo(new ogl::buffer(ogl::buffer_type::UNIFORM)){
 
-		mp_ubo->define_data(sizeof(UniformGlobalMatrices), NULL, ogl::buffer_usage_pattern::STREAM_READ);
+		mp_ubo->define_data(sizeof(UniformSceneParameters), NULL, ogl::buffer_usage_pattern::STREAM_READ);
 	}
 
 	void setSceneUniforms() {
-		convert_mat4<true>(m_ugm.ProjectionMatrix, mp_renderer->getCameraPtr()->getProjectionMatrix());
+		convert_mat4<true>(m_ubo_sceneparams.ProjectionMatrix, mp_renderer->getCameraPtr()->getProjectionMatrix());
 		Matrix4 view_matrix = mp_renderer->getCameraPtr()->getSceneNode()->getGlobalTransformation();
 				view_matrix = view_matrix.inverse();
-		convert_mat4(m_ugm.ViewMatrix, view_matrix);
-		mp_ubo->update_subdata(0, sizeof(UniformGlobalMatrices), &m_ugm);
+		convert_mat4(m_ubo_sceneparams.ViewMatrix, view_matrix);
+		Matrix4 proj_view_matrix = view_matrix * mp_renderer->getCameraPtr()->getSceneNode()->getGlobalTransformation();
+		convert_mat4<true>(m_ubo_sceneparams.ProjectionViewMatrix, proj_view_matrix);
+		mp_ubo->update_subdata(0, sizeof(UniformSceneParameters), &m_ubo_sceneparams);
 		mp_ubo->bind_at_point(0);
 	}
 

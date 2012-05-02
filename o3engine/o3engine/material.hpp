@@ -77,6 +77,13 @@ namespace o3engine
 */
 		//! Get shader program
 		const ogl::program & getProgram() const;
+
+		//! Set shader program
+		void setProgram(ogl::program * pprog) {
+			if (pprog)
+				mp_program = pprog;
+		}
+
 	protected:
 
 		//! Emissive color

@@ -1,6 +1,7 @@
 #include "./materialmanager.hpp"
 #include "./string_functions.hpp"
 #include "./texturemanager.hpp"
+#include "./programmanager.hpp"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ namespace o3engine {
 	}
 
 	void MaterialManager::initialize() {
+		ProgramManager::getSingleton().loadProgram("default", "default.vert", "default.frag");
 		mp_default_material = new Material("default");
 	}
 
@@ -126,5 +128,6 @@ namespace o3engine {
 		// Close file and exit
 		fclose(fin);
 		return true;*/
+		return false;
 	}
 }

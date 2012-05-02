@@ -4,6 +4,7 @@
 #include "./prereqs.hpp"
 #include "./platform/platform.hpp"
 #include "./materialmanager.hpp"
+#include "./programmanager.hpp"
 #include "./framelistener.hpp"
 #include "./fontmanager.hpp"
 #include "./texturemanager.hpp"
@@ -42,6 +43,7 @@ namespace o3engine {
 		framelisteners_type::iterator m_fl_it; 		//!< Framelistener iterator
 
 		// Managers
+		ProgramManager * mp_program_manager; 	//!< The program manager
 		MaterialManager * mp_material_manager; 	//!< The material manager
 		FontManager * mp_font_manager; 			//!< The font manager
 		TextureManager * mp_texture_manager; 	//!< Texture manager
