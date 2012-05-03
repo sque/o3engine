@@ -94,7 +94,17 @@ namespace o3engine {
 		return current_fps;
 	}
 
-	int O3Engine::initialize(int argc, char ** argv) {
+	int O3Engine::initialize(int argc, char ** argv, std::initializer_list<std::string> search_dirs ) {
+
+		// Prepare search directories
+		if (search_dirs.size() > 0) {
+			for(auto sdir : search_dirs) {
+				mp_program_manager->addSearchDirectory(sdir);
+			}
+		} else {
+			mp_program_manager->addSearchDirectory("resources/shaders");
+		}
+
 		// Initialize platform (Window, Input, Timers)
 		Platform::getSingleton().initialize(argc, argv);
 
@@ -134,7 +144,7 @@ namespace o3engine {
 			p_fl->raiseRenderInterval();
 		}
 
-		// Calculate fps
+		// Calculate FPS
 		m_frame_counter++;
 	}
 
@@ -143,8 +153,5 @@ namespace o3engine {
 		// Set up OpenGL parameters
 		ogl::context::create();
 		ogl::current_ctx().depth_test().enable();
-		/*glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 	}
 }

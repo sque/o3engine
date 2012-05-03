@@ -6,6 +6,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <cstdint>
 
 namespace o3engine {
 
@@ -91,13 +92,22 @@ struct SceneRendererDrawVisitor:
 	GenericNode * mp_object_node;
 
 	//! Uniform buffer object
-	ogl::buffer * mp_ubo;
+	ogl::buffer * mp_ubos[2];
+
+	std::uint8_t m_active_ubo;
 
 	SceneRendererDrawVisitor(SceneRenderer * prenderer):
 		mp_renderer(prenderer),
-		mp_ubo(new ogl::buffer(ogl::buffer_type::UNIFORM)){
+		mp_ubos({new ogl::buffer(ogl::buffer_type::UNIFORM), new ogl::buffer(ogl::buffer_type::UNIFORM)}),
+		m_active_ubo(0){
 
-		mp_ubo->define_data(sizeof(UniformSceneParameters), NULL, ogl::buffer_usage_pattern::STREAM_READ);
+		mp_ubos[0]->define_data(sizeof(UniformSceneParameters), NULL, ogl::buffer_usage_pattern::STREAM_READ);
+		mp_ubos[1]->define_data(sizeof(UniformSceneParameters), NULL, ogl::buffer_usage_pattern::STREAM_READ);
+	}
+
+	~SceneRendererDrawVisitor() {
+		delete mp_ubos[0];
+		delete mp_ubos[1];
 	}
 
 	void setSceneUniforms() {
@@ -107,8 +117,9 @@ struct SceneRendererDrawVisitor:
 		convert_mat4(m_ubo_sceneparams.ViewMatrix, view_matrix);
 		Matrix4 proj_view_matrix = view_matrix * mp_renderer->getCameraPtr()->getSceneNode()->getGlobalTransformation();
 		convert_mat4<true>(m_ubo_sceneparams.ProjectionViewMatrix, proj_view_matrix);
-		mp_ubo->update_subdata(0, sizeof(UniformSceneParameters), &m_ubo_sceneparams);
-		mp_ubo->bind_at_point(0);
+		mp_ubos[m_active_ubo]->update_subdata(0, sizeof(UniformSceneParameters), &m_ubo_sceneparams);
+		mp_ubos[m_active_ubo]->bind_at_point(0);
+		m_active_ubo = !m_active_ubo;
 	}
 
 	//! Populate programs parameters with uniform values

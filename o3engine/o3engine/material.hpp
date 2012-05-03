@@ -6,8 +6,17 @@
 #include "./texturemanager.hpp"
 #include "./singletonmanager.hpp"
 
-namespace o3engine
-{
+namespace o3engine {
+
+
+	struct MaterialParamater {
+
+		const std::string & getName() const {
+			return m_name;
+		}
+	protected:
+		std::string m_name;
+	};
 	/**
 	 * @brief Material describer and handler
 	 */

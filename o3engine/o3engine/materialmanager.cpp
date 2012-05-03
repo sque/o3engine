@@ -46,7 +46,7 @@ namespace o3engine {
 	}
 
 	void MaterialManager::initialize() {
-		ProgramManager::getSingleton().loadProgram("default", "default.vert", "default.frag");
+		ProgramManager::getSingleton().loadProgram("default", FileName("default.vert"), FileName("default.frag"));
 		mp_default_material = new Material("default");
 	}
 

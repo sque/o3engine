@@ -1,3 +1,14 @@
+/* O3Engine Version */
+#define O3ENGINE_VERSION_MAJOR 0
+#define O3ENGINE_VERSION_MINOR 3
+#define O3ENGINE_VERSION_REVISION 999
+
+/* Helpful macros */
+#define __IMPL_STRINGIFY( x) #x
+#define STRINGIFY(x) __IMPL_STRINGIFY(x)
+#define __IMPL_CONCAT( a, b) a##b
+#define CONCAT( a, b) __IMPL_CONCAT( a, b)
+
 /* DEBUG MACROS */
 // #define DEBUG_LOG
 // Debug macros
@@ -10,6 +21,7 @@
 	#define DBG_PRINT_1(x,a)
 	#define DBG_PRINT_2(x,a,b)
 #endif
+
 
 // System libraries needed
 /* For Windows */
@@ -36,12 +48,9 @@
 #include "base/base.hpp"
 #include "ogl/ogl.hpp"
 
-// Fast macros
-#define DBGMSG(x) printf("%s", x)
-
 // Class prototypes
-namespace o3engine
-{
+namespace o3engine {
+
 	class Camera;
 	class RenderOutput;
 	class ViewportRenderOutput;

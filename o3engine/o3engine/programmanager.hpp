@@ -2,8 +2,33 @@
 #define O3ENGINE_PROGRAMMANAGER_HPP_INCLUDED
 
 #include "prereqs.hpp"
+#include <set>
 
 namespace o3engine {
+
+	//! String wrapper to declare a new filename type
+	struct FileName {
+		FileName(const std::string & name) :
+			m_fname(name){
+		}
+
+		FileName(const FileName &) = default;
+		FileName & operator=(const FileName &) = default;
+
+		const std::string & string() const {
+			return m_fname;
+		}
+
+	protected:
+		std::string m_fname;
+	};
+
+	//! Preprocess exception
+	struct preprocess_exception : public std::runtime_error {
+		preprocess_exception(const std::string & what) :
+			runtime_error(what){
+		}
+	};
 
 	//! Manager class for all GPU Programs
 	class ProgramManager :
@@ -27,11 +52,13 @@ namespace o3engine {
 		}
 
 		//! Load a new program from source
-		template<class TVertex, class TFragment, class TGeometry, class TTessellation>
+		template<class TVertex, class TFragment, class TGeometry = nullptr_t, class TTessellation = nullptr_t>
 		ogl::program * loadProgram(
 				const char * name,
-				const TVertex * vsh,
-				const TFragment * fsh) {
+				const TVertex & vsh,
+				const TFragment & fsh,
+				const TGeometry & gsh = nullptr,
+				const TTessellation & tsh = nullptr) {
 
 			// Check if it already exists
 			if (hasProgram(name))
@@ -43,7 +70,7 @@ namespace o3engine {
 			// load shader objects
 			loadShader(pprog, ogl::shader_type::VERTEX, vsh);
 			loadShader(pprog, ogl::shader_type::FRAGMENT, fsh);
-			//loadShader(pprog, ogl::shader_type::GEOMETRY, gsh);
+			loadShader(pprog, ogl::shader_type::GEOMETRY, gsh);
 			// TODO: GLEW 1.7 loadShader(pprog, ogl::shader_type::TESS, tsh);
 
 			// compile objects and link them together
@@ -84,7 +111,14 @@ namespace o3engine {
 		//! Shaders include search directories
 		search_dirs_container_type m_search_dirs;
 
-		void loadShader(ogl::shader_type type);
+		//! Find file path by looking in search directories
+		std::string findFilePath(const std::string & filename);
+
+		//! Preprocess an included file source and return new source
+		std::string includeFileSource(const std::string & fsource, std::uint16_t & max_glsl_version, std::set<std::string> &depending_modules);
+
+		//! Load shader from files
+		void loadShader(ogl::program * pprog, ogl::shader_type type, const FileName & src_fname);
 
 		//! Load shader from in-memory string
 		void loadShader(ogl::program * pprog, ogl::shader_type type, const std::string & source);

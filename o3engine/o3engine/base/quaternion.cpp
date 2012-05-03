@@ -143,7 +143,7 @@ namespace o3engine {
 		dst[2][1] = fTyz + fTwx;
 		dst[2][2] = 1.0f - (fTxx + fTyy);
 	}
-	//! Convert Quaternion to rotation matrix
+
 	Matrix3 Quaternion::toMatrix() const {
 		Matrix3 m3;
 		toMatrix(m3);

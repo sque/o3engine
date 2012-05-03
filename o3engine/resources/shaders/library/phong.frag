@@ -1,11 +1,11 @@
 #version 330
 
-#headers
-
 vec4 phong_lit(void);
 
-#endheaders
+#ifdef MODULE_MAIN
 
 vec4 phong_lit(void) {
 	return vec4(1,0,0,0);
 }
+
+#endif

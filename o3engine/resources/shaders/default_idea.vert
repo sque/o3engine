@@ -1,6 +1,5 @@
 #version 420
-#include "library/scene_parameters.glslh"
-#depend "library/phong.vert"
+
 
 // Input attributes
 layout(location=0) in vec4 aPosition;

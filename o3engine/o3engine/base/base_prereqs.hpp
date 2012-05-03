@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <string>
 #include <stdio.h>
+#include <cstdint>
 
 // Needed type definitions
 namespace o3engine {

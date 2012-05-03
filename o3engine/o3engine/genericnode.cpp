@@ -1,6 +1,7 @@
 #include "./genericnode.hpp"
 #include "./genericscene.hpp"
 #include <algorithm>
+#include <iostream>
 
 namespace o3engine {
 	GenericNode::GenericNode(const string & name, GenericNode * parent,
@@ -104,14 +105,12 @@ namespace o3engine {
 		if (mp_parent) {
 			mp_parent->_updateCachedGPos_GOrient(cur_renderloop);
 			m_gorientation = mp_parent->m_gorientation * m_orientation;
-			m_gposition = mp_parent->m_gposition
-					+ (mp_parent->m_gorientation * m_position);
+			m_gposition = mp_parent->m_gposition + (mp_parent->m_gorientation * m_position);
 		} else {
 			m_gorientation = m_orientation;
 			m_gposition = m_position;
 		}
-		m_gtransformation = Matrix4::IDENTITY;
-		m_gtransformation = m_gorientation.toMatrix();
+		m_gtransformation = m_gorientation.conjugate().toMatrix();
 		m_gtransformation.setTranslation(m_gposition);
 	}
 

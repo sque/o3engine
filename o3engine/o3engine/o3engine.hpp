@@ -15,6 +15,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <initializer_list>
 
 namespace o3engine {
 
@@ -74,7 +75,7 @@ namespace o3engine {
 		 This function must be called @b BEFORE using
 		 any component of the library.
 		 */
-		int initialize(int argc, char ** argv);
+		int initialize(int argc, char ** argv, std::initializer_list<std::string> search_dirs = {} );
 
 		//! Start rendering
 		/**
@@ -143,6 +144,11 @@ namespace o3engine {
 		//! Reference to the platform module
 		inline Platform & getPlatformManager() {
 			return *mp_platform;
+		}
+
+		//! Reference to the program manager
+		inline ProgramManager & getProgramManager() {
+			return *mp_program_manager;
 		}
 
 		//! @}

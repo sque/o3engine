@@ -1,17 +1,16 @@
-#version 420
-layout(location=0) in vec4 aPosition;
+#version 330
 
-layout(std140, binding=0) uniform SceneMatrices {
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
-	mat4 ProjectionViewMatrix;
-};
+#depend "library/scene_parameters.vert"
+#depend "library/phong.vert"
+
+layout(location=0) in vec4 aPositionOs;
 
 uniform mat4 ModelMatrix;
 
 out float depth;
 
 void main() {
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * aPosition;
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * aPositionOs;
+	phong_lit();
 	depth = clamp((gl_Position.z - 5)/15, 0.0, 1.0);
-});
+};

@@ -86,6 +86,7 @@ public:
 
 		if (e.ms_mouse_state.isAnyButtonDown()) {
 			pscene->getRootNode().getChildPtr("camera-base")->yaw(Degree(e.m_rel_x));
+			pscene->getRootNode().getChildPtr("camera-base")->roll(Degree(e.m_rel_y));
 		}
 	}
 
@@ -125,7 +126,7 @@ public :
 	O3Engine m_engine;
 	GeneratorApp() {
 		// Start engine
-		m_engine.initialize(0, NULL);
+		m_engine.initialize(0, NULL, {"o3engine/resources/shaders" });
 	}
 
 	void start() {
@@ -169,7 +170,7 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
-		sm.getRootNode().createChild("model")->attachObject(spacecrap);
+		sm.getRootNode().createChild("model")->attachObject(new Quad("test"));
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(*new Light());
