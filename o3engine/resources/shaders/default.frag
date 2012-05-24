@@ -1,8 +1,9 @@
 #version 330
 
-in float depth;
+#depend "library/phong.frag"
+
 out vec4 outColor;
 
 void main() {
-	outColor = vec4(1, 1, 1, 1)*depth;
+	outColor = phong_lit();
 }

@@ -4,14 +4,14 @@
 #include <iostream>
 
 namespace o3engine {
-	GenericNode::GenericNode(const string & name, GenericNode * parent,
-			const Vector3 & pos) :
+	GenericNode::GenericNode(const string & name, GenericNode * parent, const Vector3 & pos) :
 			SceneNode(parent->getMySceneManager()),
+			mp_light(nullptr),
 			m_position(pos),
 			m_scale(Vector3::IDENTITY),
 			m_orientation(Quaternion::IDENTITY),
 			m_name(name),
-			mp_parent(parent) {
+			mp_parent(parent){
 
 		// Initialize variables
 		m_cached_global_loop = 0;
@@ -21,11 +21,12 @@ namespace o3engine {
 	// Constructor for root node
 	GenericNode::GenericNode(const string & name, SceneManager * pmanager) :
 			SceneNode(pmanager),
+			mp_light(nullptr),
 			m_position(Vector3::ZERO),
 			m_scale(Vector3::IDENTITY),
 			m_orientation(Quaternion::IDENTITY),
 			m_name(name),
-			mp_parent(nullptr) {
+			mp_parent(nullptr){
 
 		// Initialize variables
 		m_cached_global_loop = 0;
@@ -43,7 +44,7 @@ namespace o3engine {
 			mp_scene->unregisterNodeWithObjects(ActiveNodes_myiterator);
 
 		// Remove our-selfs from light nodes list
-		if (m_light.isEnabled())
+		if (mp_light && mp_light->isEnabled())
 			mp_scene->m_light_nodes.erase(LightNodes_myiterator);
 
 		// Delete all children
@@ -137,15 +138,14 @@ namespace o3engine {
 		}
 	}
 
-	void GenericNode::setLight(const Light & light) {
+	void GenericNode::setLight(const Light * plight) {
 
 		// Remove the previous iterator
-		if (m_light.isEnabled())
+		if (mp_light && mp_light->isEnabled())
 			mp_scene->m_light_nodes.erase(LightNodes_myiterator);
 
-		m_light = light;
-		if (m_light.isEnabled()) {
-
+		mp_light = plight;
+		if (mp_light && mp_light->isEnabled()) {
 			LightNodes_myiterator = mp_scene->m_light_nodes.insert(
 					mp_scene->m_light_nodes.begin(), this);
 		}

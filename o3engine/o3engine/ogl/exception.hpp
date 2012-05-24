@@ -76,7 +76,7 @@ public:
 	}
 };
 
-//! Exception thrown when shader compilation has failed.
+//! Exception thrown when compilation has failed.
 class compile_error: public exception {
 public:
 	compile_error(const std::string & error) throw () :

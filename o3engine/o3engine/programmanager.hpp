@@ -3,6 +3,7 @@
 
 #include "prereqs.hpp"
 #include <set>
+#include <iostream>
 
 namespace o3engine {
 
@@ -74,7 +75,12 @@ namespace o3engine {
 			// TODO: GLEW 1.7 loadShader(pprog, ogl::shader_type::TESS, tsh);
 
 			// compile objects and link them together
-			pprog->build();
+			try {
+				pprog->build();
+			} catch(ogl::shader_compile_error & e) {
+				std::cerr << e.m_shader.source() << std::endl;
+				throw e;
+			}
 
 			// register
 			m_programs[name] = pprog;
@@ -115,7 +121,11 @@ namespace o3engine {
 		std::string findFilePath(const std::string & filename);
 
 		//! Preprocess an included file source and return new source
-		std::string includeFileSource(const std::string & fsource, std::uint16_t & max_glsl_version, std::set<std::string> &depending_modules);
+		std::string includeFileSource(
+				const std::string & fsource,
+				std::uint16_t & max_glsl_version,
+				std::set<std::string> &depending_modules,
+				bool compile_object = true);
 
 		//! Load shader from files
 		void loadShader(ogl::program * pprog, ogl::shader_type type, const FileName & src_fname);

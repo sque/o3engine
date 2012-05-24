@@ -54,7 +54,11 @@ namespace o3engine {
 		return "";
 	}
 
-	std::string ProgramManager::includeFileSource(const std::string & fsource, std::uint16_t & max_glsl_version, std::set<std::string> &depending_modules) {
+	std::string ProgramManager::includeFileSource(
+			const std::string & fsource,
+			std::uint16_t & max_glsl_version,
+			std::set<std::string> &depending_modules,
+			bool compile_object) {
 		std::string processed_source;
 
 		// By default glsl version is 100
@@ -63,9 +67,6 @@ namespace o3engine {
 		// Regular expressions
 		boost::regex regversion("^#version\\s+(\\d+)");
 		boost::regex regdepend("^#depend\\s+\"([^\"]+)\"\\s*$");
-
-		// flags
-		bool finished_directives = false;
 
 		// Line tokenizer
 		boost::char_separator<char> nlsep("\n");
@@ -87,13 +88,18 @@ namespace o3engine {
 				uint16_t included_max_glsl_version;
 				std::string included_fpath = findFilePath(filematch[1]);
 				if (included_fpath.empty()){
-					throw preprocess_exception("Cannot open #depending file \"" + filematch[1] + "\"");
+					throw preprocess_exception("Cannot open #depend ing file \"" + filematch[1] + "\"");
 				}
-				std::string include_source = includeFileSource(__get_file_contents(included_fpath), included_max_glsl_version, depending_modules);
+
+				std::string include_source = includeFileSource(__get_file_contents(included_fpath), included_max_glsl_version, depending_modules, false);
 				if (included_max_glsl_version > max_glsl_version)
 					max_glsl_version = included_max_glsl_version;
 
 				depending_modules.insert(included_fpath);
+				if (compile_object) {
+					// We must wrap it because it changes state from COMPILE_OBJECT = 1 to COMPILE_OBJECT = NULL
+					include_source = "#undef COMPILE_OBJECT\n" + include_source + "\n#define COMPILE_OBJECT 1\n";
+				}
 				processed_source += include_source;
 			} else {
 
@@ -120,19 +126,14 @@ namespace o3engine {
 				"#define O3ENGINE_VERSION_MAJOR " STRINGIFY(O3ENGINE_VERSION_MAJOR) "\n"
 				"#define O3ENGINE_VERSION_MINOR " STRINGIFY(O3ENGINE_VERSION_MINOR) "\n"
 				"#define O3ENGINE_VERSION_REVISION " STRINGIFY(O3ENGINE_VERSION_REVISION) "\n"
+				"#define COMPILE_MODULE 1 \n"
 				"#endif\n";
 		final_source += processed_source;
 
-		std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl << final_source << std::endl << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl << final_source << std::endl << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 		for(auto d : dependending_modules) {
 			loadShader(pprog, type, FileName(d));
 		}
-/*		std::cout << "need to include also: " <<std::endl;
-		for(auto d : dependend_modules) {
-			std::cout << "   " << d << std::endl;
-			loadShader(pprog, type, FileName(d));
-		}
-		*/
 		pprog->attach_shader(*new ogl::shader(type, final_source));	// TODO: Leak ogl::shader
 	}
 

@@ -6,45 +6,14 @@
 namespace o3engine {
 
 	//! A light object that can be attached in any node
-	/**
-	 * To create a light, just create a new object from this class
-	 * with some unique name. <b>NOTICE</b>: Light is off by default,
-	 * you must turn it on. Lights inherit direction by the node
-	 * they are attached, this is also valid for directional light.
-	 * @todo Remake it
-	 */
 	class Light {
 	public:
 		//! The types of lights
-		enum class ETYPE {
+		enum class ETYPE : std::uint8_t{
 			POSITIONAL,		//!< Positional light
 			DIRECTIONAL, 	//!< Directional light
 			SPOT			//!< Spot light
 		};
-
-	private:
-		//!< The current type of light
-		ETYPE m_type;
-
-		//!< Spotlight cutoff
-		Degree m_spot_cutoff;
-
-		//!< Direction of light (directional, and spot)
-		Vector3 m_direction;
-
-		//!< Ambient color
-		Color m_ambient;
-
-		//!< Diffuse color
-		Color m_diffuse;
-
-		//!< Specular color
-		Color m_specular;
-
-		//!< If light is enabled
-		bool m_enabled;
-
-	public:
 
 		//! Construct a new light with default values
 		Light();
@@ -136,6 +105,28 @@ namespace o3engine {
 		inline const Degree & getSpotCutOffAngle() const {
 			return m_spot_cutoff;
 		}
+	private:
+
+		//! Ambient color
+		Color m_ambient;
+
+		//! Diffuse color
+		Color m_diffuse;
+
+		//! Specular color
+		Color m_specular;
+
+		//! Direction of light (directional, and spot)
+		Vector3 m_direction;
+
+		//! Spotlight cutoff
+		Degree m_spot_cutoff;
+
+		//! The current type of light
+		ETYPE m_type;
+
+		//! If light is enabled
+		bool m_enabled;
 	};
 }
 

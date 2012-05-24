@@ -173,12 +173,18 @@ public :
 		sm.getRootNode().createChild("model")->attachObject(new Quad("test"));
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
-		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(*new Light());
+		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());
+		Light redlight;
+		redlight.setDiffuse(Color::RED);
+		sm.getRootNode().createChild("redlight", Vector3(0,0,10))->setLight(&redlight);
+
+
 
 		pmainout->attachNode(new SceneRenderer(perscam));
 
 		m_engine.getPlatformManager().disableVSync();
 		//m_engine.getPlatformManager().enableVSync();
+		ogl::current_ctx().face_cull().enable();
 		m_engine.startRendering();
 //		while(1) {
 //			sm.getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Degree(30)));

@@ -5,6 +5,10 @@
 
 namespace ogl{
 
+	shader_compile_error::shader_compile_error(const shader & sh) throw () :
+			m_shader(sh),
+		compile_error(sh.info_log()) {}
+
 	void shader::initialize() {
 		m_gl_name = ::glCreateShader((GLenum) m_type);
 		if (m_gl_name == 0)
@@ -50,7 +54,7 @@ namespace ogl{
 
 		// Check status
 		if (!is_compiled()) {
-			throw compile_error(info_log());
+			throw shader_compile_error(*this);
 		}
 	}
 

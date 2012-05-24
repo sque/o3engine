@@ -212,7 +212,7 @@ namespace o3engine {
 
 		m_indices = {
 			0, 1, 2,
-			0, 3, 2
+			2, 3, 0
 		};
 	}
 }

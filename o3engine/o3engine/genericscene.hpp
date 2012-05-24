@@ -19,46 +19,6 @@ namespace o3engine {
 	 */
 	class GenericScene: public SceneManager {
 		friend class GenericNode;
-	protected:
-		//! Pointer to root node
-		GenericNode * mp_root_node;
-
-		//! A list of nodes that have drawable objects
-		GenericNode::active_nodes_type m_activenodes;
-
-		//! A counter of render loops
-		size_t m_loop_counter;
-
-		//! Max distance of far cut off algorithm
-		Real m_farcutoff_distance;
-
-		//! Squared max distance of far cut off algorithm
-		Real m_farcutoff_sqdistance;
-
-		//! Cut off far objects
-		bool m_enabled_far_cutoff;
-
-		//! Selective render of viewable objects only
-		bool m_enabled_clipping;
-
-		//! Ambient light of the scene
-		Color m_ambient_light;
-
-		//! A list of nodes that contain lights
-		vector<GenericNode *> m_light_nodes;
-
-		//! Register a node as an active node (a node that contains at least one object)
-		inline GenericNode::active_nodes_type::iterator registerNodeWithObjects(
-				GenericNode * pnode) {
-			return m_activenodes.insert(m_activenodes.begin(), pnode);
-		}
-
-		//! Unregister a node from active nodes
-		inline void unregisterNodeWithObjects(
-				GenericNode::active_nodes_type::iterator pit) {
-			m_activenodes.erase(pit);
-		}
-
 	public:
 		//! Constructor
 		GenericScene();
@@ -126,6 +86,57 @@ namespace o3engine {
 					visitor.visitObject(n, o);
 				}
 			}
+		}
+
+		template<class Visitor>
+		void navigateActiveLights(Visitor & visitor) {
+			for(auto & n: m_light_nodes) {
+				visitor.visitNode(n);
+				visitor.visitLight(n, n->getLight());
+			}
+		}
+
+		vector<GenericNode *> & getLightNodes(){
+			return m_light_nodes;
+		}
+	protected:
+		//! Pointer to root node
+		GenericNode * mp_root_node;
+
+		//! A list of nodes that have drawable objects
+		GenericNode::active_nodes_type m_activenodes;
+
+		//! A counter of render loops
+		size_t m_loop_counter;
+
+		//! Max distance of far cut off algorithm
+		Real m_farcutoff_distance;
+
+		//! Squared max distance of far cut off algorithm
+		Real m_farcutoff_sqdistance;
+
+		//! Cut off far objects
+		bool m_enabled_far_cutoff;
+
+		//! Selective render of viewable objects only
+		bool m_enabled_clipping;
+
+		//! Ambient light of the scene
+		Color m_ambient_light;
+
+		//! A list of nodes that contain lights
+		vector<GenericNode *> m_light_nodes;
+
+		//! Register a node as an active node (a node that contains at least one object)
+		inline GenericNode::active_nodes_type::iterator registerNodeWithObjects(
+				GenericNode * pnode) {
+			return m_activenodes.insert(m_activenodes.begin(), pnode);
+		}
+
+		//! Unregister a node from active nodes
+		inline void unregisterNodeWithObjects(
+				GenericNode::active_nodes_type::iterator pit) {
+			m_activenodes.erase(pit);
 		}
 	};
 }

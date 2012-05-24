@@ -9,4 +9,6 @@ layout(std140) uniform SceneMatrices {
 	vec4 CameraPositionWs;
 };
 
+uniform mat4 ModelMatrix;
+
 #endif

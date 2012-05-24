@@ -5,6 +5,18 @@
 
 namespace ogl {
 
+	class shader;
+
+	//! Exception thrown when shader compilation has failed.
+	class shader_compile_error: public compile_error {
+	public:
+		shader_compile_error(const shader & sh) throw ();
+
+		virtual ~shader_compile_error() throw () {	}
+
+		const shader & m_shader;
+	};
+
 	//! GPU Shader
 	/**
 	 * @remarks non-copiable, non-inheritable

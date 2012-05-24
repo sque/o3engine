@@ -31,65 +31,8 @@ namespace o3engine {
 		// List of attached objects
 		typedef vector<DrawableObject *> attached_objects_type;
 
-	protected:
-		// Characteristics of this node
-
-		//! Data of a light
-		Light m_light;
-
-		//! A pointer to our generic scene
-		GenericScene * mp_scene;
-
-		//! Position of node
-		Vector3 m_position;
-
-		//! Scale factor of node
-		Vector3 m_scale;
-
-		//! Orientation of node
-		Quaternion m_orientation;
-
-		//! Name of node
-		string m_name;
-
-		//! An array with objects
-		attached_objects_type m_attached_objects;
-
-		//! Cached global position
-		Vector3 m_gposition;
-
-		//! Cached global orientation
-		Quaternion m_gorientation;
-
-		//! Cached global transformation
-		Matrix4 m_gtransformation;
-
-		//! At which render loop it was cached
-		unsigned long m_cached_global_loop;
-
-		/**@brief Iterator at the list of our selfs in the
-		 list of active nodes at our SceneManager	*/
-		active_nodes_type::iterator ActiveNodes_myiterator;
-
-		//! Iterator at the list of nodes with active light
-		vector<GenericNode *>::iterator LightNodes_myiterator;
-
-		bool m_has_scale;				//!< A flag showing if node has scaling attributes
-		GenericNode * mp_parent; 		//!< Pointer to parent node
-		children_map_type m_children;	//!< Map with children nodes
-
-		//! Constructor for child nodes
-		GenericNode(const string & name, GenericNode * parent, const Vector3 & pos);
-
-		//! Constructor for root node
-		GenericNode(const string & name, SceneManager * pmanager);
-
-		//! Hide destructor so that it is not destructable from the public scope
-		~GenericNode();
-
-	public:
 		//! Internal implementation of calculate global position and orientation
-				void _updateCachedGPos_GOrient(unsigned long cur_renderloop);
+		void _updateCachedGPos_GOrient(unsigned long cur_renderloop);
 
 		using SceneNode::attachObject;
 
@@ -193,14 +136,71 @@ namespace o3engine {
 
 		//! Set a light on this node
 		/**
-		 To disable light on this node, set a light which is disabled
+		 * To disable light on this node, set a light which is disabled
 		 */
-		void setLight(const Light & light);
+		void setLight(const Light * plight);
 
 		//! Get the light of this node
 		inline const Light & getLight() const {
-			return m_light;
+			return *mp_light;
 		}
+
+
+	protected:
+		// Characteristics of this node
+
+		//! Data of a light
+		const Light * mp_light;
+
+		//! A pointer to our generic scene
+		GenericScene * mp_scene;
+
+		//! Position of node
+		Vector3 m_position;
+
+		//! Scale factor of node
+		Vector3 m_scale;
+
+		//! Orientation of node
+		Quaternion m_orientation;
+
+		//! Name of node
+		string m_name;
+
+		//! An array with objects
+		attached_objects_type m_attached_objects;
+
+		//! Cached global position
+		Vector3 m_gposition;
+
+		//! Cached global orientation
+		Quaternion m_gorientation;
+
+		//! Cached global transformation
+		Matrix4 m_gtransformation;
+
+		//! At which render loop it was cached
+		unsigned long m_cached_global_loop;
+
+		/**@brief Iterator at the list of our selfs in the
+		 list of active nodes at our SceneManager	*/
+		active_nodes_type::iterator ActiveNodes_myiterator;
+
+		//! Iterator at the list of nodes with active light
+		vector<GenericNode *>::iterator LightNodes_myiterator;
+
+		bool m_has_scale;				//!< A flag showing if node has scaling attributes
+		GenericNode * mp_parent; 		//!< Pointer to parent node
+		children_map_type m_children;	//!< Map with children nodes
+
+		//! Constructor for child nodes
+		GenericNode(const string & name, GenericNode * parent, const Vector3 & pos);
+
+		//! Constructor for root node
+		GenericNode(const string & name, SceneManager * pmanager);
+
+		//! Hide destructor so that it is not destructable from the public scope
+		~GenericNode();
 	};
 }
 
