@@ -75,7 +75,7 @@ namespace o3engine {
 			if (line.find("#version") != std::string::npos) {
 				boost::smatch version;
 				if (!boost::regex_search(line, version, regversion, boost::match_default)) {
-					throw preprocess_exception(std::string("Cannot parse #version directive: \"") + line + "\"");
+					throw shader_preprocess_error(std::string("Cannot parse #version directive: \"") + line + "\"");
 				}
 				uint16_t glsl_version = boost::lexical_cast<std::uint16_t>(version[1]);
 				if (glsl_version > max_glsl_version)
@@ -83,12 +83,12 @@ namespace o3engine {
 			} else if (line.find("#depend") != std::string::npos) {
 				boost::smatch filematch;
 				if (!boost::regex_search(line, filematch, regdepend, boost::match_default)) {
-					throw preprocess_exception(std::string("Cannot parse #depend directive: \"") + line + "\"");
+					throw shader_preprocess_error(std::string("Cannot parse #depend directive: \"") + line + "\"");
 				}
 				uint16_t included_max_glsl_version;
 				std::string included_fpath = findFilePath(filematch[1]);
 				if (included_fpath.empty()){
-					throw preprocess_exception("Cannot open #depend ing file \"" + filematch[1] + "\"");
+					throw shader_preprocess_error("Cannot open #depend ing file \"" + filematch[1] + "\"");
 				}
 
 				std::string include_source = includeFileSource(__get_file_contents(included_fpath), included_max_glsl_version, depending_modules, false);

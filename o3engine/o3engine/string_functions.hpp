@@ -1,6 +1,7 @@
 #ifndef STRUP_H_INCLUDED
 #define STRUP_H_INCLUDED
 
+//TODO: REmove it, we have boost....
 #include <string>
 #include <vector>
 

@@ -17,6 +17,7 @@
 #include <o3engine/renderline/viewportoutput.hpp>
 #include <o3engine/mesh.hpp>
 #include <o3engine/scenerenderer.hpp>
+#include <o3engine/materilizer.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -41,7 +42,7 @@ public:
 				% O3Engine::getSingleton().getFps() << endl;
 
 		}
-		pscene->getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Radian(M_PI * secs)));
+		pscene->getRootNode().getChildPtr("model")->rotate(Quaternion(Vector3::UNIT_Y, Radian(M_PI * secs/4)));
 
 	}
 
@@ -130,7 +131,6 @@ public :
 	}
 
 	void start() {
-		//pcache_manager = new ResourceCacheManager();
 
 		// Set up window
 		o3engine::Window wnd_main(800, 600);
@@ -170,13 +170,26 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
-		sm.getRootNode().createChild("model")->attachObject(new Quad("test"));
-		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 10))->attachCamera(perscam);
+		auto * pcol1 = new materilizer::ColorNode("diffuseColor", Color::BLUE);
+		auto * plight = new materilizer::LightingNode("phong");
+		plight->getInputConnector("diffuse")->connectTo(pcol1->getOutputConnector("value"));
+		Materilizer * pmatwierd = new Materilizer("wierd");
+		pmatwierd->getInputConnector("color")->connectTo(plight->getOutputConnector("color"));
+		pmatwierd->buildProgram();
+
+		auto * prim = new UVSphere("test");
+		std::cout << info(*prim) << std::endl;
+		prim->setMaterial("wierd");
+
+
+
+		sm.getRootNode().createChild("model")->attachObject(prim);
+		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 5, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
-		sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());
+		//sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());
 		Light redlight;
-		redlight.setDiffuse(Color::RED);
-		sm.getRootNode().createChild("redlight", Vector3(0,0,10))->setLight(&redlight);
+		//redlight.setDiffuse(Color::RED);
+		sm.getRootNode().createChild("redlight", Vector3(0,5,0))->setLight(&redlight);
 
 
 

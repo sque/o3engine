@@ -163,9 +163,10 @@ struct SceneRendererDrawVisitor:
 	//! Pointer to the object's node
 	GenericNode * mp_object_node;
 
-	//! Uniform buffer object
+	//! Uniform buffer object for scene parameters
 	DoubleUniformBufferObject m_ubo_scene;
 
+	//! Uniform buffer object for lights
 	DoubleUniformBufferObject m_ubo_light;
 
 	//! Index of active UBO
@@ -179,8 +180,6 @@ struct SceneRendererDrawVisitor:
 	}
 
 	~SceneRendererDrawVisitor() {
-		//delete mp_ubos[0];
-		//delete mp_ubos[1];
 	}
 
 	void setSceneUniforms() {

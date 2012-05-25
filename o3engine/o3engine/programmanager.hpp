@@ -24,9 +24,9 @@ namespace o3engine {
 		std::string m_fname;
 	};
 
-	//! Preprocess exception
-	struct preprocess_exception : public std::runtime_error {
-		preprocess_exception(const std::string & what) :
+	//! Shader preprocessing error
+	struct shader_preprocess_error : public std::runtime_error {
+		shader_preprocess_error(const std::string & what) :
 			runtime_error(what){
 		}
 	};
@@ -55,7 +55,7 @@ namespace o3engine {
 		//! Load a new program from source
 		template<class TVertex, class TFragment, class TGeometry = nullptr_t, class TTessellation = nullptr_t>
 		ogl::program * loadProgram(
-				const char * name,
+				const std::string & name,
 				const TVertex & vsh,
 				const TFragment & fsh,
 				const TGeometry & gsh = nullptr,

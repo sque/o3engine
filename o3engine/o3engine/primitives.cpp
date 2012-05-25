@@ -63,12 +63,12 @@ namespace o3engine {
 			float y = cos(f)* m_radius;
 			for(size_t s = 0; s < m_slices; s++) {
 				float l = l_step * s;
-				m_vertices.push_back(Vector3(cos(l)*pr, y, sin(l)*pr));
+				m_vertices.push_back(vx_build(Vector3(cos(l)*pr, y, sin(l)*pr)));
 			}
 		}
 
 		// Down vertex
-		m_vertices.push_back(Vector3(0, -m_radius, 0));
+		m_vertices.push_back(vx_build(Vector3(0, -m_radius, 0)));
 
 		// Create indices
 

@@ -1,14 +1,12 @@
 #version 330
 
 #depend "library/scene_parameters.vert"
+#depend "library/attributes.vert"
 #depend "library/light.vert"
 
 void phong_lit(void);
 
 #ifdef COMPILE_OBJECT
-
-layout(location=0) in vec4 aPositionOs;
-layout(location=1) in vec4 aNormalOs;
 
 out vec3 vtEyeVecWs;
 out vec3 vtLightDirWs[LIGHT_TOTAL_MAX];

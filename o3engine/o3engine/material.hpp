@@ -20,7 +20,7 @@ namespace o3engine {
 	/**
 	 * @brief Material describer and handler
 	 */
-	class Material : ManagedObject<MaterialManager, string, Material>
+	class Material : public ManagedObject<MaterialManager, string, Material>
 	{
 	public:
 		// Default constructor
@@ -110,13 +110,14 @@ namespace o3engine {
 		//! Shininess exponement
 		Real m_shininess;
 
-		// Flag for lighting usage
+		//! Flag for lighting usage
 		bool f_lighting;
 
-		// Flag showing if depth write should be enabled
+		//! Flag showing if depth write should be enabled
 		bool b_depthwrite;
 
-		unsigned long seq;  // Sequence number
+		 //! Sequence number
+		unsigned long seq;
 
 		//! Pointer to GPU program
 		ogl::program * mp_program;

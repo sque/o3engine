@@ -11,7 +11,8 @@ namespace o3engine {
 	struct PrimitiveObject: public DrawableObject, public Geometry {
 
 		//! Constructor
-		PrimitiveObject(const string & name, Geometry::attributesflags_type attrs = VertexAttributes::position) :
+		PrimitiveObject(const string & name, Geometry::attributesflags_type attrs = {
+				VertexAttributes::position, VertexAttributes::normal, VertexAttributes::tex_coords_0}) :
 			DrawableObject(name), Geometry(attrs),
 			mp_renderer(nullptr){
 		}

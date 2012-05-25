@@ -34,7 +34,7 @@ vec4 phong_lit(void) {
 	vec4 outColor;
 	for(uint i = 0u;i < TotalLights;i++) {
 		vec3 L = normalize(vtLightDirWs[i]);
-		outColor += compute_light(Lights[0], N, L, E, 1, vec4(0,0,0,1), vec4(0.2, 0.2, 0.2, 1), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 2);
+		outColor += compute_light(Lights[0], N, L, E, 1, vec4(0,0,0,1), vec4(0.2, 0.2, 0.2, 1), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 50);
 	}
 	return outColor;
 }
