@@ -1,64 +1,96 @@
 include(FindPkgConfig)
 
-pkg_search_module(exlibs REQUIRED freetype2 glew2)
+pkg_check_modules(exlibs REQUIRED freetype2 glew assimp)
 include_directories(${exlibs_INCLUDE_DIRS})
 
+# Enable C++11 support
+if(${CMAKE_COMPILER_IS_GNUCC})
+add_definitions(-std=gnu++0x)
+endif(${CMAKE_COMPILER_IS_GNUCC})
+
 add_library(o3engine STATIC 
-	animatedtexture.cpp
-	billboard.cpp
-	camera.cpp
-	drawableobject.cpp
-	face.cpp
-	font.cpp
-	fontmanager.cpp
-	framelistener.cpp
-	genericnode.cpp
-	genericscene.cpp
-	light.cpp
-	material.cpp
-	materialmanager.cpp
-	mesh.cpp
-	o3engine.cpp
-	objectmanager.cpp
-	overlay.cpp
-	skinnedobject.cpp
-	skybox.cpp
-	string_functions.cpp
-	submesh.cpp
-	texture.cpp
-	texturemanager.cpp
-	timesensitive.cpp
-	base/angle.cpp
-	base/color.cpp
-	base/image.cpp
-	base/math.cpp
-	base/matrix3.cpp
-	base/quaternion.cpp
-	base/rectangle.cpp
-	base/triangle3.cpp
-	base/vector2.cpp
-	base/vector3.cpp
-	base/vector4.cpp
-	gui/guibutton.hpp
-	gui/guiroot.cpp
-	gui/guisimpleengine.cpp
-	gui/guiwindow.cpp
-	tinyxml/tinystr.cpp
-	tinyxml/tinyxml.cpp
-	tinyxml/tinyxmlerror.cpp
-	tinyxml/tinyxmlparser.cpp
-	platform/inputprocessor.cpp
-	platform/keyboardlistener.cpp
-	platform/mouselistener.cpp
-	platform/platform.cpp
-	platform/surface.cpp
-	platform/timer_posix.cpp
-	platform/glut/glut_state.cpp
-	platform/glut/inputprocessor_impl_glut.cpp
-	platform/glut/offscreen_impl_glut.cpp
-	platform/glut/platform_impl_glut.cpp
-	platform/glut/window_impl_glut.cpp
-	renderline/output.cpp
-	renderline/textureoutput.cpp
-	renderline/viewportoutput.cpp
+./mesh.cpp
+./perspectivecamera.cpp
+./tinyxml/tinystr.cpp
+./tinyxml/tinyxml.cpp
+./tinyxml/tinyxmlparser.cpp
+./tinyxml/tinyxmlerror.cpp
+./orthocamera.cpp
+./renderline/viewportoutput.cpp
+./renderline/output.cpp
+./renderline/textureoutput.cpp
+./font.cpp
+./genericnode.cpp
+./billboard.cpp
+./genericscene.cpp
+./skybox.cpp
+./base/matrix3.cpp
+./base/vector2.cpp
+./base/color.cpp
+./base/angle.cpp
+./base/quaternion.cpp
+./base/image.cpp
+./base/triangle3.cpp
+./base/vector3.cpp
+./base/vector4.cpp
+./base/math.cpp
+./base/matrix4.cpp
+./base/rectangle.cpp
+./programmanager.cpp
+./light.cpp
+./scenerenderer.cpp
+./timesensitive.cpp
+./overlay.cpp
+./objectmanager.cpp
+./animatedtexture.cpp
+./camera.cpp
+./drawableobject.cpp
+./primitives.cpp
+./materialmanager.cpp
+./material.cpp
+./ogl/utils/info.cpp
+./ogl/context.cpp
+./ogl/program.cpp
+./ogl/scissor_test_unit.cpp
+./ogl/blend_unit.cpp
+./ogl/stencil_test_unit.cpp
+./ogl/capabilities_unit.cpp
+./ogl/depth_test_unit.cpp
+./ogl/texture_unit.cpp
+./ogl/shader.cpp
+./ogl/frame_buffer.cpp
+./ogl/uniform_block.cpp
+./ogl/buffer.cpp
+./ogl/face_cull_unit.cpp
+./ogl/render_buffer.cpp
+./ogl/uniform.cpp
+./ogl/texture.cpp
+./ogl/vertex_array.cpp
+./geometry.cpp
+./fontmanager.cpp
+./gui/guiwindow.cpp
+./gui/guiroot.cpp
+./gui/guisimpleengine.cpp
+./o3engine.cpp
+./texture.cpp
+./texturemanager.cpp
+./string_functions.cpp
+./materilizer/colornode.cpp
+./materilizer/builder.cpp
+./materilizer/ligthingnode.cpp
+./materilizer/connector.cpp
+./materilizer/node.cpp
+./framelistener.cpp
+./materilizer.cpp
+./platform/mouselistener.cpp
+./platform/timer_posix.cpp
+./platform/inputprocessor.cpp
+./platform/glut/offscreen_impl_glut.cpp
+./platform/glut/glut_state.cpp
+./platform/glut/window_impl_glut.cpp
+./platform/glut/platform_impl_glut.cpp
+./platform/glut/inputprocessor_impl_glut.cpp
+./platform/keyboardlistener.cpp
+./platform/platform.cpp
+./platform/surface.cpp
 )
