@@ -20,6 +20,8 @@ namespace o3engine {
 		virtual std::string getStaticCode(ogl::shader_type type);
 
 		virtual std::string getGeneratedCode(ogl::shader_type type);
+
+		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name);
 	protected:
 
 	};

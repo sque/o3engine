@@ -44,6 +44,9 @@ namespace materilizer {
 		//! Traverse all node connections and gather static code
 		void gatherStaticCode(std::string & vert_static_source, std::string & frag_static_source);
 
+		//! Traverse all node connections and gather generated code
+		void gatherGeneratedCode(std::string & vert_source, std::string & fragc_source);
+
 		void processNode(Node * pnode);
 	};
 }

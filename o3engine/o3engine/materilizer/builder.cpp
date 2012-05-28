@@ -37,6 +37,16 @@ namespace materilizer {
 		}
 	}
 
+	//! Gather static code
+	void Builder::gatherGeneratedCode(std::string & vert_source, std::string & frag_source) {
+
+		// Add node to active
+		for(auto & node : m_nodes) {
+			vert_source += node.second->getGeneratedCode(ogl::shader_type::VERTEX);
+			frag_source += node.second->getGeneratedCode(ogl::shader_type::FRAGMENT);
+		}
+	}
+
 	bool Builder::build() {
 		// Gather all nodes
 		gatherChainedNodes(m_root_node);
@@ -52,13 +62,21 @@ namespace materilizer {
 			"#version 330\n\n"
 			"out vec4 outColor;\n";
 
-
+		// static code
 		gatherStaticCode(m_vert_source, m_frag_source);
 
+		// Main entry points
 		m_vert_source += "void main(){\n"
 			" gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * aPositionOs;";
+		m_frag_source +="void main(){\n";
 
-		m_frag_source +="void main(){\n phong_lit();";
+		//! Generated code
+		gatherGeneratedCode(m_vert_source, m_frag_source);
+
+		//! Main call loop
+		m_vert_source += m_root_node->getGeneratedOutputValue(ogl::shader_type::VERTEX, "color");
+		m_frag_source +=
+			"outColor = " + m_root_node->getGeneratedOutputValue(ogl::shader_type::FRAGMENT, "color") + ";";
 
 		m_vert_source += "\n}\n";
 		m_frag_source += "\n}\n";

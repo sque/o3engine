@@ -57,6 +57,13 @@ namespace materilizer {
 	};
 
 	//! Specialization for input connector
+	class OutputConnector : public Connector {
+	public:
+		OutputConnector(const std::string & name, ValueType vtype, Node * powner);
+
+	};
+
+	//! Specialization for input connector
 	class InputConnector : public Connector {
 	public:
 		InputConnector(const std::string & name, ValueType vtype, Node * powner);
@@ -81,17 +88,19 @@ namespace materilizer {
 			return mp_connected_at->getOwner();
 		}
 
+		//! Get connected socket
+		OutputConnector * getConnectedSocket() {
+			if (!isConnected())
+				throw std::runtime_error("materilizer::Connector::getConnectedSocket(): connector is not attached.");
+			return mp_connected_at;
+		}
+
 	protected:
 		//! Pointer to the other connector
-		Connector * mp_connected_at;
+		OutputConnector * mp_connected_at;
 
 	};
 
-	class OutputConnector : public Connector {
-	public:
-		OutputConnector(const std::string & name, ValueType vtype, Node * powner);
-
-	};
 }
 }
 

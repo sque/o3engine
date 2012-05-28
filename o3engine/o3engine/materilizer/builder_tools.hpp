@@ -14,6 +14,8 @@ namespace materilizer{
 
 namespace builder {
 
+	bool has_input_connector(Node * node, const std::string & connector_name);
+
 	bool has_output_connector(Node * node, const std::string & connector_name);
 
 	std::string output_variable(Node * node, const std::string & connector_name);
@@ -28,6 +30,9 @@ namespace builder {
 
 	std::string variable_type(Connector::ValueType type);
 
+	std::string input_data_value(ogl::shader_type type, Node * node, const std::string & connector_name);
+
+	std::string func_call(const std::string & func_name, std::initializer_list<std::string> arguments = {});
 }}}
 
 #endif

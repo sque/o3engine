@@ -55,7 +55,7 @@ namespace materilizer {
 		virtual std::string getGeneratedCode(ogl::shader_type type) = 0;
 
 		//! Get generated output value
-		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name){};
+		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name) = 0;
 	protected:
 
 		//! Add an input connector

@@ -14,7 +14,7 @@ namespace materilizer {
 		switch(type){
 		case ogl::shader_type::FRAGMENT:
 			return (boost::format("%1% %2% = %3%;\n")
-				% builder::variable_type(this->getInputConnector("value")->getValueType())
+				% builder::variable_type(this->getOutputConnector("value")->getValueType())
 				% builder::output_variable(this, "value")
 				% builder::literal(m_color)).str();
 		default:

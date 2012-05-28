@@ -11,7 +11,8 @@ namespace materilizer {
 
 
 		ColorNode(const std::string & name, const Color & color) :
-			Node(name){
+			Node(name),
+			m_color(color){
 			addOutputConnector("value", Connector::ValueType::Vec4);
 		}
 

@@ -35,6 +35,7 @@ namespace materilizer {
 
 		virtual std::string getGeneratedCode(ogl::shader_type type);
 
+		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name);
 
 	private:
 		Op m_operation;

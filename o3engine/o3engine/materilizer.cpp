@@ -1,4 +1,5 @@
 #include "materilizer.hpp"
+#include "materilizer/builder_tools.hpp"
 #include "materilizer/builder.hpp"
 #include "programmanager.hpp"
 
@@ -16,6 +17,15 @@ std::string Materilizer::getStaticCode(ogl::shader_type type) {
 
 std::string Materilizer::getGeneratedCode(ogl::shader_type type) {
 	return "";
+}
+
+std::string Materilizer::getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name) {
+	switch(type) {
+	case ogl::shader_type::FRAGMENT:
+		return "outColor = " + materilizer::builder::input_data_value(type, this, "color") + ";";
+	default:
+		return "";
+	}
 }
 
 void Materilizer::buildProgram() {

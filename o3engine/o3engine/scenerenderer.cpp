@@ -23,7 +23,7 @@ void set_dmat4_to_mat4(ogl::uniform & u, const Matrix4 &m) {
 	for(size_t i = 0; i < 16;i++) {
 		fv[i] = (&m[0][0])[i];
 	}
-	u.setmat4f(fv, true);
+	u.setmat4f(fv, false);
 }
 
 template<class To, class From, bool Transpose = false>
