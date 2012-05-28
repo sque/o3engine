@@ -7,21 +7,31 @@
 namespace o3engine {
 namespace materilizer {
 
-	class Builder {
+	//! Builder that will process a node structure and produce a GLSL program.
+	class ProgramBuilder {
 	public:
 
-		Builder(Node * proot);
+		//! Initialize builder on the root
+		ProgramBuilder(Node * proot);
 
+		//! Process structure and build program
 		bool build();
 
-		const std::string & getVertexSource() const {
-			return m_vert_source;
+		//! Check if program is built
+		bool isBuilt() const{
+			return m_built;
 		}
 
-		const std::string & getFragmentSource() const {
-			return m_frag_source;
-		}
+		//! Get produced vertex source
+		const std::string & getVertexSource() const;
+
+		//! Get produces fragment source
+		const std::string & getFragmentSource() const;
+
 	protected:
+
+		//! Flag if program is built
+		bool m_built;
 
 		//! Vertex shader produced source code
 		std::string m_vert_source;
@@ -30,10 +40,10 @@ namespace materilizer {
 		std::string m_frag_source;
 
 		//! Type definition of container with all nodes
-		typedef std::map<std::string, Node * > nodes_type;
+		typedef std::map<std::string, Node * > nodes_container_type;
 
 		//! A container with all chained nodes
-		nodes_type m_nodes;
+		nodes_container_type m_nodes;
 
 		//! Root node to use for building
 		Node * m_root_node;
@@ -45,9 +55,7 @@ namespace materilizer {
 		void gatherStaticCode(std::string & vert_static_source, std::string & frag_static_source);
 
 		//! Traverse all node connections and gather generated code
-		void gatherGeneratedCode(std::string & vert_source, std::string & fragc_source);
-
-		void processNode(Node * pnode);
+		void gatherExecutedCode(std::string & vert_source, std::string & fragc_source);
 	};
 }
 }

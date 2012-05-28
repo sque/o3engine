@@ -4,7 +4,7 @@
 #include "material.hpp"
 #include "materilizer/node.hpp"
 #include "materilizer/mathnode.hpp"
-#include "materilizer/colornode.hpp"
+#include "materilizer/fixedvaluenode.hpp"
 #include "materilizer/lightingnode.hpp"
 
 namespace o3engine {
@@ -17,15 +17,13 @@ namespace o3engine {
 		//! Build a program out of this material
 		void buildProgram();
 
-		virtual std::string getStaticCode(ogl::shader_type type);
+		std::string getStaticCode(ogl::shader_type type);
 
-		virtual std::string getGeneratedCode(ogl::shader_type type);
+		std::string getExecutedCode(ogl::shader_type type);
 
-		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name);
-	protected:
+		std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name);
 
 	};
 }
-
 
 #endif

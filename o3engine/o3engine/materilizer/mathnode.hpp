@@ -16,9 +16,9 @@ namespace materilizer {
 
 		MathNode(const std::string & name) :
 			Node(name){
-			addInputConnector("arg1", Connector::ValueType::Vec4);
-			addInputConnector("arg2", Connector::ValueType::Vec4);
-			addOutputConnector("result", Connector::ValueType::Vec4);
+			addInputSocket<Socket::ValueType::Vec4>("arg1", Vector4(1,1,1,1));
+			addInputSocket<Socket::ValueType::Vec4>("arg2", Vector4(1,1,1,1));
+			addOutputSocket<Socket::ValueType::Vec4>("result");
 		}
 
 		void setOperation(Op op) {

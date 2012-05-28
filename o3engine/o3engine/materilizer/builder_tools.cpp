@@ -5,20 +5,22 @@ namespace o3engine {
 namespace materilizer{
 namespace builder {
 
-	bool has_input_connector(Node * node, const std::string & connector_name) {
-		auto & ic = node->getInputConnectors();
-		return ic.find(connector_name) != ic.end();
+	std::string output_variable_name(Node * pnode, const std::string & socket_name) {
+		if (!pnode->hasOutputSocket(socket_name))
+			throw materilizer_build_error("There is no output socket with this name. \n" + socket_name + "\"");
+		return pnode->getName() + "_" + socket_name;
 	}
 
-	bool has_output_connector(Node * node, const std::string & connector_name) {
-		auto & oc = node->getOutputConnectors();
-		return oc.find(connector_name) != oc.end();
+	std::string literal(const float & f) {
+		return (boost::format("%1%") % f).str();
 	}
 
-	std::string output_variable(Node * node, const std::string & connector_name) {
-		if (!has_output_connector(node, connector_name))
-			throw materilizer_build_error("There is no output connector with this name. \n" + connector_name + "\"");
-		return node->getName() + connector_name;
+	std::string literal(const std::int32_t & r) {
+		return (boost::format("%1%") % r).str();
+	}
+
+	std::string literal(const std::uint32_t & r) {
+		return (boost::format("%1%") % r).str();
 	}
 
 	std::string literal(const Vector2 & r) {
@@ -37,23 +39,34 @@ namespace builder {
 		return (boost::format("vec4(%1%, %2%, %3%, %4%)") % r.red % r.green % r.blue % r.alpha).str();
 	}
 
-	std::string variable_type(Connector::ValueType type) {
+	struct literal_variant_visitor : public boost::static_visitor<std::string> {
+		template<class Type>
+		std::string operator()(const Type & v) const {
+			return literal(v);
+		}
+	};
+
+	std::string literal(const InputSocket::default_variant_type & vt) {
+		return boost::apply_visitor(literal_variant_visitor(), vt);
+	}
+
+	std::string variable_type(Socket::ValueType type) {
 		switch(type) {
-		case Connector::ValueType::Float:
+		case Socket::ValueType::Float:
 			return "float";
-		case Connector::ValueType::Int:
+		case Socket::ValueType::Int:
 			return "int";
-		case Connector::ValueType::Uint:
+		case Socket::ValueType::Uint:
 			return "uint";
-		case Connector::ValueType::Vec3:
+		case Socket::ValueType::Vec3:
 			return "vec3";
-		case Connector::ValueType::Vec4:
+		case Socket::ValueType::Vec4:
 			return "vec4";
-		case Connector::ValueType::Vec2:
+		case Socket::ValueType::Vec2:
 			return "vec2";
-		case Connector::ValueType::Mat3:
+		case Socket::ValueType::Mat3:
 			return "mat3";
-		case Connector::ValueType::Mat4:
+		case Socket::ValueType::Mat4:
 			return "mat4";
 		default:
 			return "";
@@ -61,12 +74,23 @@ namespace builder {
 	}
 
 
-	std::string input_data_value(ogl::shader_type type, Node * node, const std::string & connector_name) {
-		if (!has_input_connector(node, connector_name))
-			throw materilizer_build_error("There is no output connector with this name. \n" + connector_name + "\"");
-		return node->getInputConnector(connector_name)->getConnectedNode()->getGeneratedOutputValue(
-				type,
-				node->getInputConnector(connector_name)->getConnectedSocket()->getName());
+	std::string input_value(ogl::shader_type type, Node * pnode, const std::string & socket_name) {
+
+		// Check if there is actually a socket with this name
+		if (!pnode->hasInputSocket(socket_name)) {
+			throw materilizer_build_error("There is no output socket with this name. \n" + socket_name + "\"");
+		}
+
+		// Check if it is not connected, then return default value
+		auto * psocket = pnode->getInputSocket(socket_name);
+		if (!psocket->isConnected()) {
+			return literal(psocket->getDefaultValue());
+		}
+
+		// Else return the value of the foreign node
+		return psocket->getConnectedNode()->getOutputSocketReference(
+			type,
+			psocket->getConnectedSocket()->getName());
 	}
 
 	std::string func_call(const std::string & func_name, std::initializer_list<std::string> arguments) {

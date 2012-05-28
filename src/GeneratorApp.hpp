@@ -172,24 +172,27 @@ public :
 
 		auto * pcol1 = new materilizer::ColorNode("diffuseColor", Color::BLUE);
 		auto * plight = new materilizer::LightingNode("phong");
-		plight->getInputConnector("diffuse")->connectTo(pcol1->getOutputConnector("value"));
+		plight->getInputSocket("diffuse")->connectTo(pcol1->getOutputSocket("value"));
+		plight->getInputSocket("ambient")->connectTo(pcol1->getOutputSocket("value"));
 		Materilizer * pmatwierd = new Materilizer("wierd");
-		pmatwierd->getInputConnector("color")->connectTo(plight->getOutputConnector("color"));
+		pmatwierd->getInputSocket("color")->connectTo(plight->getOutputSocket("color"));
 		pmatwierd->buildProgram();
 
-		auto * prim = new UVSphere("test");
+		auto * prim = new UVSphere("test", 5, 30, 30);
 		std::cout << info(*prim) << std::endl;
 		prim->setMaterial("wierd");
 
 
 
 		sm.getRootNode().createChild("model")->attachObject(prim);
+		sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
+		sm.getRootNode().getChildPtr("model2")->setLight(new Light());
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 5, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		//sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());
 		Light redlight;
 		//redlight.setDiffuse(Color::RED);
-		sm.getRootNode().createChild("redlight", Vector3(0,5,0))->setLight(&redlight);
+		sm.getRootNode().createChild("redlight", Vector3(0,15,0))->setLight(&redlight);
 
 
 

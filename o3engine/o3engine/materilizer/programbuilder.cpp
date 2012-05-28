@@ -1,34 +1,42 @@
-#include "builder.hpp"
+#include "programbuilder.hpp"
 
 namespace o3engine {
 namespace materilizer {
-	Builder::Builder(Node * proot) :
-	m_root_node(proot){
+
+	ProgramBuilder::ProgramBuilder(Node * proot) :
+		m_built(false),
+		m_root_node(proot){
 
 	}
 
-	void processNode(Node * pnode) {
-
-		//if (has)
+	const std::string & ProgramBuilder::getVertexSource() const {
+		if (!isBuilt())
+			throw std::runtime_error("ProgramBuilder: use build() before requesting source.");
+		return m_vert_source;
 	}
 
-	void Builder::gatherChainedNodes(Node * pnode) {
+	const std::string & ProgramBuilder::getFragmentSource() const {
+		if (!isBuilt())
+			throw std::runtime_error("ProgramBuilder: use build() before requesting source.");
+		return m_frag_source;
+	}
 
-		// Add node to active
+	void ProgramBuilder::gatherChainedNodes(Node * pnode) {
+
+		// Add this node to the active chained nodes
 		if (m_nodes.find(pnode->getName()) != m_nodes.end()) {
 			throw materilizer_build_error("Found duplicate name \"" + pnode->getName() + "\"");
 		}
 		m_nodes[pnode->getName()] = pnode;
 
 		// Continue for every chained object
-		for(auto & con : pnode->getInputConnectors()) {
+		for(auto & con : pnode->getInputSockets()) {
 			if (con.second->isConnected())
 				gatherChainedNodes(con.second->getConnectedNode());
 		}
 	}
 
-	//! Gather static code
-	void Builder::gatherStaticCode(std::string & vert_static_source, std::string & frag_static_source) {
+	void ProgramBuilder::gatherStaticCode(std::string & vert_static_source, std::string & frag_static_source) {
 
 		// Add node to active
 		for(auto & node : m_nodes) {
@@ -37,18 +45,19 @@ namespace materilizer {
 		}
 	}
 
-	//! Gather static code
-	void Builder::gatherGeneratedCode(std::string & vert_source, std::string & frag_source) {
+	void ProgramBuilder::gatherExecutedCode(std::string & vert_source, std::string & frag_source) {
 
 		// Add node to active
 		for(auto & node : m_nodes) {
-			vert_source += node.second->getGeneratedCode(ogl::shader_type::VERTEX);
-			frag_source += node.second->getGeneratedCode(ogl::shader_type::FRAGMENT);
+			vert_source += node.second->getExecutedCode(ogl::shader_type::VERTEX);
+			frag_source += node.second->getExecutedCode(ogl::shader_type::FRAGMENT);
 		}
 	}
 
-	bool Builder::build() {
+	bool ProgramBuilder::build() {
+
 		// Gather all nodes
+		m_nodes.clear();
 		gatherChainedNodes(m_root_node);
 
 		m_vert_source =
@@ -71,17 +80,17 @@ namespace materilizer {
 		m_frag_source +="void main(){\n";
 
 		//! Generated code
-		gatherGeneratedCode(m_vert_source, m_frag_source);
+		gatherExecutedCode(m_vert_source, m_frag_source);
 
 		//! Main call loop
-		m_vert_source += m_root_node->getGeneratedOutputValue(ogl::shader_type::VERTEX, "color");
+		m_vert_source += m_root_node->getOutputSocketReference(ogl::shader_type::VERTEX, "color");
 		m_frag_source +=
-			"outColor = " + m_root_node->getGeneratedOutputValue(ogl::shader_type::FRAGMENT, "color") + ";";
+			"outColor = " + m_root_node->getOutputSocketReference(ogl::shader_type::FRAGMENT, "color") + ";";
 
 		m_vert_source += "\n}\n";
 		m_frag_source += "\n}\n";
 
-		return true;
+		return m_built = true;
 	}
 
 
