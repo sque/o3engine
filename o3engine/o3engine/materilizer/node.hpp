@@ -54,11 +54,8 @@ namespace materilizer {
 		//! Get source code to generate output variables
 		virtual std::string getGeneratedCode(ogl::shader_type type) = 0;
 
-		//! Get name of generated output variable
-		std::string getGeneratedOutputVariable(const std::string & connector_name) {
-			return getName() + connector_name;
-		}
-
+		//! Get generated output value
+		virtual std::string getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name){};
 	protected:
 
 		//! Add an input connector

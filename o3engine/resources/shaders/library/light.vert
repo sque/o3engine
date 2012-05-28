@@ -1,4 +1,6 @@
 #version 330
+#ifndef LIGHT_VERT_INCLUDED
+#define LIGHT_VERT_INCLUDED
 
 #define LIGHT_POSITIONAL 0u
 #define LIGHT_DIRECTIONAL 1u
@@ -20,3 +22,5 @@ layout(std140, binding = 1) uniform LightsUniform {
 	uint TotalLights;
 	light_t Lights[LIGHT_TOTAL_MAX];
 };
+
+#endif

@@ -14,7 +14,6 @@ namespace o3engine {
 	public:
 		Materilizer(const std::string & name);
 
-
 		//! Build a program out of this material
 		void buildProgram();
 

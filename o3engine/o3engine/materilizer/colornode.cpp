@@ -1,4 +1,5 @@
 #include "colornode.hpp"
+#include "builder_tools.hpp"
 #include <boost/format.hpp>
 
 namespace o3engine {
@@ -12,13 +13,18 @@ namespace materilizer {
 
 		switch(type){
 		case ogl::shader_type::FRAGMENT:
-			return (boost::format("vec4 %1% = vec4(%2%, %3%, %4%, %5);\n")
-						% getGeneratedOutputVariable("value")
-						% m_color.red % m_color.green % m_color.blue % m_color.alpha).str();
+			return (boost::format("%1% %2% = %3%;\n")
+				% builder::variable_type(this->getInputConnector("value")->getValueType())
+				% builder::output_variable(this, "value")
+				% builder::literal(m_color)).str();
 		default:
 			return "";
 		}
 
+	}
+
+	std::string ColorNode::getGeneratedOutputValue(ogl::shader_type type, const std::string & connector_name) {
+		return (boost::format("%1%") % builder::literal(m_color)).str();
 	}
 
 }

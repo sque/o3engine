@@ -2,16 +2,10 @@
 #define O3ENGINE_MATERILIZER_BUILDER_HPP_INCLUDED
 
 #include "node.hpp"
+#include "builder_tools.hpp"
 
 namespace o3engine {
 namespace materilizer {
-
-	//! Error will building program
-	struct materilizer_build_error : public std::runtime_error {
-		materilizer_build_error(const std::string & what) :
-			runtime_error(what){
-		}
-	};
 
 	class Builder {
 	public:
@@ -46,6 +40,9 @@ namespace materilizer {
 
 		//! Traverse all node connections and gather nodes
 		void gatherChainedNodes(Node * pnode);
+
+		//! Traverse all node connections and gather static code
+		void gatherStaticCode(std::string & vert_static_source, std::string & frag_static_source);
 
 		void processNode(Node * pnode);
 	};

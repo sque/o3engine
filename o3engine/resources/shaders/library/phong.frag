@@ -1,4 +1,6 @@
 #version 330
+#ifndef PHONG_FRAG_INCLUDED
+#define PHONG_FRAG_INCLUDED
 
 #depend "library/light.vert"
 
@@ -38,5 +40,7 @@ vec4 phong_lit(void) {
 	}
 	return outColor;
 }
+
+#endif
 
 #endif

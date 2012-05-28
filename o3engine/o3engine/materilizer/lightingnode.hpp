@@ -20,7 +20,6 @@ namespace materilizer {
 			addInputConnector("ambient", Connector::ValueType::Vec4);
 			addInputConnector("shininess", Connector::ValueType::Float);
 			addInputConnector("normal", Connector::ValueType::Vec3);
-
 			addOutputConnector("color", Connector::ValueType::Vec4);
 		}
 

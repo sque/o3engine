@@ -1,6 +1,6 @@
 #version 330
-#ifndef SCENE_PARAMS_GLSLH_INCLUDED
-#define SCENE_PARAMS_GLSLH_INCLUDED
+#ifndef SCENE_PARAMETERS_VERT_INCLUDED
+#define SCENE_PARAMETERS_VERT_INCLUDED
 
 layout(std140) uniform SceneMatrices {
 	mat4 ProjectionMatrix;

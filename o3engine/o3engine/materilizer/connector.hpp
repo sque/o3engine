@@ -20,6 +20,7 @@ namespace materilizer {
 			Float,
 			Int,
 			Uint,
+			Vec2,
 			Vec3,
 			Vec4,
 			Mat4,

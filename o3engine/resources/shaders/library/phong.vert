@@ -1,4 +1,6 @@
 #version 330
+#ifndef PHONG_VERT_INCLUDED
+#define PHONG_VERT_INCLUDED
 
 #depend "library/scene_parameters.vert"
 #depend "library/attributes.vert"
@@ -22,5 +24,8 @@ void phong_lit(void) {
 	}
 			
 }
+
+#endif
+
 
 #endif
