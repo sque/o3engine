@@ -1,10 +1,10 @@
-#ifndef O3ENGINE_MATERILIZER_MATHNODE_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_MATHNODE_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_MATHNODE_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_MATHNODE_HPP_INCLUDED
 
 #include "node.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	class MathNode : public Node{
 	public:
@@ -14,8 +14,8 @@ namespace materilizer {
 			Add
 		};
 
-		MathNode(const std::string & name) :
-			Node(name){
+		MathNode(NodeContainer * powner, const std::string & name) :
+			Node(powner, name, typeid(name).name()){
 			addInputSocket<Socket::ValueType::Vec4>("arg1", Vector4(1,1,1,1));
 			addInputSocket<Socket::ValueType::Vec4>("arg2", Vector4(1,1,1,1));
 			addOutputSocket<Socket::ValueType::Vec4>("result");

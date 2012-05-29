@@ -1,16 +1,16 @@
-#ifndef O3ENGINE_MATERILIZER_TEXTURE_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_TEXTURE_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_TEXTURE_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_TEXTURE_HPP_INCLUDED
 
 #include "node.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	//! Node to sample from a texture
 	class TextureNode : public Node{
 	public:
 		//! Construct a new texture node
-		TextureNode(const std::string & name, const std::string & texture_name);
+		TextureNode(NodeContainer * powner, const std::string & name, const std::string & texture_name);
 
 		//! Set a new texture
 		void setTexture(Texture * ptexture) {

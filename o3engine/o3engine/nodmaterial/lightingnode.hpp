@@ -1,17 +1,17 @@
-#ifndef O3ENGINE_MATERILIZER_LIGHTINGNODE_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_LIGHTINGNODE_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_LIGHTINGNODE_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_LIGHTINGNODE_HPP_INCLUDED
 
 #include "node.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	//! Node to implement lighting
 	class LightingNode : public Node{
 	public:
 
 		//! Construct a new node with basic lighting
-		LightingNode(const std::string & name);
+		LightingNode(NodeContainer * powner, const std::string & name);
 
 		virtual std::string getStaticCode(ogl::shader_type type);
 

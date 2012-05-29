@@ -1,7 +1,7 @@
 #include "programbuilder.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	ProgramBuilder::ProgramBuilder(Node * proot) :
 		m_built(false),
@@ -24,12 +24,6 @@ namespace materilizer {
 	void ProgramBuilder::gatherChainedNodes(Node * pnode) {
 
 		// Add this node to the active chained nodes
-		nodes_container_type::iterator it = m_nodes.find(pnode->getName());
-		if (it != m_nodes.end()) {
-			// Two nodes with the chain with same name, are either the same or synonymous
-			if (it->second != pnode)
-				throw materilizer_build_error("Found duplicate name \"" + pnode->getName() + "\"");
-		}
 		m_nodes[pnode->getName()] = pnode;
 
 		// Continue for every chained object

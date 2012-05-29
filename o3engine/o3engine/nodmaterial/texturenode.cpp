@@ -3,10 +3,10 @@
 #include "builder_tools.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
-	TextureNode::TextureNode(const std::string & name, const std::string & texture_name) :
-		Node(name){
+	TextureNode::TextureNode(NodeContainer * powner, const std::string & name, const std::string & texture_name) :
+		Node(powner, name, typeid(this).name()){
 		addInputSocket<Socket::ValueType::Vec4>("coordinates", Vector4(0,0,0,1));
 		addOutputSocket<Socket::ValueType::Vec4>("color");
 

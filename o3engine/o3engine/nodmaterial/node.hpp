@@ -1,12 +1,15 @@
-#ifndef O3ENGINE_MATERILIZER_NODE_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_NODE_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_NODE_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_NODE_HPP_INCLUDED
 
 #include "socket.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
-	//! A node in materilizer system
+	//! Prototype of container class
+	class NodeContainer;
+
+	//! A node in NodMaterial system
 	class Node {
 	public:
 		//! Container of input sockets
@@ -15,17 +18,20 @@ namespace materilizer {
 		//! Container of output sockets
 		typedef std::map<std::string, OutputSocket *> outputsockets_container_type;
 
-		//! Constructor
-		Node(const std::string & name) :
-			m_name(name) {
-		}
+		//! Construct a node
+		Node(NodeContainer * powner, const std::string & instance_name, const std::string & type_name);
 
 		//! Inheritable
 		virtual ~Node();
 
-		//! Get the name of this node
+		//! Get the name of this node instance
 		const std::string & getName() const {
-			return m_name;
+			return m_instance_name;
+		}
+
+		//! Get the name of this node type
+		const std::string & getTypeName() const {
+			return m_type_name;
 		}
 
 		//! Get input sockets
@@ -68,6 +74,7 @@ namespace materilizer {
 		virtual std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name) = 0;
 	protected:
 
+		//! Add an input socket
 		template<Socket::ValueType value_type, class DefaultType>
 		void addInputSocket(const std::string & name, const DefaultType & def_value) {
 			if (m_input_sockets.find(name) != m_input_sockets.end())
@@ -83,10 +90,21 @@ namespace materilizer {
 			m_output_sockets[name]= new OutputSocket(name, value_type, this);
 		}
 
+		//! Get container owner of this now
+		NodeContainer * getOwner() {
+			return mp_owner;
+		}
+
 	private:
 
-		//! Name of this node
-		std::string m_name;
+		//! Container owner of the node
+		NodeContainer * mp_owner;
+
+		//! Name of this node instance
+		std::string m_instance_name;
+
+		//! Name of node type
+		std::string m_type_name;
 
 		//! List with all input sockets
 		inputsockets_container_type m_input_sockets;

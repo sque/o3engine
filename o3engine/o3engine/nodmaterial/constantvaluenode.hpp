@@ -1,29 +1,31 @@
-#ifndef O3ENGINE_MATERILIZER_COLORNODE_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_COLORNODE_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_COLORNODE_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_COLORNODE_HPP_INCLUDED
 
 #include "node.hpp"
 #include "builder_tools.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
+	//! Node representing constant value
 	template<class Type, Socket::ValueType SocketValueType, const Type & DefaultValue>
-	class FixedValueNode : public Node{
+	class ConstantValueNode : public Node{
 	public:
 
 		//! Type of value
 		typedef Type value_type;
 
-		//! Construct with specific value
-		FixedValueNode(const std::string & name, const value_type & value) :
-			Node(name),
+
+		//! Construct and initialize with a value
+		ConstantValueNode(NodeContainer * powner, const std::string & name, const value_type & value) :
+			Node(powner, name, typeid(this).name()),
 			m_value(value){
 			addOutputSocket<SocketValueType>("value");
 		}
 
 		//! Construct with default value
-		FixedValueNode(const std::string & name):
-			FixedValueNode(name, DefaultValue){
+		ConstantValueNode(const std::string & name):
+			ConstantValueNode(name, DefaultValue){
 		}
 
 		//! Set new value
@@ -54,7 +56,7 @@ namespace materilizer {
 		value_type m_value;
 	};
 
-	typedef FixedValueNode<Color, Socket::ValueType::Vec4, Color::BLACK> ColorNode;
+	typedef ConstantValueNode<Color, Socket::ValueType::Vec4, Color::BLACK> ColorNode;
 }
 }
 

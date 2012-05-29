@@ -1,6 +1,6 @@
 #include "socket.hpp"
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 
 Socket::Socket(const std::string & name, ValueType vtype, Node * powner) :
@@ -31,7 +31,7 @@ InputSocket::~InputSocket() {
 
 void InputSocket::connectTo(OutputSocket * pother) {
 	if (getValueType() != pother->getValueType())
-		throw std::runtime_error("materilizer::InputSocket::connect() Different value types");
+		throw std::runtime_error("NodMaterial::InputSocket::connect() Different value types");
 	mp_connected_at = pother;
 }
 }}

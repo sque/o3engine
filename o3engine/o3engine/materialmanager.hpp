@@ -1,11 +1,10 @@
-#ifndef MATERIALMANAGER_H_INCLUDED
-#define MATERIALMANAGER_H_INCLUDED
+#ifndef O3ENGINE_MATERIALMANAGER_H_INCLUDED
+#define O3ENGINE_MATERIALMANAGER_H_INCLUDED
 
 #include "./prereqs.hpp"
 #include "./material.hpp"
 #include "./singletonmanager.hpp"
 
-// STL
 #include <map>
 
 namespace o3engine {
@@ -35,9 +34,7 @@ namespace o3engine {
 		//! Initialize manager
 		void initialize();
 
-		// Load materials file
-		bool loadMaterials(const string & fname);
 	};
 }
 
-#endif // MATERIALMANAGER_H_INCLUDED
+#endif

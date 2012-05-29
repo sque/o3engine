@@ -17,7 +17,7 @@
 #include <o3engine/renderline/viewportoutput.hpp>
 #include <o3engine/mesh.hpp>
 #include <o3engine/scenerenderer.hpp>
-#include <o3engine/materilizer.hpp>
+#include <o3engine/nodmaterial.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -173,14 +173,15 @@ public :
 		Texture * ptex = new Texture("testi", ogl::texture_type::TEX_2D);
 		ptex->uploadImage(Image("Ryan_t_shirt_AO_512x512.png"), true);
 		ptex->glObject().bind();
-		auto * pcol1 = new materilizer::ColorNode("diffuseColor", Color::BLUE);
-		auto * plight = new materilizer::LightingNode("phong");
-		auto * pgeo = new materilizer::GeometryNode("geo");
-		auto * ptexnode = new materilizer::TextureNode("diffuseMap", "testi");
+		NodMaterial * pmatwierd = new NodMaterial("wierd");
+		auto * pcol1 = pmatwierd->createNode<nodmaterial::ColorNode>("diffuseColor", Color::BLUE);
+		auto * plight = pmatwierd->createNode<nodmaterial::LightingNode>("phong");
+		auto * pgeo = pmatwierd->createNode<nodmaterial::GeometryNode>("geo");
+		auto * ptexnode = pmatwierd->createNode<nodmaterial::TextureNode>("diffuseMap", "testi");
 		ptexnode->getInputSocket("coordinates")->connectTo(pgeo->getOutputSocket("normal"));
 		plight->getInputSocket("ambient")->connectTo(ptexnode->getOutputSocket("color"));
 		//plight->getInputSocket("ambient")->connectTo(pgeo->getOutputSocket("position"));
-		Materilizer * pmatwierd = new Materilizer("wierd");
+
 		pmatwierd->getInputSocket("color")->connectTo(plight->getOutputSocket("color"));
 		pmatwierd->buildProgram();
 
@@ -191,7 +192,7 @@ public :
 
 
 		sm.getRootNode().createChild("model")->attachObject(spacecrap);
-		//sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
+		sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
 		//sm.getRootNode().getChildPtr("model2")->setLight(new Light());
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 5, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);

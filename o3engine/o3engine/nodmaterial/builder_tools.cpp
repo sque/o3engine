@@ -2,12 +2,12 @@
 #include <boost/format.hpp>
 
 namespace o3engine {
-namespace materilizer{
+namespace nodmaterial{
 namespace builder {
 
 	std::string output_variable_name(Node * pnode, const std::string & socket_name) {
 		if (!pnode->hasOutputSocket(socket_name))
-			throw materilizer_build_error("There is no output socket with this name. \n" + socket_name + "\"");
+			throw nodmaterial_build_error("There is no output socket with this name. \n" + socket_name + "\"");
 		return pnode->getName() + "_" + socket_name;
 	}
 
@@ -78,7 +78,7 @@ namespace builder {
 
 		// Check if there is actually a socket with this name
 		if (!pnode->hasInputSocket(socket_name)) {
-			throw materilizer_build_error("There is no output socket with this name. \n" + socket_name + "\"");
+			throw nodmaterial_build_error("There is no output socket with this name. \n" + socket_name + "\"");
 		}
 
 		// Check if it is not connected, then return default value

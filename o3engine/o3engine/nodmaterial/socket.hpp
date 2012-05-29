@@ -1,11 +1,11 @@
-#ifndef O3ENGINE_MATERILIZER_SOCKET_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_SOCKET_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_SOCKET_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_SOCKET_HPP_INCLUDED
 
 #include "../prereqs.hpp"
 #include <boost/variant.hpp>
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	//! Prototype of node class
 	class Node;

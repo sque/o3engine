@@ -1,10 +1,10 @@
 #include "geometrynode.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
-GeometryNode::GeometryNode(const std::string & name) :
-		Node(name){
+GeometryNode::GeometryNode(NodeContainer * powner, const std::string & name) :
+		Node(powner, name, typeid(this).name()){
 		addOutputSocket<Socket::ValueType::Vec4>("position");
 		addOutputSocket<Socket::ValueType::Vec4>("normal");
 		addOutputSocket<Socket::ValueType::Vec4>("tangent");

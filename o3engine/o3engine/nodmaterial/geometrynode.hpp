@@ -1,16 +1,16 @@
-#ifndef O3ENGINE_MATERILIZER_GEOMETRY_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_GEOMETRY_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_GEOMETRY_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_GEOMETRY_HPP_INCLUDED
 
 #include "node.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	//! Node to access geometry object information
 	class GeometryNode : public Node{
 	public:
-		//! Construct a new texture node
-		GeometryNode(const std::string & name);
+		//! Construct a new geometry node
+		GeometryNode(NodeContainer * powner, const std::string & name);
 
 		virtual std::string getStaticCode(ogl::shader_type type);
 

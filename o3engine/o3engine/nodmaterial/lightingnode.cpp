@@ -3,10 +3,10 @@
 #include "builder_tools.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
-	LightingNode::LightingNode(const std::string & name):
-			Node(name){
+	LightingNode::LightingNode(NodeContainer * powner, const std::string & name):
+			Node(powner, name, typeid(this).name()){
 		addInputSocket<Socket::ValueType::Vec4>("emission", Vector4(0, 0, 0, 1));
 		addInputSocket<Socket::ValueType::Vec4>("ambient", Vector4(0.15, 0.15, 0.15, 1));
 		addInputSocket<Socket::ValueType::Vec4>("diffuse", Vector4(0.8, 0.8, 0.8, 1));

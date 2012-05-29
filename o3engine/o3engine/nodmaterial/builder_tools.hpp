@@ -3,11 +3,11 @@
 
 #include "node.hpp"
 namespace o3engine {
-namespace materilizer{
+namespace nodmaterial{
 
 	//! Error while building program
-	struct materilizer_build_error : public std::runtime_error {
-		materilizer_build_error(const std::string & what) :
+	struct nodmaterial_build_error : public std::runtime_error {
+		nodmaterial_build_error(const std::string & what) :
 			runtime_error(what){
 		}
 	};

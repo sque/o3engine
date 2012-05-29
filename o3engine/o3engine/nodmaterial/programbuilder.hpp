@@ -1,11 +1,11 @@
-#ifndef O3ENGINE_MATERILIZER_BUILDER_HPP_INCLUDED
-#define O3ENGINE_MATERILIZER_BUILDER_HPP_INCLUDED
+#ifndef O3ENGINE_NODMATERIAL_BUILDER_HPP_INCLUDED
+#define O3ENGINE_NODMATERIAL_BUILDER_HPP_INCLUDED
 
 #include "node.hpp"
 #include "builder_tools.hpp"
 
 namespace o3engine {
-namespace materilizer {
+namespace nodmaterial {
 
 	//! Builder that will process a node structure and produce a GLSL program.
 	class ProgramBuilder {
