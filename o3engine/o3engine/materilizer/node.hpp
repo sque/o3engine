@@ -35,7 +35,7 @@ namespace materilizer {
 
 		//! Get a specific input socket
 		InputSocket * getInputSocket(const std::string & name){
-			return m_input_sockets[name];
+			return m_input_sockets.at(name);
 		}
 
 		//! Check if there is an input socket with specific name
@@ -50,7 +50,7 @@ namespace materilizer {
 
 		//! Get specific output sockets
 		OutputSocket * getOutputSocket(const std::string & name){
-			return m_output_sockets[name];
+			return m_output_sockets.at(name);
 		}
 
 		//! Check if there is an output socket with specific name

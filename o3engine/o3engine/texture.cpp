@@ -18,7 +18,6 @@ namespace o3engine
 		delete mp_gl_texture;
 	}
 
-	// Load a picture from file
 	bool Texture::uploadImage(const Image & img, bool build_mipmap)	{
 
 		// This is only for 2d loading

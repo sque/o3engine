@@ -51,14 +51,14 @@ namespace materilizer {
 		//! Inheritable
 		virtual ~Socket(){}
 
+		//! Name of this socket
+		std::string m_name;
+
 		//! Pointer to node owner
 		Node * mp_owner_node;
 
 		//! Type of this
 		ValueType m_value_type;
-
-		//! Name of this socket
-		std::string m_name;
 	};
 
 	//! Specialization for output socket

@@ -170,10 +170,16 @@ public :
 		sm.setSceneClipped(false);
 		sm.setAmbientLight(Color::BLACK);
 
+		Texture * ptex = new Texture("testi", ogl::texture_type::TEX_2D);
+		ptex->uploadImage(Image("Ryan_t_shirt_AO_512x512.png"), true);
+		ptex->glObject().bind();
 		auto * pcol1 = new materilizer::ColorNode("diffuseColor", Color::BLUE);
 		auto * plight = new materilizer::LightingNode("phong");
-		plight->getInputSocket("diffuse")->connectTo(pcol1->getOutputSocket("value"));
-		plight->getInputSocket("ambient")->connectTo(pcol1->getOutputSocket("value"));
+		auto * pgeo = new materilizer::GeometryNode("geo");
+		auto * ptexnode = new materilizer::TextureNode("diffuseMap", "testi");
+		ptexnode->getInputSocket("coordinates")->connectTo(pgeo->getOutputSocket("normal"));
+		plight->getInputSocket("ambient")->connectTo(ptexnode->getOutputSocket("color"));
+		//plight->getInputSocket("ambient")->connectTo(pgeo->getOutputSocket("position"));
 		Materilizer * pmatwierd = new Materilizer("wierd");
 		pmatwierd->getInputSocket("color")->connectTo(plight->getOutputSocket("color"));
 		pmatwierd->buildProgram();
@@ -184,9 +190,9 @@ public :
 
 
 
-		sm.getRootNode().createChild("model")->attachObject(prim);
-		sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
-		sm.getRootNode().getChildPtr("model2")->setLight(new Light());
+		sm.getRootNode().createChild("model")->attachObject(spacecrap);
+		//sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
+		//sm.getRootNode().getChildPtr("model2")->setLight(new Light());
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 5, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		//sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());

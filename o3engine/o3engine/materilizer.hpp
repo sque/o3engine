@@ -6,6 +6,8 @@
 #include "materilizer/mathnode.hpp"
 #include "materilizer/fixedvaluenode.hpp"
 #include "materilizer/lightingnode.hpp"
+#include "materilizer/geometrynode.hpp"
+#include "materilizer/texturenode.hpp"
 
 namespace o3engine {
 

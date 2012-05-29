@@ -4,6 +4,7 @@ namespace materilizer {
 
 
 Socket::Socket(const std::string & name, ValueType vtype, Node * powner) :
+	m_name(name),
 	mp_owner_node(powner),
 	m_value_type(vtype){
 }
