@@ -11,7 +11,9 @@ namespace nodmaterial {
 	class UniqueNode : public Node{
 	public:
 		//! Construct a new texture node
-		UniqueNode(const std::string & name);
+		UniqueNode(NodeContainer * powner, const std::string & instance_name) {
+			//if (powner->getNode() == powner-)
+		}
 
 	};
 

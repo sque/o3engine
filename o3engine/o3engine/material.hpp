@@ -18,7 +18,7 @@ namespace o3engine {
 		std::string m_name;
 	};
 	/**
-	 * @brief Material describer and handler
+	 * @brief Material base
 	 */
 	class Material : public ManagedObject<MaterialManager, string, Material>
 	{

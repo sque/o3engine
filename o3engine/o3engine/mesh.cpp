@@ -1,5 +1,7 @@
 #include "./mesh.hpp"
 #include "./tinyxml/tinyxml.h"
+#include "genericmaterial.hpp"
+#include <boost/lexical_cast.hpp>
 #include <assimp.hpp>
 #include <aiScene.h>
 #include <aiPostProcess.h>
@@ -70,7 +72,7 @@ namespace o3engine
 
 		assert(index < pscene->mNumMaterials);
 		aiMaterial * aimat = pscene->mMaterials[index];
-		pmat = new Material(name);
+		pmat = new GenericMaterial(name);
 
 		std::cout << "Material Properties: " << aimat->mNumProperties << std::endl;
 		for(size_t i = 0;i < aimat->mNumProperties;i++) {
@@ -83,9 +85,9 @@ namespace o3engine
 					//std::cout << str << std::endl;
 					break;
 				case aiPropertyTypeInfo::aiPTI_Float:
-					float fr;
-					aimat->Get(prop->mKey.data, prop->mType, 0, fr);
-					std::cout << fr << std::endl;
+					float fr[4];
+					aimat->Get(prop->mKey.data, prop->mType, 0, fr[0]);
+					std::cout << fr[0] << "," << fr[1] << "," << fr[2] << "," << fr[3] << std::endl;
 					break;
 				default:
 					std::cout << "?" << std::endl;
@@ -180,7 +182,7 @@ namespace o3engine
 				gm.indices()[i * 3 + 2] = pMesh->mFaces[i].mIndices[2];
 			}
 
-			//gm.setMaterial(importMaterial(getName() + "_importedMaterial_", pMesh->mMaterialIndex, scene));
+			gm.setMaterial(importMaterial(getName() + "_importedMaterial_" + boost::lexical_cast<std::string>(mesh_index), pMesh->mMaterialIndex, scene));
 			m_geometries.push_back(gm);
 		}
 
