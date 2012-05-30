@@ -1,13 +1,13 @@
 #ifndef O3ENGINE_NODMATERIAL_GEOMETRY_HPP_INCLUDED
 #define O3ENGINE_NODMATERIAL_GEOMETRY_HPP_INCLUDED
 
-#include "node.hpp"
+#include "uniquenode.hpp"
 
 namespace o3engine {
 namespace nodmaterial {
 
 	//! Node to access geometry object information
-	class GeometryNode : public Node{
+	class GeometryNode : public UniqueNode<GeometryNode>{
 	public:
 		//! Construct a new geometry node
 		GeometryNode(NodeContainer * powner, const std::string & name);

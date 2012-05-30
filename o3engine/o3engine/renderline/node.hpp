@@ -21,7 +21,7 @@ namespace RenderLine {
 	public:
 
 		Node() :
-				mp_next(NULL), mp_state(NULL) {
+			mp_next(NULL), mp_state(NULL) {
 		}
 
 		inline virtual ~Node() {

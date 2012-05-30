@@ -5,7 +5,7 @@
 #include "nodmaterial/nodecontainer.hpp"
 #include "nodmaterial/mathnode.hpp"
 #include "nodmaterial/constantvaluenode.hpp"
-#include "nodmaterial/lightingnode.hpp"
+#include "nodmaterial/shadingnode.hpp"
 #include "nodmaterial/geometrynode.hpp"
 #include "nodmaterial/texturenode.hpp"
 
@@ -27,6 +27,8 @@ namespace o3engine {
 		std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name);
 
 	};
+
+	void import_nodmaterials(const std::string & fname);
 }
 
 #endif

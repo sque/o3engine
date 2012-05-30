@@ -1,11 +1,11 @@
-#include "lightingnode.hpp"
+#include "shadingnode.hpp"
 #include <boost/format.hpp>
 #include "builder_tools.hpp"
 
 namespace o3engine {
 namespace nodmaterial {
 
-	LightingNode::LightingNode(NodeContainer * powner, const std::string & name):
+	ShadingNode::ShadingNode(NodeContainer * powner, const std::string & name):
 			Node(powner, name, typeid(this).name()){
 		addInputSocket<Socket::ValueType::Vec4>("emission", Vector4(0, 0, 0, 1));
 		addInputSocket<Socket::ValueType::Vec4>("ambient", Vector4(0.15, 0.15, 0.15, 1));
@@ -16,7 +16,7 @@ namespace nodmaterial {
 		addOutputSocket<Socket::ValueType::Vec4>("color");
 	}
 
-	std::string LightingNode::getStaticCode(ogl::shader_type type) {
+	std::string ShadingNode::getStaticCode(ogl::shader_type type) {
 		switch (type) {
 		case ogl::shader_type::VERTEX:
 			return "#depend \"library/phong.vert\"\n";
@@ -28,7 +28,7 @@ namespace nodmaterial {
 
 	}
 
-	std::string LightingNode::getExecutedCode(ogl::shader_type type) {
+	std::string ShadingNode::getExecutedCode(ogl::shader_type type) {
 		switch (type) {
 		case ogl::shader_type::VERTEX:
 			return "phong_lit();\n";
@@ -47,7 +47,7 @@ namespace nodmaterial {
 		}
 	}
 
-	std::string LightingNode::getOutputSocketReference(ogl::shader_type type, const std::string & connector_name) {
+	std::string ShadingNode::getOutputSocketReference(ogl::shader_type type, const std::string & connector_name) {
 		switch (type) {
 		case ogl::shader_type::VERTEX:
 			return "";

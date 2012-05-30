@@ -27,7 +27,7 @@ namespace nodmaterial {
 
 		switch(type){
 		case ogl::shader_type::FRAGMENT:
-			return "vec4 pixel = texture(myTexture, (" + builder::input_value(type, this, "coordinates") + ").xy);\n";
+			return "vec4 pixel = texture(myTexture, (" + builder::input_value(type, this, "coordinates") + ").st);\n";
 		default:
 			return "";
 		}

@@ -24,8 +24,8 @@ namespace nodmaterial {
 		}
 
 		//! Construct with default value
-		ConstantValueNode(const std::string & name):
-			ConstantValueNode(name, DefaultValue){
+		ConstantValueNode(NodeContainer * powner, const std::string & name):
+			ConstantValueNode(powner, name, DefaultValue){
 		}
 
 		//! Set new value

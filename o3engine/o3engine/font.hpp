@@ -40,8 +40,9 @@ namespace o3engine
 			CharGlyph(){}
 
 			// Copy constructor
-			CharGlyph(const CharGlyph & r)
-			{	operator=(r);	}
+			CharGlyph(const CharGlyph & r) {
+				operator=(r);
+			}
 
 			// Copy operator
 			CharGlyph & operator=(const CharGlyph & r)
@@ -109,12 +110,14 @@ namespace o3engine
 		void printf(Vector3 pos, const Color & text_color, const char *fmt, ...);
 
 		// Get line space;
-		inline int getLineSpace() const
-		{	return LineSpace;	}
+		inline int getLineSpace() const	{
+			return LineSpace;
+		}
 
 		// Set line space
-		inline void setLineSpace(int _sp)
-		{	LineSpace = _sp;	}
+		inline void setLineSpace(int _sp) {
+			LineSpace = _sp;
+		}
 	};
 }
 #endif // FONT_H_INCLUDED

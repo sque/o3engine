@@ -4,7 +4,7 @@ namespace o3engine {
 namespace nodmaterial {
 
 GeometryNode::GeometryNode(NodeContainer * powner, const std::string & name) :
-		Node(powner, name, typeid(this).name()){
+		UniqueNode(powner, name, typeid(this).name()){
 		addOutputSocket<Socket::ValueType::Vec4>("position");
 		addOutputSocket<Socket::ValueType::Vec4>("normal");
 		addOutputSocket<Socket::ValueType::Vec4>("tangent");

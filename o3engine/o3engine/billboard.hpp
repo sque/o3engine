@@ -18,7 +18,7 @@ namespace o3engine
 	protected:
 		//! Pointer to engine
 		O3Engine * mp_engine;
-		Node * p_camnode;
+		SceneNode * p_camnode;
 
 		//! Constructor
 		Billboard();

@@ -28,11 +28,12 @@ namespace nodmaterial {
 			}
 
 			NodeType * pnode = new NodeType(this, name, args...);
+			m_nodes[name] = pnode;
 			return pnode;
 		}
 
 		//! Get node by name
-		Node * getNode(const std::string & name) {
+		Node * getNodePtr(const std::string & name) {
 			return m_nodes[name];
 		}
 

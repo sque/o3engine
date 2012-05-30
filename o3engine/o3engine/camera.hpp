@@ -17,6 +17,7 @@ namespace o3engine {
 		//! Default constructor
 		Camera():mp_scene_node(nullptr){}
 
+		//! Inheritable
 		virtual ~Camera();
 
 		//! Get attached scene node

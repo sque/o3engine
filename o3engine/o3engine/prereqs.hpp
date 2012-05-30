@@ -76,7 +76,6 @@ namespace o3engine {
 	class MaterialManager;
 
 	class O3Engine;
-	class Node;
 	class InputProcessor;
 	class MouseListener;
 	class KeyboardListener;
