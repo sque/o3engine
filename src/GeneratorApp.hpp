@@ -148,10 +148,9 @@ public :
 		Camera * perscam = new PerspectiveCamera(Degree(45), 1, 0.1, 1000);
 		//OrthoCamera * orthcam = new OrthoCamera(4, 3, 0, 1000);
 
-		Mesh * spacecrap = new Mesh("spacecrap");
-		//spacecrap->uploadToGPU();
+		/*Mesh * spacecrap = new Mesh("spacecrap");
 		spacecrap->importFromFile("house.dae");
-		std::cout << info(*spacecrap) << std::endl;
+		std::cout << info(*spacecrap) << std::endl;*/
 
 		//pbcout->attachNode(orthcam);
 
@@ -175,26 +174,29 @@ public :
 		ptex->glObject().bind();
 		NodMaterial * pmatwierd = new NodMaterial("wierd");
 		auto * pcol1 = pmatwierd->createNode<nodmaterial::ColorNode>("diffuseColor", Color::BLUE);
-		auto * plight = pmatwierd->createNode<nodmaterial::LightingNode>("phong");
+		auto * plight = pmatwierd->createNode<nodmaterial::ShadingNode>("phong");
 		auto * pgeo = pmatwierd->createNode<nodmaterial::GeometryNode>("geo");
 		auto * ptexnode = pmatwierd->createNode<nodmaterial::TextureNode>("diffuseMap", "testi");
 		ptexnode->getInputSocket("coordinates")->connectTo(pgeo->getOutputSocket("normal"));
 		plight->getInputSocket("ambient")->connectTo(ptexnode->getOutputSocket("color"));
-		//plight->getInputSocket("ambient")->connectTo(pgeo->getOutputSocket("position"));
+		plight->getInputSocket("ambient")->connectTo(pgeo->getOutputSocket("position"));
 
 		pmatwierd->getInputSocket("color")->connectTo(plight->getOutputSocket("color"));
 		pmatwierd->buildProgram();
 
-		auto * prim = new UVSphere("test", 5, 30, 30);
+		auto * prim = new UVSphere("test", 5, 10, 30);
 		std::cout << info(*prim) << std::endl;
-		prim->setMaterial("wierd");
+		import_nodmaterials("materials.xml");
+		prim->setMaterial("vivid");
 
+		Mesh * monkey = new Mesh("monkey");
+		monkey->importFromFile("monkey.dae");
+		monkey->geometries()[0].setMaterial("monkey_shaded");
 
-
-		sm.getRootNode().createChild("model")->attachObject(spacecrap);
+		sm.getRootNode().createChild("model")->attachObject(monkey);
 		sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
 		//sm.getRootNode().getChildPtr("model2")->setLight(new Light());
-		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 5, 15))->attachCamera(perscam);
+		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
 		//sm.getRootNode().getChildPtr("camera-base")->getChildPtr("camera")->setLight(new Light());
 		Light redlight;
