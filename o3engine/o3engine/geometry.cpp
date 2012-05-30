@@ -69,12 +69,18 @@ namespace o3engine
 				mp_vao->get_attrib(1).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, normal));
 				mp_vao->get_attrib(1).enable();
 			}
+			for(size_t i = 0;i < 6; i ++) {
+				if (m_geometry.attributes().has_flag((VertexAttributes)((size_t)VertexAttributes::tex_coords_0 + i))) {
+					mp_vao->get_attrib(2+i).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tex_coords[0]) + (sizeof(float) * i));
+					mp_vao->get_attrib(2+i).enable();
+				}
+			}
 			if (m_geometry.attributes().has_flag(VertexAttributes::tangent_bitangent)) {
-				mp_vao->get_attrib(10).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tangent));
-				mp_vao->get_attrib(10).enable();
+				mp_vao->get_attrib(8).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, tangent));
+				mp_vao->get_attrib(8).enable();
 
-				mp_vao->get_attrib(11).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, bitangent));
-				mp_vao->get_attrib(11).enable();
+				mp_vao->get_attrib(9).set_pointerf(*mp_vbo, 3, ogl::attribf_data_type::DOUBLE, sizeof(Vertex), offsetof(Vertex, bitangent));
+				mp_vao->get_attrib(9).enable();
 			}
 		}
 	}
@@ -97,12 +103,12 @@ namespace o3engine
 	//! Draw mesh
 	void GeometryRenderer::draw(SceneRendererVisitor * pvisitor) {
 		pvisitor->preDraw(&const_cast<ogl::program &>(m_geometry.getMaterialPtr()->getProgram()));
-		m_geometry.getMaterialPtr()->getProgram().use();
+		m_geometry.getMaterialPtr()->Use();
 		if (mp_ebo)
-			// Indexed based
+			// In-GPU vertices index
 			mp_vao->draw_elements(ogl::primitive_type::TRIANGLES, m_geometry.indices().size(), *mp_ebo, m_elements_type);
 		else
-			// Raw rendering
+			// CPU vertices index
 			mp_vao->draw(ogl::primitive_type::TRIANGLES, 0, m_geometry.totalElements());
 	}
 
@@ -147,7 +153,17 @@ namespace o3engine
 		if (gm.attributes().has_flag(VertexAttributes::normal))
 			ss << "normal,";
 		if (gm.attributes().has_flag(VertexAttributes::tex_coords_0))
+			ss << "tex_coords[0],";
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_1))
 			ss << "tex_coords[1],";
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_2))
+			ss << "tex_coords[2],";
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_3))
+			ss << "tex_coords[3],";
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_4))
+			ss << "tex_coords[4],";
+		if (gm.attributes().has_flag(VertexAttributes::tex_coords_5))
+			ss << "tex_coords[5],";
 		if (gm.attributes().has_flag(VertexAttributes::tangent_bitangent))
 			ss << "tangent_bitangent,";
 		ss << " Vertices:" << gm.totalVertices() << ", Elements:" << gm.totalElements() << " }";
@@ -160,7 +176,6 @@ namespace o3engine
 		return ss.str();
 	}
 
-	//! Dump object to output
 	std::string dump_object(const Geometry & gm) {
 		std::ostringstream ss;
 		ss << "Vertices :" << std::endl;

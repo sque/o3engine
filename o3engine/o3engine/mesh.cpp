@@ -1,5 +1,4 @@
 #include "./mesh.hpp"
-#include "./tinyxml/tinyxml.h"
 #include "genericmaterial.hpp"
 #include <boost/lexical_cast.hpp>
 #include <assimp.hpp>
@@ -160,6 +159,7 @@ namespace o3engine
 			}
 
 			// Load texcoords (0)
+			// Todo: load multiple texture coordinates
 			if (gm.attributes().has_flag(VertexAttributes::tex_coords_0)) {
 				for(size_t i = 0; i < pMesh->mNumVertices; i++ ) {
 					gm.vertices()[i].tex_coords[0] = Vector3(pMesh->mTextureCoords[0][i].x, pMesh->mTextureCoords[0][i].y, pMesh->mTextureCoords[0][i].z);
@@ -182,7 +182,7 @@ namespace o3engine
 				gm.indices()[i * 3 + 2] = pMesh->mFaces[i].mIndices[2];
 			}
 
-			gm.setMaterial(importMaterial(getName() + "_importedMaterial_" + boost::lexical_cast<std::string>(mesh_index), pMesh->mMaterialIndex, scene));
+			//gm.setMaterial(importMaterial(getName() + "_importedMaterial_" + boost::lexical_cast<std::string>(mesh_index), pMesh->mMaterialIndex, scene));
 			m_geometries.push_back(gm);
 		}
 

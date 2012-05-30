@@ -123,7 +123,7 @@ namespace o3engine {
 		//! Set material
 		bool setMaterial(const Material * pmaterial);
 
-		//! Get current material
+		//! Get current material (const)
 		const Material * getMaterialPtr() const {
 			return mp_material;
 		}
