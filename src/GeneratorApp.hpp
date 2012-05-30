@@ -193,8 +193,13 @@ public :
 		monkey->importFromFile("monkey.dae");
 		monkey->geometries()[0].setMaterial("monkey_shaded");
 
+		Mesh * monkey2 = new Mesh("monkey2");
+		monkey2->importFromFile("monkey.dae");
+		monkey2->geometries()[0].setMaterial("monkey");
+
+
 		sm.getRootNode().createChild("model")->attachObject(monkey);
-		sm.getRootNode().createChild("model2", Vector3(15, 0, 0))->attachObject(prim);
+		sm.getRootNode().createChild("model2", Vector3(5, 0, 0))->attachObject(monkey2);
 		//sm.getRootNode().getChildPtr("model2")->setLight(new Light());
 		sm.getRootNode().createChild("camera-base")->createChild("camera", Vector3(0, 0, 15))->attachCamera(perscam);
 		//sm.getRootNode().getChildPtr("camera")->createChild("2ndview")->attachCamera(orthcam);
