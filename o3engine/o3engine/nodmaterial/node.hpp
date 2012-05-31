@@ -9,6 +9,9 @@ namespace nodmaterial {
 	//! Prototype of container class
 	class NodeContainer;
 
+	//! Prototype of program builder
+	class ProgramBuilder;
+
 	//! A node in NodMaterial system
 	class Node {
 	public:
@@ -17,6 +20,9 @@ namespace nodmaterial {
 
 		//! Container of output sockets
 		typedef std::map<std::string, OutputSocket *> outputsockets_container_type;
+
+		//! Function type holder for predraw function
+		typedef std::function<void(void)>  predraw_function_type;
 
 		//! Construct a node
 		Node(NodeContainer * powner, const std::string & instance_name, const std::string & type_name);
@@ -72,6 +78,17 @@ namespace nodmaterial {
 
 		//! Get GLSL reference code for specific output
 		virtual std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name) = 0;
+
+		//! Get a function that must be executing before drawing with this material
+		virtual const predraw_function_type getPreDrawFunction(){
+			return predraw_function_type();
+		};
+
+		//! Executed before starting build process
+		virtual void preBuild(ProgramBuilder & pm){}
+
+		//! Executed after build process has finished
+		virtual void postBuild(ProgramBuilder & pm){}
 	protected:
 
 		//! Add an input socket

@@ -19,7 +19,7 @@ namespace ogl {
 	}
 
 	//! Bind a texture on this unit
-	void texture_unit_t::bind_texture(texture & tex) {
+	void texture_unit_t::bind_texture(const texture & tex) {
 		activate();
 		tex.bind();
 	}

@@ -108,9 +108,6 @@ namespace o3engine {
 		// Initialize platform (Window, Input, Timers)
 		Platform::getSingleton().initialize(argc, argv);
 
-		// Initialize opengl state
-		setupOpenGLState();
-
 		// Create font manager
 		mp_font_manager = new FontManager();
 
@@ -146,12 +143,5 @@ namespace o3engine {
 
 		// Calculate FPS
 		m_frame_counter++;
-	}
-
-	// Setup opengl state
-	void O3Engine::setupOpenGLState() {
-		// Set up OpenGL parameters
-		ogl::context::create();
-		ogl::current_ctx().depth_test().enable();
 	}
 }

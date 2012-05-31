@@ -21,6 +21,13 @@ namespace nodmaterial {
 		return m_frag_source;
 	}
 
+	//! Get produced material predraw functions
+	const ProgramBuilder::predraw_functions_type ProgramBuilder::getPreDrawFunctions() const {
+		if (!isBuilt())
+			throw std::runtime_error("ProgramBuilder: use build() before predraw functions.");
+		return m_predraw_functions;
+	}
+
 	void ProgramBuilder::gatherChainedNodes(Node * pnode) {
 
 		// Add this node to the active chained nodes
@@ -30,6 +37,15 @@ namespace nodmaterial {
 		for(auto & con : pnode->getInputSockets()) {
 			if (con.second->isConnected())
 				gatherChainedNodes(con.second->getConnectedNode());
+		}
+	}
+
+	void ProgramBuilder::gatherPredrawFunctions() {
+		m_predraw_functions.clear();
+		for(auto & node: m_nodes) {
+			auto & func = node.second->getPreDrawFunction();
+			if (func)
+				m_predraw_functions.push_back(func);
 		}
 	}
 
@@ -56,6 +72,10 @@ namespace nodmaterial {
 		// Gather all nodes
 		m_nodes.clear();
 		gatherChainedNodes(m_root_node);
+		for(auto & node : m_nodes) {
+			node.second->preBuild(*this);
+		}
+		gatherPredrawFunctions();
 
 		m_vert_source =
 			"#version 330\n\n"
@@ -87,6 +107,9 @@ namespace nodmaterial {
 		m_vert_source += "\n}\n";
 		m_frag_source += "\n}\n";
 
+		for(auto & node : m_nodes) {
+			node.second->postBuild(*this);
+		}
 		return m_built = true;
 	}
 

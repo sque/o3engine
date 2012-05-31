@@ -8,6 +8,7 @@
 #include "nodmaterial/shadingnode.hpp"
 #include "nodmaterial/geometrynode.hpp"
 #include "nodmaterial/texturenode.hpp"
+#include "nodmaterial/programbuilder.hpp"
 
 namespace o3engine {
 
@@ -26,6 +27,11 @@ namespace o3engine {
 
 		std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name);
 
+		virtual void preUse() const;
+	protected:
+
+		//! Functions to executed before aplying a material
+		nodmaterial::ProgramBuilder::predraw_functions_type m_predraw_functions;
 	};
 
 	void import_nodmaterials(const std::string & fname);

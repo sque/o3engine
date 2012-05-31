@@ -20,7 +20,7 @@ namespace ogl {
 		bool is_active() const;
 
 		//! Bind a texture on this unit
-		void bind_texture(texture & tex);
+		void bind_texture(const texture & tex);
 
 		//! Unbind any texture from a specific target
 		void unbind_texture(texture_type tex_type);

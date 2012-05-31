@@ -54,9 +54,6 @@ namespace o3engine {
 		//! All the activities that must be done on constructor
 		void generalConstructor(int c, char** v);
 
-		//! Setup opengl state
-		void setupOpenGLState();
-
 		void onLoopIdle();
 
 		// Uncopiable

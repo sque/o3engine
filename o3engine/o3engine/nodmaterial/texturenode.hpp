@@ -28,10 +28,17 @@ namespace nodmaterial {
 
 		virtual std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name);
 
+		virtual const predraw_function_type getPreDrawFunction();
+
+		virtual void preBuild(ProgramBuilder & pm);
+
 	private:
 
-		//! Pointer to texture
+		//! Pointer to texture object
 		Texture * mp_texture;
+
+		//! Texture unit that will be used to load this texture
+		ogl::texture_unit_t::name_type m_texunit_id;
 	};
 }
 }

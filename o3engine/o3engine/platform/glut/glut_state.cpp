@@ -20,9 +20,10 @@ namespace o3engine {
 			throw new std::runtime_error("Cannot initialize GLEW!");
 		}
 
-		//TODO :Very ugly hack. Some stuff need to be initialized as soon as there is an GL contenxt
-		MaterialManager::getSingletonPtr()->initialize();
+		//TODO :Very ugly hack. Some stuff can only need be initialized if there is a output device
 		ogl::context::create();
+		MaterialManager::getSingletonPtr()->initialize();
+		ogl::current_ctx().depth_test().enable();
 
 		// Get swap interval function
 		mf_swap_interval = (void 	(*)(int)) glXGetProcAddress((const GLubyte*) "glXSwapIntervalSGI");

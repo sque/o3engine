@@ -49,6 +49,11 @@ namespace o3engine
 		ogl::texture & glObject() {
 			return *mp_gl_texture;
 		}
+
+		//! Get opengl texture
+		const ogl::texture & glObject() const{
+			return *mp_gl_texture;
+		}
 	};
 }
 
