@@ -22,7 +22,7 @@ namespace nodmaterial {
 		typedef std::map<std::string, OutputSocket *> outputsockets_container_type;
 
 		//! Function type holder for predraw function
-		typedef std::function<void(void)>  predraw_function_type;
+		typedef std::function<void(const ogl::program &)>  predraw_function_type;
 
 		//! Construct a node
 		Node(NodeContainer * powner, const std::string & instance_name, const std::string & type_name);

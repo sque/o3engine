@@ -32,7 +32,7 @@ namespace o3engine {
 
 	void NodMaterial::preUse() const {
 		for(auto & func : m_predraw_functions) {
-			func();
+			func(getProgram());
 		}
 	}
 
@@ -98,6 +98,9 @@ namespace o3engine {
 					pnode = pmat->createNode<nodmaterial::TextureNode>(
 						nodeit->attribute("name").value(),
 						nodeit->attribute("texture").value());
+				} else if (node_type == "time") {
+					pnode = pmat->createNode<nodmaterial::TimeNode>(
+						nodeit->attribute("name").value());
 				} else {
 					throw std::runtime_error("Error loading materials from file \"" + fname + "\". "
 						"Unknown node type \"" + node_type + "\".");

@@ -8,6 +8,7 @@
 #include "nodmaterial/shadingnode.hpp"
 #include "nodmaterial/geometrynode.hpp"
 #include "nodmaterial/texturenode.hpp"
+#include "nodmaterial/timenode.hpp"
 #include "nodmaterial/programbuilder.hpp"
 
 namespace o3engine {

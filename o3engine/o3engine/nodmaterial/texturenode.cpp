@@ -48,7 +48,7 @@ namespace nodmaterial {
 	}
 
 	const Node::predraw_function_type TextureNode::getPreDrawFunction() {
-		return [this] {
+		return [this](const ogl::program & prog) {
 			ogl::current_ctx().texture_unit(this->m_texunit_id).bind_texture(this->getTexture()->glObject());
 		};
 	}

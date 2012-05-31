@@ -171,7 +171,6 @@ public :
 
 		Texture * ptex = new Texture("testi", ogl::texture_type::TEX_2D);
 		ptex->uploadImage(Image("Ryan_t_shirt_AO_512x512.png"), true);
-		ptex->glObject().bind();
 		NodMaterial * pmatwierd = new NodMaterial("wierd");
 		auto * pcol1 = pmatwierd->createNode<nodmaterial::ColorNode>("diffuseColor", Color::BLUE);
 		auto * plight = pmatwierd->createNode<nodmaterial::ShadingNode>("phong");

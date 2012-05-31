@@ -35,10 +35,11 @@
 				<node type="shading" name="shading"></node>
 				<node type="texture" name="aoMap" texture="monkey_ao"></node>
 				<node type="texture" name="diffuseMap" texture="monkey_diffuse"></node>
+				<node type="time" name="time"></node>
 			</nodes>
 			<links>
-				<link from_node="aoMap" from_socket="color" to_node="material" to_socket="color"></link>
-				<link from_node="aoMap" from_socket="color" to_node="shading" to_socket="diffuse"></link>
+				<link from_node="time" from_socket="time_v4" to_node="material" to_socket="color"></link>
+				<link from_node="diffuseMap" from_socket="color" to_node="shading" to_socket="diffuse"></link>
 				<link from_node="aoMap" from_socket="color" to_node="shading" to_socket="ambient"></link>
 				<link from_node="geo" from_socket="texcoord0" to_node="aoMap" to_socket="coordinates"></link>
 				<link from_node="geo" from_socket="texcoord0" to_node="diffuseMap" to_socket="coordinates"></link>
