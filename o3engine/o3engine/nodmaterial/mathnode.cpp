@@ -11,7 +11,6 @@ namespace nodmaterial {
 		addInputSocket<Socket::ValueType::Vec4>("arg2", Vector4(1,1,1,1));
 		addOutputSocket<Socket::ValueType::Vec4>("result");
 
-
 		// Different approach for each case. Operator, function, one argument, two arguments....
 		m_map_op_to_glslfunctions[Op::POWER] = "pow";
 		m_map_op_to_glslfunctions[Op::SQUARE] = "sqrt";
@@ -23,7 +22,7 @@ namespace nodmaterial {
 			SIN,
 			COS,
 			TAN,"]*/
-	}
+		}
 
 
 	std::string MathNode::getStaticCode(ogl::shader_type type) {

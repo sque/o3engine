@@ -18,6 +18,7 @@
 #include <o3engine/mesh.hpp>
 #include <o3engine/scenerenderer.hpp>
 #include <o3engine/nodmaterial.hpp>
+#include <o3engine/nodmaterial/storage.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -185,7 +186,7 @@ public :
 
 		auto * prim = new UVSphere("test", 5, 10, 30);
 		std::cout << info(*prim) << std::endl;
-		import_nodmaterials("materials.xml");
+		nodmaterial::import_xml("materials.xml");
 		prim->setMaterial("vivid");
 
 		Mesh * monkey = new Mesh("monkey");

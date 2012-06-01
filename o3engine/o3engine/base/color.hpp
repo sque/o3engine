@@ -228,14 +228,17 @@ namespace o3engine {
 		//! Constant magenta color
 		static const Color MAGENTA;
 
+		//! Channel type
+		typedef Real channel_type;
+
 		//! Value of red channel (Normal values are in range [0, 1] )
-		Real red;
+		channel_type red;
 		//! Value of green channel (Normal values are in range [0, 1] )
-		Real green;
+		channel_type green;
 		//! Value of blue channel (Normal values are in range [0, 1] )
-		Real blue;
+		channel_type blue;
 		//! Value of alpha channel (Normal values are in range [0, 1] )
-		Real alpha;
+		channel_type alpha;
 
 		//! Default constructor (@b Not @b initialized )
 		/**
@@ -253,7 +256,7 @@ namespace o3engine {
 		 * @param b Blue color channel (0.0 to 1.0)
 		 * @param a Alpha color channel (0.0 to 1.0)
 		 */
-		inline Color(Real r, Real g, Real b, Real a = 1.0) :
+		inline Color(channel_type r, channel_type g, channel_type b, channel_type a = 1.0) :
 				red(r), green(g), blue(b), alpha(a) {
 		}
 
@@ -276,10 +279,10 @@ namespace o3engine {
 		 * @param color The r-value of assignment in @b RGBA format
 		 */
 		inline void assignAsRGBA(const color_rgba_t & color) {
-			red = (Real) color.channels.red / (Real) 255;
-			green = (Real) color.channels.green / (Real) 255;
-			blue = (Real) color.channels.blue / (Real) 255;
-			alpha = (Real) color.channels.alpha / (Real) 255;
+			red = (channel_type) color.channels.red / channel_type(255);
+			green = (channel_type) color.channels.green / channel_type(255);
+			blue = (channel_type) color.channels.blue / channel_type(255);
+			alpha = (channel_type) color.channels.alpha / channel_type(255);
 		}
 
 		//! Assign color value from color_bgra_t
@@ -287,10 +290,10 @@ namespace o3engine {
 		 * @param color The r-value of assignment in @b BGRA format
 		 */
 		inline void assignAsBGRA(const color_bgra_t & color) {
-			red = (Real) color.channels.red / (Real) 255;
-			green = (Real) color.channels.green / (Real) 255;
-			blue = (Real) color.channels.blue / (Real) 255;
-			alpha = (Real) color.channels.alpha / (Real) 255;
+			red = (channel_type) color.channels.red / channel_type(255);
+			green = (channel_type) color.channels.green / channel_type(255);
+			blue = (channel_type) color.channels.blue / channel_type(255);
+			alpha = (channel_type) color.channels.alpha / channel_type(255);
 		}
 
 		//! Assign color value from color_abgr_t
@@ -298,10 +301,10 @@ namespace o3engine {
 		 * @param color The r-value of assignment in @b ABGR format
 		 */
 		inline void assignAsABGR(const color_abgr_t & color) {
-			red = (Real) color.channels.red / (Real) 255;
-			green = (Real) color.channels.green / (Real) 255;
-			blue = (Real) color.channels.blue / (Real) 255;
-			alpha = (Real) color.channels.alpha / (Real) 255;
+			red = (channel_type) color.channels.red / channel_type(255);
+			green = (channel_type) color.channels.green / channel_type(255);
+			blue = (channel_type) color.channels.blue / channel_type(255);
+			alpha = (channel_type) color.channels.alpha / channel_type(255);
 		}
 
 		//! Assign color value from color_argb_t
@@ -309,10 +312,10 @@ namespace o3engine {
 		 * @param color The r-value of assignment in @b ARGB format
 		 */
 		inline void assignAsARGB(const color_argb_t & color) {
-			red = (Real) color.channels.red / (Real) 255;
-			green = (Real) color.channels.green / (Real) 255;
-			blue = (Real) color.channels.blue / (Real) 255;
-			alpha = (Real) color.channels.alpha / (Real) 255;
+			red = (channel_type) color.channels.red / channel_type(255);
+			green = (channel_type) color.channels.green / channel_type(255);
+			blue = (channel_type) color.channels.blue / channel_type(255);
+			alpha = (channel_type) color.channels.alpha / channel_type(255);
 		}
 
 		//! Cast color to color_rgba_t

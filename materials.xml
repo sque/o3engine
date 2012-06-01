@@ -9,8 +9,8 @@
 		<material name="vivid">
 			<nodes>
 				<node type="geometry" name="geo"></node>
-				<node type="color" name="color1" value="vec4(1,0,1,1)"></node>
-				<node type="color" name="color2" value="vec4(1,1,0,1)"></node>
+				<node type="color" name="color1" value="color(1,0,1,1)"></node>
+				<node type="color" name="color2" value="color(1,1,0,1)"></node>
 				<node type="shading" name="shading"></node>
 				<node type="texture" name="diffuseMap" texture="object1_diffuse"></node>
 			</nodes>
@@ -22,7 +22,7 @@
 		</material>
 		<material name="flat_red">
 			<nodes>
-				<node type="color" name="red" value="vec4(1,0,0,1)"></node>
+				<node type="color" name="red" value="color(1,0,0,1)"></node>
 			</nodes>
 			<links>
 				<link from_node="red" from_socket="value" to_node="material" to_socket="color"></link>
@@ -31,16 +31,17 @@
 		<material name="monkey_shaded">
 			<nodes>
 				<node type="geometry" name="geo"></node>
-				<node type="color" name="red" value="vec4(1,0,0,1)"></node>
+				<node type="color" name="red" value="color(1,0,0,1)"></node>
 				<node type="shading" name="shading"></node>
 				<node type="texture" name="aoMap" texture="monkey_ao"></node>
 				<node type="texture" name="diffuseMap" texture="monkey_diffuse"></node>
 				<node type="time" name="time"></node>
 			</nodes>
 			<links>
-				<link from_node="time" from_socket="time_v4" to_node="material" to_socket="color"></link>
+				<link from_node="shading" from_socket="color" to_node="material" to_socket="color"></link>
 				<link from_node="diffuseMap" from_socket="color" to_node="shading" to_socket="diffuse"></link>
 				<link from_node="aoMap" from_socket="color" to_node="shading" to_socket="ambient"></link>
+				<link from_node="red" from_socket="value" to_node="shading" to_socket="specular"></link>
 				<link from_node="geo" from_socket="texcoord0" to_node="aoMap" to_socket="coordinates"></link>
 				<link from_node="geo" from_socket="texcoord0" to_node="diffuseMap" to_socket="coordinates"></link>
 			</links>
@@ -49,7 +50,7 @@
 		<material name="monkey">
 			<nodes>
 				<node type="geometry" name="geo"></node>
-				<node type="color" name="red" value="vec4(1,0,0,1)"></node>
+				<node type="color" name="red" value="color(1,0,0,1)"></node>
 				<node type="shading" name="shading"></node>
 				<node type="texture" name="aoMap" texture="monkey_ao"></node>
 			</nodes>

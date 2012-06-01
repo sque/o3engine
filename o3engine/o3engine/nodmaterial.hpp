@@ -35,7 +35,6 @@ namespace o3engine {
 		nodmaterial::ProgramBuilder::predraw_functions_type m_predraw_functions;
 	};
 
-	void import_nodmaterials(const std::string & fname);
 }
 
 #endif
