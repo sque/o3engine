@@ -66,39 +66,22 @@ namespace o3engine {
 	 * Magic uh? You must have noticed that getObjectPtr() and getObject() are static functions which results
 	 * in even more simple and clean code.
 	 * */
-	template<class T, class N, class O> class SingletonManager {
+	template<class SingletonType, class Name, class Object> class SingletonManager {
 	public:
 
 		//! Type definition for the type of objects
-		typedef O object_type;
+		typedef Object object_type;
 
 		//! Type definition for the type of names
-		typedef N name_type;
+		typedef Name name_type;
 
-	protected:
-		//! A pointer to the instance of object
-		static T* ms_singleton;
+		//! Type definition of singleton type
+		typedef SingletonType singleton_type;
 
-		//! List of managed objects
-		std::map<name_type, object_type *> m_objects;
-
-		//! Type definition of iterator
-		typedef typename std::map<name_type, object_type *>::iterator ObjectIterator;
-
-		//! Event triggered when a new object has been added
-		virtual void onObjectAdded(const name_type & _name,
-				object_type * _pobject) {
-		}
-
-		//! Event triggered when an object has been removed
-		virtual void onObjectRemoved(const name_type & _name) {
-		}
-
-	public:
 		//! Constructor of managed objects
 		inline SingletonManager() {
 			assert( !ms_singleton);
-			ms_singleton = static_cast<T*>(this);
+			ms_singleton = static_cast<singleton_type*>(this);
 		}
 
 		//! Destrcuctor of Manager
@@ -108,13 +91,13 @@ namespace o3engine {
 		}
 
 		//! Get singleton by reference
-		inline static T& getSingleton(void) {
+		inline static singleton_type& getSingleton(void) {
 			assert( ms_singleton);
 			return (*ms_singleton);
 		}
 
 		//! Get singleton's pointer
-		inline static T* getSingletonPtr(void) {
+		inline static singleton_type* getSingletonPtr(void) {
 			return ms_singleton;
 		}
 
@@ -167,6 +150,25 @@ namespace o3engine {
 					!= ms_singleton->m_objects.end())
 				return it->second;
 			return nullptr;
+		}
+
+	protected:
+		//! A pointer to the instance of object
+		static singleton_type * ms_singleton;
+
+		//! List of managed objects
+		std::map<name_type, object_type *> m_objects;
+
+		//! Type definition of iterator
+		typedef typename std::map<name_type, object_type *>::iterator ObjectIterator;
+
+		//! Event triggered when a new object has been added
+		virtual void onObjectAdded(const name_type & _name,
+				object_type * _pobject) {
+		}
+
+		//! Event triggered when an object has been removed
+		virtual void onObjectRemoved(const name_type & _name) {
 		}
 	};
 
