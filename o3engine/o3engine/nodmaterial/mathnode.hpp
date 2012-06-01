@@ -14,13 +14,15 @@ namespace nodmaterial {
 		enum class Op {
 			MULTIPLY,
 			ADD,
-			POWER,
+			POW,
 			SUBSTRACT,
 			SQUARE,
 			DIVIDE,
 			SIN,
 			COS,
 			TAN,
+			MUL,
+			MOD
 		};
 
 		MathNode(NodeContainer * powner, const std::string & name);
@@ -46,8 +48,14 @@ namespace nodmaterial {
 		//! Map operations to functions
 		typedef std::map<Op, std::string> map_op_function_type;
 
-		//! Map OP enum to GLSL function name
-		map_op_function_type m_map_op_to_glslfunctions;
+		//! Map OP enum to GLSL function name argument1
+		map_op_function_type m_map_to_glslfunc1;
+
+		//! Map OP enum to GLSL function name argument2
+		map_op_function_type m_map_to_glslfunc2;
+
+		//! Map OP enum to GLSL operand
+		map_op_function_type m_map_to_glslop;
 
 		//! Operation to be done
 		Op m_operation;

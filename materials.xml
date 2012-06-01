@@ -32,14 +32,18 @@
 			<nodes>
 				<node type="geometry" name="geo"></node>
 				<node type="color" name="red" value="color(1,0,0,1)"></node>
+				<node type="vector4" name="const2" value="vec4(2,2,2,2)"></node>
 				<node type="shading" name="shading"></node>
 				<node type="texture" name="aoMap" texture="monkey_ao"></node>
 				<node type="texture" name="diffuseMap" texture="monkey_diffuse"></node>
 				<node type="time" name="time"></node>
+				<node type="math" name="math" operation="mul"></node>
 			</nodes>
 			<links>
 				<link from_node="shading" from_socket="color" to_node="material" to_socket="color"></link>
-				<link from_node="diffuseMap" from_socket="color" to_node="shading" to_socket="diffuse"></link>
+				<link from_node="diffuseMap" from_socket="color" to_node="math" to_socket="arg1"></link>
+				<link from_node="red" from_socket="value" to_node="math" to_socket="arg2"></link>
+				<link from_node="math" from_socket="result" to_node="shading" to_socket="diffuse"></link>
 				<link from_node="aoMap" from_socket="color" to_node="shading" to_socket="ambient"></link>
 				<link from_node="red" from_socket="value" to_node="shading" to_socket="specular"></link>
 				<link from_node="geo" from_socket="texcoord0" to_node="aoMap" to_socket="coordinates"></link>

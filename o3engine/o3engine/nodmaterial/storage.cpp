@@ -7,6 +7,23 @@
 namespace o3engine {
 namespace nodmaterial {
 
+	std::string pack_param(const MathNode::Op & op) {
+		std::vector<std::string> strings = {
+				"multiply",
+				"add",
+				"pow",
+				"substract",
+				"square",
+				"divide",
+				"sin",
+				"cos",
+				"tan",
+				"mul",
+				"mod"
+		};
+		return strings.at(static_cast<int>(op));
+	}
+
 	void unpack_param(const std::string & s, Color & dst) {
 		static const boost::regex rx("^color\\(([\\d\\.]+),([\\d\\.]+),([\\d\\.]+),([\\d\\.]+)\\)$");
 		boost::smatch results;
@@ -50,6 +67,27 @@ namespace nodmaterial {
 		}
 		dst.x = boost::lexical_cast<Color::channel_type>(results.str(1));
 		dst.y = boost::lexical_cast<Color::channel_type>(results.str(2));
+	}
+
+	void unpack_param(const std::string & s, MathNode::Op & dst) {
+		std::vector<std::string> strings = {
+				"multiply",
+				"add",
+				"pow",
+				"substract",
+				"square",
+				"divide",
+				"sin",
+				"cos",
+				"tan",
+				"mul",
+				"mod"
+		};
+
+		auto it = std::find(strings.begin(), strings.end(), s);
+		if (it == strings.end())
+			throw std::runtime_error("Error unpacking parameter of type MathNode::Op \"" + s + "\"");
+		dst = static_cast<MathNode::Op>(std::distance(strings.begin(), it));
 	}
 
 	void import_xml(const std::string & fname) {
@@ -102,6 +140,18 @@ namespace nodmaterial {
 				} else if (node_type == "color" ) {
 					ColorNode * pnode = pmat->createNode<ColorNode>(nodeit->attribute("name").value());
 					parameters_serialization<ColorNode>::unpack(params, *pnode);
+				} else if (node_type == "vector2" ) {
+					Vector2Node * pnode = pmat->createNode<Vector2Node>(nodeit->attribute("name").value());
+					parameters_serialization<Vector2Node>::unpack(params, *pnode);
+				} else if (node_type == "vector3" ) {
+					Vector3Node * pnode = pmat->createNode<Vector3Node>(nodeit->attribute("name").value());
+					parameters_serialization<Vector3Node>::unpack(params, *pnode);
+				} else if (node_type == "vector4" ) {
+					Vector4Node * pnode = pmat->createNode<Vector4Node>(nodeit->attribute("name").value());
+					parameters_serialization<Vector4Node>::unpack(params, *pnode);
+				} else if (node_type == "math" ) {
+					MathNode * pnode = pmat->createNode<MathNode>(nodeit->attribute("name").value());
+					parameters_serialization<MathNode>::unpack(params, *pnode);
 				} else if (node_type == "shading") {
 					ShadingNode * pnode = pmat->createNode<ShadingNode>(nodeit->attribute("name").value());
 					parameters_serialization<ShadingNode>::unpack(params, *pnode);

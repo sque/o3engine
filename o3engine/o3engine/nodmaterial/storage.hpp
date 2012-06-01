@@ -35,6 +35,8 @@ namespace nodmaterial {
 		return (boost::format("color(%1%,%2%,%3%,%4%)") % r.red % r.green % r.blue % r.alpha).str();
 	}
 
+	std::string pack_param(const MathNode::Op & op);
+
 	template <class Type>
 	void unpack_param(const std::string & s, Type & dst) {
 		dst = boost::lexical_cast<Type>(s);
@@ -47,6 +49,8 @@ namespace nodmaterial {
 	void unpack_param(const std::string & s, Vector3 & dst);
 
 	void unpack_param(const std::string & s, Vector2 & dst);
+
+	void unpack_param(const std::string & s, MathNode::Op & dst);
 
 	//! Pack/Unpack parameters functor that returns a map of strings
 	template<class NodeType>
@@ -83,6 +87,25 @@ namespace nodmaterial {
 
 		static void unpack(const parameters_map_type & params_map, node_type & dst ) {
 
+		}
+	};
+
+	//! MathNode implementation
+	template< >
+	struct parameters_serialization<MathNode> {
+
+		typedef MathNode node_type;
+
+		static parameters_map_type pack(const node_type & node) {
+			parameters_map_type param_map;
+			param_map["operation"] = pack_param(node.getOperation());
+			return param_map;
+		}
+
+		static void unpack(const parameters_map_type & params_map, node_type & dst ) {
+			MathNode::Op op;
+			unpack_param(params_map.at("operation"), op);
+			dst.setOperation(op);
 		}
 	};
 

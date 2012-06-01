@@ -57,6 +57,9 @@ namespace nodmaterial {
 	};
 
 	typedef ConstantValueNode<Color, Socket::ValueType::Vec4, Color::BLACK> ColorNode;
+	typedef ConstantValueNode<Vector2, Socket::ValueType::Vec2, Vector2::IDENTITY> Vector2Node;
+	typedef ConstantValueNode<Vector3, Socket::ValueType::Vec3, Vector3::IDENTITY> Vector3Node;
+	typedef ConstantValueNode<Vector4, Socket::ValueType::Vec4, Vector4::IDENTITY> Vector4Node;
 }
 }
 
