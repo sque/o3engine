@@ -37,11 +37,11 @@
 				<node type="texture" name="aoMap" texture="monkey_ao"></node>
 				<node type="texture" name="diffuseMap" texture="monkey_diffuse"></node>
 				<node type="time" name="time"></node>
-				<node type="math" name="math" operation="mul"></node>
+				<node type="math" name="math" operation="sin"></node>
 			</nodes>
 			<links>
 				<link from_node="shading" from_socket="color" to_node="material" to_socket="color"></link>
-				<link from_node="diffuseMap" from_socket="color" to_node="math" to_socket="arg1"></link>
+				<link from_node="time" from_socket="time_v4" to_node="math" to_socket="arg1"></link>
 				<link from_node="red" from_socket="value" to_node="math" to_socket="arg2"></link>
 				<link from_node="math" from_socket="result" to_node="shading" to_socket="diffuse"></link>
 				<link from_node="aoMap" from_socket="color" to_node="shading" to_socket="ambient"></link>

@@ -18,7 +18,7 @@ namespace nodmaterial {
 
 		virtual std::string getOutputSocketReference(ogl::shader_type type, const std::string & socket_name);
 
-		virtual const Node::predraw_function_type getPreDrawFunction() const;
+		virtual const predraw_function_type getPreDrawFunction();
 	};
 }
 }

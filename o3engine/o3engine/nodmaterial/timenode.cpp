@@ -35,7 +35,7 @@ TimeNode::TimeNode(NodeContainer * powner, const std::string & name) :
 		return "";
 	}
 
-	const Node::predraw_function_type TimeNode::getPreDrawFunction() const {
+	const Node::predraw_function_type TimeNode::getPreDrawFunction() {
 		return [](const ogl::program & prog) {
 			const_cast<ogl::program &>(prog).get_uniform("time_secs").set1f((double)Platform::getSingleton().getTimer().getMilliseconds() / 1000.0f);
 		};
