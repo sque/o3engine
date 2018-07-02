@@ -2,16 +2,16 @@
 #include "camera.hpp"
 #include "genericnode.hpp"
 #include "genericscene.hpp"
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cstdint>
+#include <memory>
 
 namespace o3engine {
 
-boost::shared_ptr<float> to_floatv(const Matrix4 &m) {
-	boost::shared_ptr<float> fv(new float[16]);
+std::shared_ptr<float> to_floatv(const Matrix4 &m) {
+	std::shared_ptr<float> fv(new float[16]);
 	for(size_t i = 0; i < 16;i++) {
 		(fv.get())[i] = (&m[0][0])[i];
 	}
@@ -202,8 +202,6 @@ struct SceneRendererDrawVisitor:
 		m_ubo_light.getActive()->update_subdata(0, sizeof(UniformSceneLights), &m_ubd_lights);
 		m_ubo_light.getActive()->bind_at_point(1);
 		m_ubo_light.swap();
-
-
 	}
 
 	//! Populate programs parameters with uniform values

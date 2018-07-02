@@ -1,6 +1,8 @@
 #ifndef O3ENGINE_PREREQS_HPP_INCLUDED
 #define O3ENGINE_PREREQS_HPP_INCLUDED
 
+#include "./platform_prereqs.hpp"
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +29,7 @@ namespace o3engine {
 		const static Real HALF_PI = PI / 2;
 		//! Multiply factor to convert radians to degrees
 		const static Real RAD2DEG = 180.0 / PI;
-		//! Multiply factor to convert degrees to radiasn
+		//! Multiply factor to convert degrees to radians
 		const static Real DEG2RAD = PI / 180.0;
 
 		//! Convert a radian number to degree

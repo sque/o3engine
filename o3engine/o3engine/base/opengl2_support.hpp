@@ -9,10 +9,13 @@
 #include "./angle.hpp"
 #include "./color.hpp"
 
-// System Detection
+// Platform Detection
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 namespace o3engine {
